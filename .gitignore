@@ -2,6 +2,7 @@
 
 .aws-conf/
 .django-conf/
+static_root/
 
 
 
