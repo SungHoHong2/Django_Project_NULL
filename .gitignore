@@ -4,6 +4,7 @@
 .django-conf/
 static_root/
 
+.django-conf
 
 
 __dev*/
