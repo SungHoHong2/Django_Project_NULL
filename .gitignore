@@ -1,5 +1,10 @@
 # Project custom 
 
+.aws-conf/
+.django-conf/
+
+
+
 __dev*/
 .idea/
 *.sqlite3
@@ -169,3 +174,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
