@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 CONF_DIR = os.path.join(ROOT_DIR, '.django-conf')
 STATIC_ROOT = os.path.join(ROOT_DIR, 'static_root')
-
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 AUTH_USER_MODEL = 'member.MyUser'
 
 config = json.loads(open(os.path.join(CONF_DIR, 'settings_deploy.json')).read())
@@ -31,7 +31,7 @@ SECRET_KEY = '_as5v2#d-r#mw)405ye1756zk)pa8ek3v8s_jmjh_$n09l^gf6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.elasticbeanstalk.com','.shh.coffee',]
+ALLOWED_HOSTS = ['.elasticbeanstalk.com','.shh.coffee','localhost']
 
 
 # Application definition
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'storages',
     'member',
     'collection',
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'project_null.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
