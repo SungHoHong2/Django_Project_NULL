@@ -18,6 +18,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 CONF_DIR = os.path.join(ROOT_DIR, '.django-conf')
 STATIC_ROOT = os.path.join(ROOT_DIR, 'static_root')
 
+AUTH_USER_MODEL = 'member.MyUser'
 
 config = json.loads(open(os.path.join(CONF_DIR, 'settings_deploy.json')).read())
 
@@ -43,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages',
-
+    'member',
+    'collection',
+    'saytalk',
 ]
 
 MIDDLEWARE = [
