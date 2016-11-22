@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
 
-    #url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
 
     # 초기 화면 페이지 내용
     url(r'^$', LoginPageView.as_view(),name='main_login'),
