@@ -15,11 +15,22 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from member.views.web import LoginPageView
+from member.views.web import LoginPageView, RegisterPageView
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', LoginPageView.as_view(),name='main_page'),
+
+    #url(r'^admin/', admin.site.urls),
+
+    # 초기 화면 페이지 내용
+    url(r'^$', LoginPageView.as_view(),name='main_login'),
+    url(r'^about_us/$', TemplateView.as_view(template_name='base_test/about_us.html'), name='about_us'),
+    url(r'^register/$', RegisterPageView.as_view(), name='register'),
+
+
+
+
+
     url(r'^member/', include('member.urls',namespace='member')),
 ]

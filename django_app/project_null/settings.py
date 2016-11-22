@@ -17,6 +17,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 CONF_DIR = os.path.join(ROOT_DIR, '.django-conf')
 STATIC_ROOT = os.path.join(ROOT_DIR, 'static_root')
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+
+
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 AUTH_USER_MODEL = 'member.MyUser'
 
@@ -149,3 +154,6 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
+    STATICFILES_DIRS = [
+        STATIC_DIR,
+    ]

@@ -6,13 +6,14 @@ from django.utils import timezone
 # Create your models here.
 
 class Image(models.Model):
-    member = models.ForeignKey(MyUser)
+    member = models.ForeignKey(MyUser, blank=True, null=True)
+    say_talk = models.ForeignKey(SayTalk, blank=True, null=True)
     created_by = models.CharField(max_length=28)
     modified_by = models.CharField(max_length=28)
     created_date = models.DateTimeField(editable=False)
     modified_date = models.DateTimeField()
     img_order = models.IntegerField(default=1)
-    img_file = models.ImageField(blank=True, null=True)
+    img_file = models.ImageField(upload_to= 'img', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.id:

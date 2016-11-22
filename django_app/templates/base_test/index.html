@@ -1,0 +1,71 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+<script>
+	$(document).ready(function(){
+
+	});
+</script>
+
+<style>
+.login_content{ margin-top : 10px; }
+</style>
+<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>Welcome</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+
+	 <div class="container mtb login_content">
+	 	<div class="row">
+	 		<div class="col-lg-12">
+	 			<h4>로그인 하십시오</h4>
+	 			<div class="hline"></div>
+		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+		 			<form role="form" class="form-group" method="POST" id='registerForm' enctype="multipart/form-data" action="">
+						{{  login_form.as_p }}
+					  <button type="submit" class="btn btn-theme">Submit</button>
+					</form>
+			</div>
+	 	</div><! --/row -->
+	 </div><! --/container -->
+
+
+<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>API</h4>
+		 			<div class="hline-w"></div>
+		 			<p> member forms.py / LoginView()</p>
+		 		</div>
+
+		 		<div class="col-lg-8">
+		 			<h4>Description</h4>
+		 			<div class="hline-w"></div>
+		 			<p>
+		 				GET <br/>
+		 				http://localhost:8000/ <br/>
+						REQUEST: { } <br/>
+		 				RESPONSE : { login_form : login_form_data } <br/>
+		 			</p>
+		 		</div>
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+{% endblock %}
