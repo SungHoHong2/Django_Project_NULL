@@ -2,7 +2,6 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication
-
 from member.dto.forms import LoginForm, RegisterForm, RegisterImageForm
 from project_null.custom_authentication import CsrfExemptSessionAuthentication
 from member.models import MyUser
@@ -12,6 +11,7 @@ from collection.models import Image, Hash_Tag, Hash_Relationship
 from django.db import connection
 from rest_framework.response import Response
 from collection.serializer import ImageSerializer
+from django.conf import settings
 
 class LoginPageView(TemplateView):
     template_name = 'base_test/index.html'
@@ -124,9 +124,14 @@ class AroundMeView(TemplateView):
         with connection.cursor() as cursor:
             cursor.execute(_query, [])
             _list = cursor.fetchall()
-            _list = [ {'id' : row[0], 'username' : row[1], 'img_file' : row[2], 'tag_names' : row[3] }  for row in _list]
+            _list = [ {'id' : row[0], 'username' : row[1], 'img_file' : settings.MEDIA_URL+xstr(row[2]), 'tag_names' : row[3] }  for row in _list]
             context['member_list'] = json.dumps(_list)
         return context
+
+def xstr(s):
+    if s is None:
+        return ''
+    return str(s)
 
 
 class MemberDetailAction(viewsets.ModelViewSet):
