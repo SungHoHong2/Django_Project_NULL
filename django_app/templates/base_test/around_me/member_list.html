@@ -1,0 +1,181 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+
+
+<style>
+.login_content{ margin-top : 10px; }
+
+.custom_form_group{
+    width: 100%;
+    margin-top: 16px;
+}
+
+.custom_row{
+    margin-bottom: 18px;
+}
+
+.image_dir{
+	width: 100px;
+    height: 100px;
+}
+.img_class_dev{
+    display: block;
+    float: left;
+    margin-right: 15px;
+    background : grey;
+}
+.img_block_dev{
+    height: 113px;
+}
+
+</style>
+<script>
+
+    $(document).ready(function(){
+        var friends_list = {{ member_list|safe }};
+        console.log(friends_list);
+        $("#member_ist_templ").tmpl(friends_list).appendTo( "#friends_list" );
+
+		$('.member_detail_btn').click(function(){
+
+			_tag_list = $(this).attr('tags');
+
+			getAjax('GET', "/member/member_detail/"+$(this).attr('id')
+			, 'application/json', function(response){
+
+				$('#member_detail_photo').empty();
+				$(response).each(function(index, item){
+					$('#member_detail_photo').append($('<img/>').height(200).attr('src',item.img_file))
+				});
+
+				$('#member_detail_hashtag').val('').val(_tag_list);
+				$('#myBtn').trigger('click');
+
+
+			});
+
+		});
+
+		openModal();
+
+    });
+
+</script>
+
+
+<script id="member_ist_templ" type="text/x-jquery-tmpl">
+            <div class="img_block_dev">
+            	<span class="img_class_dev member_detail_btn" id= '${id}' tags='${tag_names}'> <img class="image_dir" src="/media/${img_file}" alt=""></span>
+                <span>
+                	<strong class="member_detail_btn" id= '${id}' tags= '${ tag_names }'>${username}</strong>
+                </span>
+                <br>
+				<span>
+					${ tag_names }
+				<span>
+            </div>
+</script>
+
+<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>About Us</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+
+	 <div class="container mtb login_content">
+	 	<div class="row custom_row">
+            <div class="col-lg-12">
+	 			<h4>친구들의 위치와 목록을 조회하는 페이지입니다.</h4>
+                <div class="hline"></div>
+                <div class="form-inline">
+                    <div class="form-group custom_form_group">
+                <input type="search" class="form-control"/>
+                <button class="btn btn-warning">Search</button>
+                    </div>
+                </div>
+			</div>
+         </div>
+         <div class="row">
+            <div class="col-lg-6">
+                    <div id="map" style="width:100%;height:500px"></div>
+			</div>
+            <div class="col-lg-6" id="friends_list">
+			</div>
+	 	</div><! --/row -->
+	 </div><! --/container -->
+
+
+    <script>
+    function myMap() {
+      var mapCanvas = document.getElementById("map");
+      var mapOptions = {
+        center: new google.maps.LatLng(51.5, -0.2),
+        zoom: 10
+      }
+      var map = new google.maps.Map(mapCanvas, mapOptions);
+    }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSeNBXeFjA0l3gQCnYU6vbnjmhRseufwQ&callback=myMap"></script>
+
+	<button id="myBtn" style="display: none">Open Modal</button>
+	<div id="myModal" class="modal">
+
+
+	  <!-- Modal content -->
+	  <div class="modal-content">
+		<span class="close">×</span>
+		  <div class ="form-group">
+					{% csrf_token %}
+						<label>photos</label>
+						<div id="member_detail_photo"></div>
+					</p>
+					<p>
+						<label>hash tags</label>
+						<input type="text" id="member_detail_hashtag" class="form-control" disabled >
+					</p>
+					<p>
+						<button class="btn btn-warning" id="post_btn"> 좋아해 </button>
+						<button class="btn btn-warning" id="post_btn"> 1:1 채팅 </button>
+					</p>
+		  </div>
+	  </div>
+	</div>
+
+
+<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>API</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 		<div class="col-lg-8">
+		 			<h4>Description</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+{% endblock %}
+
+
+

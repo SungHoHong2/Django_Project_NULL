@@ -20,7 +20,7 @@ class RegisterForm(forms.ModelForm):
         fields = ('username', 'password', )
 
 class RegisterImageForm(forms.ModelForm):
-    img_file = forms.ImageField(label='photo', widget= forms.FileInput(attrs={'class' : 'form-control'}))
+    img_file = forms.ImageField(label='', widget= forms.FileInput(attrs={'class' : 'form-control'}))
     class Meta:
         model = Image
         fields = ('img_file',)

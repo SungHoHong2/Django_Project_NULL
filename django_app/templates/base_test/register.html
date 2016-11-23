@@ -2,7 +2,51 @@
 {% block content %}
 
 <script>
+
+	var temp_file_save_records = [];
 	$(document).ready(function(){
+
+		var hash_tag_list = {{ hash_tags|safe }};
+		$(hash_tag_list).each(function(index, item){
+			$('#hash_tag_div').append($('<button/>').addClass('btn btn-theme').text(item.tag_name).attr('id', item.id)
+			.click(function(){
+				$(this).remove();
+				var text = $('#hash_tag_ids').val();
+				if(text.length>0){
+					text+=','
+				}
+
+				text+= item.id;
+				$('#hash_tag_ids').val(text);
+				$('#register_form').append($('<button/>').addClass('btn btn-theme').text(item.tag_name).attr('id', item.id));
+
+			})
+
+			);
+
+		});
+
+		$('#file_temp_submit').click(function(){
+
+				var form_data = new FormData();
+				form_data.append("img_file",$('input[name=img_file]')[0].files[0])
+				formAjax('POST', form_data, "{% url 'collection:temp_image' %}"
+						, 'application/json'
+						, function(response){
+								console.log(response);
+								var text = $('#image_file_ids').val()
+
+								if(text.length>0){
+									text+=','
+								}
+
+								text+=response.id
+								$('#image_file_ids').val(text)
+								$('#register_form').append($('<img/>').width(100).height(100).attr('src',response.img_file))
+				})
+
+		});
+
 
 	});
 </script>
@@ -32,16 +76,21 @@
 	 			<h4>지금 당장 가입하세요!</h4>
 	 			<div class="hline"></div>
 		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-		 			<form role="form" class="form-group" method="POST" action="">
+		 			<form id="register_form" role="form" class="form-group" method="POST" action="{% url 'member:register' %}">
 						{{ register_form.as_p }}
-					  <button type="submit" class="btn btn-theme">닉네임 / 핸드폰 입력</button>
+						<p><input type="hidden" id= "image_file_ids" name="image_file_ids" class="form-control"></p>
+						<p><input type="hidden" id= "hash_tag_ids" name="hash_tag_ids" class="form-control"></p>
+					    <button type="submit" class="btn btn-warning">회원가입</button>
 					</form>
 
-				  <form role="form" class="form-group" method="POST"  enctype="multipart/form-data" action="">
-						{{ register_image_form.as_p }}
-					  <button type="submit" class="btn btn-theme">첨부파일</button>
-				  </form>
-
+				  <div role="form-inline" class="form-inline" method="POST"  enctype="multipart/form-data" action="">
+					  <div class="form-group">
+					  {{ register_image_form }}
+					  <span id="file_temp_submit" class="btn btn-danger">첨부파일 추가</span>
+					  </div>
+				  </div>
+				  <div id="hash_tag_div">
+				  </div>
 			</div>
 	 	</div><! --/row -->
 	 </div><! --/container -->
