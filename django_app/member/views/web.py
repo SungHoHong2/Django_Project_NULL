@@ -147,3 +147,10 @@ class MemberDetailAction(viewsets.ModelViewSet):
         _serializer = serializer(image, many=True)
         return Response(_serializer.data)
 
+
+class MyPageProfileView(TemplateView):
+    template_name = 'base_test/my_page/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyPageProfileView, self).get_context_data(**kwargs)
+        return context
