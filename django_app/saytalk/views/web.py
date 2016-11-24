@@ -119,7 +119,7 @@ class TalkDetailPageView(TemplateView):
             "LEFT JOIN collection_image ci_post ON ci_post.say_talk_id = ss.id AND ci_post.img_order = 1 "
             "WHERE ss.id = %s "
             "ORDER BY ss.created_date "
-            "DESC "
+            "DESC LIMIT 1"
         )
 
         with connection.cursor() as cursor:
