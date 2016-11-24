@@ -24,11 +24,17 @@ class TalkListPageView(TemplateView):
         context['image_form'] = PostImageForm()
 
         _query_talk = (
-            "select ss.id, ss.title, ss.content, ci.img_file "
-            "from saytalk_saytalk ss "
-            "left join collection_image ci on ci.say_talk_id = ss.id and ci.img_order = 1 "
-            "order by ss.created_date DESC "
-            "limit 16 "
+            "SELECT "
+                "ss.id, ss.title, ss.content, ci.img_file, hht.tag_names "
+                "FROM saytalk_saytalk ss LEFT JOIN collection_image ci ON ci.say_talk_id = ss.id AND ci.img_order = 1 "
+                "LEFT JOIN( "
+                         "select chr.say_talk_id, string_agg(cht.tag_name, ', ') as tag_names "
+                         "from collection_hash_tag cht "
+                         "join collection_hash_relationship chr on chr.hash_tag_id = cht.id "
+                         "group by chr.say_talk_id "
+                ") hht on ss.id = hht.say_talk_id "
+            "ORDER BY ss.created_date DESC "
+            "LIMIT 16 "
         )
 
         _query_hash = (
@@ -48,7 +54,7 @@ class TalkListPageView(TemplateView):
 
             cursor.execute(_query_talk,[])
             _list = cursor.fetchall()
-            _list = [ {'id': row[0], 'title': row[1], 'content':row[2], 'img_file':settings.MEDIA_URL+xstr(row[3])}  for row in _list]
+            _list = [ {'id': row[0], 'title': row[1], 'content':row[2], 'img_file':settings.MEDIA_URL+xstr(row[3]), 'tag_names': row[4]}  for row in _list]
             context['talk_list'] = json.dumps(_list)
 
         return context
@@ -70,6 +76,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         myDict = {}
+        myDict['created_by'] = request.user.id
         myDict['title'] = request.data['title']
         myDict['content'] = request.data['content']
         qdict = QueryDict('', mutable=True)
@@ -98,43 +105,27 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class TalkDetailPageView(TemplateView):
-    template_name = 'base_test/say_talk/talk_list.html'
+    template_name = 'base_test/say_talk/talk_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(TalkListPageView, self).get_context_data(**kwargs)
-        context['post_form'] = PostInsertForm()
-        context['image_form'] = PostImageForm()
+        context = super().get_context_data(**kwargs)
 
-        _query_talk = (
-            "select ss.id, ss.title, ss.content, ci.img_file "
-            "from saytalk_saytalk ss "
-            "left join collection_image ci on ci.say_talk_id = ss.id and ci.img_order = 1 "
-            "order by ss.created_date DESC "
-            "limit 16 "
-        )
-
-        _query_hash = (
-            "select "
-            "    cht.id, cht.tag_name "
-            "from member_myuser mm "
-            "join collection_hash_relationship chr on chr.member_id = mm.id "
-            "join collection_hash_tag cht on cht.id = chr.hash_tag_id "
-            "where mm.id = %s "
+        _query_detail = (
+            "SELECT "
+                "ss.id, ss.title, ss.content, ci_post.img_file as post_img, ci_user.img_file as user_img "
+            "FROM saytalk_saytalk ss "
+            "JOIN member_myuser mm on mm.id = ss.created_by::Integer "
+            "JOIN collection_image ci_user on ci_user.member_id = mm.id "
+            "LEFT JOIN collection_image ci_post ON ci_post.say_talk_id = ss.id AND ci_post.img_order = 1 "
+            "WHERE ss.id = %s "
+            "ORDER BY ss.created_date "
+            "DESC "
         )
 
         with connection.cursor() as cursor:
-            cursor.execute(_query_hash, [self.request.user.id])
+            cursor.execute(_query_detail,[kwargs.get('pk')])
             _list = cursor.fetchall()
-            _list = [ {'id' : row[0], 'tag_name' : row[1] }  for row in _list]
-            context['hash_tags'] = json.dumps(_list)
-
-            cursor.execute(_query_talk,[])
-            _list = cursor.fetchall()
-            _list = [ {'id': row[0], 'title': row[1], 'content':row[2], 'img_file':settings.MEDIA_URL+xstr(row[3])}  for row in _list]
-            context['talk_list'] = json.dumps(_list)
+            _list = [ {'id': row[0], 'title': row[1], 'content':row[2], 'post_img':settings.MEDIA_URL+xstr(row[3]), 'user_img':settings.MEDIA_URL+xstr(row[4]), }  for row in _list]
+            context['talk_detail'] = json.dumps(_list)
 
         return context
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        return self.render_to_response(context)

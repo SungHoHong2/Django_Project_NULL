@@ -38,7 +38,6 @@
 			}
 		}
 
-
 		$("#photo_list_templ").tmpl({{ talk_list|safe }}).appendTo( "#photo_add_content" );
 		$('#post_btn').click(function(){
 
@@ -80,6 +79,11 @@
 		});
 
 
+		$('.detail_btn').click(function(){
+				location.href = '/saytalk/talk_detail/'+$(this).attr('id');
+		});
+
+
 	});
 </script>
 
@@ -91,6 +95,7 @@
 						<div class="bg a0" data-animate="fadeIn">
 							<h3 class="a1" data-animate="fadeInDown"> ${ title } </h3>
 							<p> ${ content } </p>
+							<h4 style=" color: yellow"> ${ tag_names } </h4>
 							<span data-rel="prettyPhoto" id= "${ id }" class="dmbutton a2 detail_btn" data-animate="fadeInUp"> Detail </span>
 							<span data-rel="prettyPhoto" id= "${ id }" class="dmbutton a2 remove_btn" data-animate="fadeInUp"> Remove </span>
 						</div><!-- he bg -->
