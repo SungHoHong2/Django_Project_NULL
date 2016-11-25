@@ -11,7 +11,7 @@
 <script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
 <script>
 	$(document).ready(function(){
-            var socket = io.connect('https://52.78.246.112:8081',{security: true});
+            var socket = io.connect('52.78.246.112:8081',{security: true});
             var $messageForm = $('#send-message');
             var $messageBox = $('#message');
             var $chat = $('#chat');
@@ -27,6 +27,8 @@
             });
 	});
 </script>
+
+
 
 <script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
             <div class="img_block_dev">
@@ -98,6 +100,9 @@
 						<input type="text" id="message" class="form-control">
 						<input type="submit" value="enter" class="btn btn-warning">
 					</form>
+
+					<iframe src="https://eb.shh.coffee/" frameborder="0"></iframe>
+
 				</div>
 
 			</div>
