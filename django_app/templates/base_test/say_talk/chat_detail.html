@@ -6,7 +6,7 @@
 .login_content{ margin-top : 10px; }
 
 </style>
-<script src="http://node-null-project-dev.ap-northeast-2.elasticbeanstalk.com/socket.io/socket.io.js"></script>
+<script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
 <script>
 	$(document).ready(function(){
 
@@ -93,9 +93,9 @@
 		 			 chatting information
 				<div id="post_detail_div">
 					<div id='chat'></div>
-					<form id="send-message">
-						<input type="text" id="message">
-						<input type="submit" value="enter">
+					<form id="send-message" class="form-inline">
+						<input type="text" id="message" class="form-control">
+						<input type="submit" value="enter" class="btn btn-warning">
 					</form>
 				</div>
 
