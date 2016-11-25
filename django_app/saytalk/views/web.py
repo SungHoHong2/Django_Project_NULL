@@ -129,3 +129,10 @@ class TalkDetailPageView(TemplateView):
             context['talk_detail'] = json.dumps(_list)
 
         return context
+
+class ChatDetailPageView(TemplateView):
+    template_name = 'base_test/say_talk/chat_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

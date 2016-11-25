@@ -1,0 +1,127 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+<style>
+.login_content{ margin-top : 10px; }
+
+</style>
+<script src="http://node-null-project-dev.ap-northeast-2.elasticbeanstalk.com/socket.io/socket.io.js"></script>
+<script>
+	$(document).ready(function(){
+
+            var socket = io.connect('52.78.246.112:8081');
+            var $messageForm = $('#send-message');
+            var $messageBox = $('#message');
+            var $chat = $('#chat');
+
+            $messageForm.submit(function(e){
+                e.preventDefault();
+                socket.emit('send message', $messageBox.val());
+                $messageBox.val('');
+            });
+
+            socket.on('new message', function(data){
+                $chat.append(data+"<br/>");
+            });
+	});
+</script>
+
+<script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
+            <div class="img_block_dev">
+            	<span class="img_class_dev member_detail_btn">
+            	 <img class="image_dir" src="${user_img}" alt=""></span>
+                <span>
+                	<strong class="member_detail_btn">${title}</strong>
+                </span>
+                <p>${content}</p>
+  				<p><img src="${post_img}" alt=""></span></p>
+            </div>
+</script>
+
+
+<style>
+.login_content{ margin-top : 10px; }
+</style>
+<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>Chat detail</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+
+	 <div class="container mtb login_content">
+	 	<div class="row">
+
+			<div class="col-lg-4">
+
+
+		 		<h4>Current Users</h4>
+		 		<div class="hline"></div>
+
+					<ul class="popular-posts">
+		                <li>
+		                    <p><a href="#"> User 1 </a></p>
+		                </li>
+		                <li>
+		                    <p><a href="#"> User 2 </a></p>
+		                    <em>Posted on 03/01/14</em>
+		                </li><li>
+		                    <p><a href="#"> User 3 </a></p>
+		                    <em>Posted on 05/16/14</em>
+		                </li>
+		                <li>
+		                    <p><a href="#">User 4</a></p>
+		                    <em>Posted on 05/16/14</em>
+		                </li>
+		            </ul>
+
+
+	 		</div>
+	 		<div class="col-lg-8">
+	 			<h4> Chatting 정보 </h4>
+	 			<div class="hline"></div>
+		 			 chatting information
+				<div id="post_detail_div">
+					<div id='chat'></div>
+					<form id="send-message">
+						<input type="text" id="message">
+						<input type="submit" value="enter">
+					</form>
+				</div>
+
+			</div>
+	 	</div><! --/row -->
+	 </div><! --/container -->
+
+
+<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>API</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 		<div class="col-lg-8">
+		 			<h4>Description</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+{% endblock %}
