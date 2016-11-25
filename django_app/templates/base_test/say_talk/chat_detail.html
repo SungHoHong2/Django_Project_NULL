@@ -11,7 +11,7 @@
 <script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
 <script>
 	$(document).ready(function(){
-            var socket = io.connect('52.78.246.112:8081',{security: true});
+            var socket = io.connect('https://52.78.246.112:8081',{secure: true, rejectUnauthorized: false});
             var $messageForm = $('#send-message');
             var $messageBox = $('#message');
             var $chat = $('#chat');
@@ -25,6 +25,23 @@
             socket.on('new message', function(data){
                 $chat.append(data+"<br/>");
             });
+
+
+            /*
+
+				var io = require('socket.io-client');
+				//var socket = io.connect('http://localhost', {port: 8088});
+
+				require('https').globalAgent.options.rejectUnauthorized = false;
+
+				var socket = io.connect('https://localhost', {secure: true, port: process.env.PORT || 8000});
+				  socket.on('connect', function(){
+					socket.on('event', function(data){});
+					socket.on('disconnect', function(){});
+				});
+
+            */
+
 	});
 </script>
 
@@ -100,9 +117,6 @@
 						<input type="text" id="message" class="form-control">
 						<input type="submit" value="enter" class="btn btn-warning">
 					</form>
-
-					<iframe src="https://eb.shh.coffee/" frameborder="0"></iframe>
-
 				</div>
 
 			</div>
