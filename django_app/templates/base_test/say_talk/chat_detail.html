@@ -11,8 +11,7 @@
 <script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
 <script>
 	$(document).ready(function(){
-
-            var socket = io.connect('http://52.78.246.112:8081');
+            var socket = io.connect('https://52.78.246.112:8081',{security: true});
             var $messageForm = $('#send-message');
             var $messageBox = $('#message');
             var $chat = $('#chat');
