@@ -131,7 +131,7 @@ class TalkDetailPageView(TemplateView):
         return context
 
 class ChatDetailPageView(TemplateView):
-    template_name = 'base_test/say_talk/chat_detail.html'
+    template_name = 'base_test/say_talk/chat_video_stream.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
