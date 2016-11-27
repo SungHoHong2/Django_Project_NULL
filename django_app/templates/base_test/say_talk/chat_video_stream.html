@@ -30,49 +30,45 @@
 
 	 <div class="container mtb login_content">
 	 	<div class="row">
-	 		<div class="col-lg-12">
-	 			<h4>우리들의 프로젝트에 대한 설명입니다.</h4>
+
+			<div class="col-lg-6">
+				<h4>영상 공유</h4>
+				<div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
+	 			<div class="hline"></div>
+				<div id="videos-container"></div>
+			</div>
+			
+			<div class="col-lg-6">
+	 			<h4>채팅, 파일 공유 공간입니다</h4>
 	 			<div class="hline"></div>
 
+			<section class="experiment">
+				<div class="make-center">
+					<input type="text" id="room-id" value="abcdef" >
+					<button id="open-room" class="btn btn-warning">Open Room</button>
+					<button id="join-room" class="btn btn-warning">Join Room</button>
+					<br>
+					<input type="text" id="input-text-chat" placeholder="Enter Text Chat" disabled>
+					<button id="share-file" class="btn btn-danger" disabled>Share File</button>
+					<br>
+					<button id="btn-leave-room" class="btn btn-warning" disabled>Leave /or close the room</button>
 
-        <article>
-        <header style="text-align: center;">
-            <h1>Audio+Video+TextChat+FileSharing using RTCMultiConnection</h1>
-        </header>
+				</div>
 
-
-        <section class="experiment">
-            <div class="make-center">
-                <input type="text" id="room-id" value="abcdef">
-                <button id="open-room">Open Room</button>
-                <button id="join-room">Join Room</button>
-                <button id="open-or-join-room">Auto Open Or Join Room</button>
-
-                <br><br>
-                <input type="text" id="input-text-chat" placeholder="Enter Text Chat" disabled>
-                <button id="share-file" disabled>Share File</button>
-                <br><br>
-                <button id="btn-leave-room" disabled>Leave /or close the room</button>
-
-                <div id="room-urls" style="text-align: center;display: none;background: #F1EDED;margin: 15px -10px;border: 1px solid rgb(189, 189, 189);border-left: 0;border-right: 0;"></div>
-            </div>
-
-            <div id="chat-container">
-                <div id="file-container"></div>
-                <div class="chat-output"></div>
-            </div>
-
-            <div id="videos-container"></div>
-        </section>
+				<div id="chat-container">
+					<div id="file-container"></div>
+					<div class="chat-output"></div>
+				</div>
+			</section>
 
         <!-- <script src="/dist/rmc3.min.js"></script> -->
-        <script src="https://cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
+        <script src="{% static 'base_test/js/webrtc/rmc3.min.js' %}"></script>
 
         <!-- custom layout for HTML5 audio/video elements -->
-        <script src="https://cdn.webrtc-experiment.com/getMediaElement.js"></script>
+		<script src="{% static 'base_test/js/webrtc/getMediaElement.js' %}"></script>
 
         <!-- <script src="/dev/FileBufferReader.js"></script> -->
-        <script src="https://cdn.webrtc-experiment.com:443/rmc3.fbr.min.js"></script>
+		<script src="{% static 'base_test/js/webrtc/rmc3.fbr.min.js' %}"></script>
 
         <!-- socket.io for signaling -->
         <script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
