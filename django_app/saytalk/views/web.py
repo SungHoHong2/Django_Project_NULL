@@ -13,6 +13,7 @@ from collection.models import Image, Hash_Tag, Hash_Relationship
 from project_null.custom_authentication import CsrfExemptSessionAuthentication
 from saytalk.dto.forms import PostInsertForm, PostImageForm
 from saytalk.dto.serializer import SayTalkPostSerializer
+from saytalk.models import Talk_Relationship, SayTalk
 
 
 class TalkListPageView(TemplateView):
@@ -33,6 +34,7 @@ class TalkListPageView(TemplateView):
                          "join collection_hash_relationship chr on chr.hash_tag_id = cht.id "
                          "group by chr.say_talk_id "
                 ") hht on ss.id = hht.say_talk_id "
+                " where ss.is_parent is true "
             "ORDER BY ss.created_date DESC "
             "LIMIT 16 "
         )
@@ -81,9 +83,12 @@ class PostViewSet(viewsets.ModelViewSet):
         myDict['content'] = request.data['content']
 
 
-        # if myDict.get('comment_type') is not None:
-        #     myDict['is_parent'] = False
-
+        # 뎃글형 게시글
+        if request.data.get('is_parent') is not None:
+            myDict['is_parent'] = False
+            par_say_talk = SayTalk.objects.get(id=request.data.get('is_parent'))
+        else:
+            myDict['is_parent'] = True
 
 
         qdict = QueryDict('', mutable=True)
@@ -92,6 +97,11 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=qdict)
         serializer.is_valid(raise_exception=True)
         _say_talk = serializer.save()
+
+
+        # 뎃글 게시글이 상단 게시글에 결합
+        if request.data.get('is_parent') is not None:
+            Talk_Relationship.objects.create(follower= _say_talk, followee= par_say_talk)
 
 
         if request.data.get('image_file_ids') is not None:
@@ -107,6 +117,8 @@ class PostViewSet(viewsets.ModelViewSet):
             for hash_tag_id in [x.strip() for x in request.data['hash_tag_ids'].split(',')]:
                 hash_tag = Hash_Tag.objects.get(id=hash_tag_id)
                 Hash_Relationship.objects.create(say_talk= _say_talk, hash_tag=hash_tag)
+
+
         return redirect('saytalk:talk_list')
 
 
@@ -148,6 +160,23 @@ class TalkDetailPageView(TemplateView):
         "where ss.id = %s "
         )
 
+
+        _query_sub_detail = (
+                 "select ss.id, "
+                 "ci.img_file AS profile_img, "
+                 "postimg.talk_images AS talk_images, "
+                 "ss.content AS content, "
+                 "ss.title AS title "
+                 "FROM saytalk_talk_relationship sr "
+                 "JOIN saytalk_saytalk ss on sr.followee_id = %s and ss.id = sr.follower_id "
+                 "JOIN member_myuser mm ON ss.created_by != '' AND mm.id = ss.created_by::Integer "
+                 "JOIN collection_image ci ON ci.member_id = mm.id AND ci.img_order = 1 "
+                 "LEFT JOIN "
+                 "(SELECT ci2.say_talk_id, string_agg(ci2.img_file, ', ') AS talk_images "
+                 "FROM collection_image ci2 GROUP BY ci2.say_talk_id) postimg "
+                 "ON postimg.say_talk_id = sr.follower_id "
+        )
+
         with connection.cursor() as cursor:
             cursor.execute(_query_detail,[kwargs.get('pk'), kwargs.get('pk'), kwargs.get('pk')])
             _list = cursor.fetchall()
@@ -159,6 +188,17 @@ class TalkDetailPageView(TemplateView):
                        'tag_names': row[5],
                        }  for row in _list]
             context['talk_detail'] = json.dumps(_list)
+
+            cursor.execute(_query_sub_detail,[kwargs.get('pk')])
+            _list = cursor.fetchall()
+            _list = [ {'id': row[0],
+                       'profile_img': settings.MEDIA_URL+xstr(row[1]),
+                       'talk_img': row[2],
+                       'content': row[3],
+                       'title': row[4],
+                       }  for row in _list]
+            context['talk_sub_detail'] = json.dumps(_list)
+
 
         context['img_url'] = settings.MEDIA_URL
         context['comment_post'] = PostInsertForm()
