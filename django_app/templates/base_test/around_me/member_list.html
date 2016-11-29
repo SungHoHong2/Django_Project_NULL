@@ -132,7 +132,7 @@
 		// GPS 인식 가능 여부(현재 위치)
 		if (navigator.geolocation) {
 
-			navigator.geolocation.getCurrentPosition(function (pos) {
+			navigator.geolocation.watchPosition(function (pos) {
 
 				// 현재 위경도 값(GPS) 변수에 넣기.
 				var latitude = pos.coords.latitude;
