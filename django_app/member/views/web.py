@@ -100,6 +100,7 @@ class AroundMeView(TemplateView):
             "    , mm.username as username "
             "    , ci.img_file as img_file "
             "    , string_agg(cch.tag_name, ', ') as tag_names "
+            "    , mm.google_location as google_location "
             "from member_myuser mm "
             "left join "
             "( select "
@@ -115,7 +116,7 @@ class AroundMeView(TemplateView):
             ") cch "
             "on cch.member_id = mm.id "
             "group by "
-            "mm.id, mm.username, ci.img_file, mm.created_date "
+            "mm.id, mm.username, ci.img_file, mm.created_date, mm.google_location "
             "order by "
             "mm.created_date "
             "DESC LIMIT 5 "
@@ -124,7 +125,7 @@ class AroundMeView(TemplateView):
         with connection.cursor() as cursor:
             cursor.execute(_query, [])
             _list = cursor.fetchall()
-            _list = [ {'id' : row[0], 'username' : row[1], 'img_file' : settings.MEDIA_URL+xstr(row[2]), 'tag_names' : row[3] }  for row in _list]
+            _list = [ {'id' : row[0], 'username' : row[1], 'img_file' : settings.MEDIA_URL+xstr(row[2]), 'tag_names' : row[3], 'google_location' : row[4] }  for row in _list]
             context['member_list'] = json.dumps(_list)
         return context
 
