@@ -79,6 +79,13 @@ class PostViewSet(viewsets.ModelViewSet):
         myDict['created_by'] = request.user.id
         myDict['title'] = request.data['title']
         myDict['content'] = request.data['content']
+
+
+        # if myDict.get('comment_type') is not None:
+        #     myDict['is_parent'] = False
+
+
+
         qdict = QueryDict('', mutable=True)
         qdict.update(myDict)
 
@@ -111,24 +118,55 @@ class TalkDetailPageView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         _query_detail = (
-            "SELECT "
-                "ss.id, ss.title, ss.content, ci_post.img_file as post_img, ci_user.img_file as user_img "
-            "FROM saytalk_saytalk ss "
-            "JOIN member_myuser mm on mm.id = ss.created_by::Integer "
-            "JOIN collection_image ci_user on ci_user.member_id = mm.id "
-            "LEFT JOIN collection_image ci_post ON ci_post.say_talk_id = ss.id AND ci_post.img_order = 1 "
-            "WHERE ss.id = %s "
-            "ORDER BY ss.created_date "
-            "DESC LIMIT 1"
+            "select "
+                    "ss.id, "
+                    "ci.img_file as profile_img, "
+                    "postimg.talk_images as talk_images, "
+                    "ss.content as content, "
+                    "ss.title as title, "
+                    "chrs.tag_names as tag_names "
+            "from saytalk_saytalk ss "
+            "join member_myuser mm on ss.created_by != '' and mm.id = ss.created_by::Integer "
+            "join collection_image ci on ci.member_id = mm.id and ci.img_order = 1 "
+            "join( "
+                "select "
+                "ci2.say_talk_id, string_agg(ci2.img_file, ', ') as talk_images "
+                "from collection_image ci2 "
+            "where "
+            "ci2.say_talk_id = %s "
+            "group by ci2.say_talk_id "
+        ") postimg on postimg.say_talk_id = ss.id "
+        "join( "
+            "select "
+                "chr.say_talk_id, string_agg(c.tag_name, ', ') as tag_names "
+                "from collection_hash_relationship chr "
+            "join collection_hash_tag c on "
+            "c.id = chr.hash_tag_id "
+            "where chr.say_talk_id = %s "
+            "group by say_talk_id "
+        ") chrs on chrs.say_talk_id = ss.id "
+        "where ss.id = %s "
         )
 
         with connection.cursor() as cursor:
-            cursor.execute(_query_detail,[kwargs.get('pk')])
+            cursor.execute(_query_detail,[kwargs.get('pk'), kwargs.get('pk'), kwargs.get('pk')])
             _list = cursor.fetchall()
-            _list = [ {'id': row[0], 'title': row[1], 'content':row[2], 'post_img':settings.MEDIA_URL+xstr(row[3]), 'user_img':settings.MEDIA_URL+xstr(row[4]), }  for row in _list]
+            _list = [ {'id': row[0],
+                       'profile_img': settings.MEDIA_URL+xstr(row[1]),
+                       'talk_img': row[2],
+                       'content': row[3],
+                       'title': row[4],
+                       'tag_names': row[5],
+                       }  for row in _list]
             context['talk_detail'] = json.dumps(_list)
 
+        context['img_url'] = settings.MEDIA_URL
+        context['comment_post'] = PostInsertForm()
+        context['comment_img_post'] = PostImageForm()
         return context
+
+
+
 
 class ChatDetailPageView(TemplateView):
     template_name = 'base_test/say_talk/chat_video_stream.html'

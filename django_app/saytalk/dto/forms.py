@@ -17,3 +17,6 @@ class PostImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ('img_file',)
+
+
+
