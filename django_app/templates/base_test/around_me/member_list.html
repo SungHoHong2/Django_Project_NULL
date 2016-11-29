@@ -33,10 +33,39 @@
 </style>
 <script>
 
+var google_data = {};
+
     $(document).ready(function(){
         var friends_list = {{ member_list|safe }};
         console.log(friends_list);
         $("#member_ist_templ").tmpl(friends_list).appendTo( "#friends_list" );
+
+
+			    google_data = {"type" : "FeatureCollection"
+				                   , "features" : [] };
+
+				var _features = [];
+
+				$(friends_list).each(function(index, item){
+						var _feature = {};
+						var _geometry = {};
+						var _temp = [];
+						_temp.push(parseFloat(item.google_location.split(',')[0]));
+						_temp.push(parseFloat(item.google_location.split(',')[1]));
+
+						_geometry['coordinates'] = _temp;
+						_geometry['type'] = 'Point';
+						_geometry['id'] = index.id;
+
+						_feature['type'] = "Feature";
+						_feature['geometry'] = _geometry;
+					_features.push(_feature);
+				});
+
+				google_data['features'] = _features;
+
+		//{"type":"Feature","geometry":{"type":"Point","coordinates":[37.517932,127.021830]},"id":"ak10559055"},
+
 
 		$('.member_detail_btn').click(function(){
 
@@ -59,7 +88,6 @@
 		});
 
 		openModal();
-
     });
 
 </script>
@@ -138,8 +166,14 @@
 				var latitude = pos.coords.latitude;
 				var longitude = pos.coords.longitude;
 
+
+				/*  AJAX 통신을 사용해서 저장 */
+				console.log(latitude);
+				console.log(longitude);
+
+
 				var mapOptions = {
-					zoom: 16,
+					zoom: 14,
 					mapTypeId: google.maps.MapTypeId.ROADMAP,
 					center: new google.maps.LatLng(latitude,longitude)
 				};
@@ -168,10 +202,23 @@
 				};
 				cityCircle = new google.maps.Circle(populationOptions);
 
-				var script = document.createElement('script');
+				/*
+				var _data = {"type":"FeatureCollection",
+							"features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[37.515836,127.020132]},"id":"usc000csx3"},
+							{"type":"Feature","geometry":{"type":"Point","coordinates":[37.517932,127.021830]},"id":"ak10559055"},
+							{"type":"Feature","geometry":{"type":"Point","coordinates":[37.515366,127.024900]},"id":"ak10559055"},
+							{"type":"Feature","geometry":{"type":"Point","coordinates":[37.5107224,127.033926]},"id":"ak10559055"},
+							{"type":"Feature","geometry":{"type":"Point","coordinates":[37.515688,127.021456]},"id":"ak10559055"}]};
+				*/
 
-				script.src = "{% static 'base_test/js/data.js' %}";
-				document.getElementsByTagName('head')[0].appendChild(script);
+				for (var i = 0; i < google_data.features.length; i++) {
+							var coords = google_data.features[i].geometry.coordinates;
+							var latLng = new google.maps.LatLng(coords[0],coords[1]);
+							var marker = new google.maps.Marker({
+								position: latLng,
+								map: map
+							});
+						}
 
 			}, function (error) {
 				switch (error.code) {
@@ -191,17 +238,6 @@
 			});
 		} else {
 			alert("Geolocation is not supported by this browser.");
-		}
-	}
-
-	window.friends_callback = function(results) {
-		for (var i = 0; i < results.features.length; i++) {
-			var coords = results.features[i].geometry.coordinates;
-			var latLng = new google.maps.LatLng(coords[0],coords[1]);
-			var marker = new google.maps.Marker({
-				position: latLng,
-				map: map
-			});
 		}
 	}
 
