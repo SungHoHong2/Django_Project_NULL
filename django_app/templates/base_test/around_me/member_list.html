@@ -118,17 +118,102 @@
 
 
     <script>
-    function myMap() {
-      var mapCanvas = document.getElementById("map");
-      var mapOptions = {
-        center: new google.maps.LatLng(51.5, -0.2),
-        zoom: 10
-      }
-      var map = new google.maps.Map(mapCanvas, mapOptions);
-    }
+   var markers = [];
+	var map;
+	var geocoder;
+	var infowindow = null;
+
+	var latitude = 0;
+	var longitude = 0;
+
+	function myMap() {
+		geocoder = new google.maps.Geocoder();
+
+		// GPS 인식 가능 여부(현재 위치)
+		if (navigator.geolocation) {
+
+			navigator.geolocation.getCurrentPosition(function (pos) {
+
+				// 현재 위경도 값(GPS) 변수에 넣기.
+				var latitude = pos.coords.latitude;
+				var longitude = pos.coords.longitude;
+
+				var mapOptions = {
+					zoom: 16,
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					center: new google.maps.LatLng(latitude,longitude)
+				};
+
+				map = new google.maps.Map(document.getElementById('map'),mapOptions);
+
+				// 현재 위치 마커 생성
+				var marker = new google.maps.Marker({
+					position: new google.maps.LatLng(latitude,longitude),
+					map: map,
+					draggable: false,
+					icon: "http://maps.google.com/mapfiles/ms/micons/man.png"
+				});
+				markers.push(marker);
+
+				// 현재 위치 기준 원 그리기
+				var populationOptions = {
+					strokeColor: '#000000',
+					strokeOpacity: 0.8,
+					strokeWeight: 2,
+					fillColor: '#808080',
+					fillOpacity: 0.5,
+					map: map,
+					center: new google.maps.LatLng(latitude,longitude) ,
+					radius: 1000
+				};
+				cityCircle = new google.maps.Circle(populationOptions);
+
+				var script = document.createElement('script');
+
+				script.src = "{% static 'base_test/js/data.js' %}";
+				document.getElementsByTagName('head')[0].appendChild(script);
+
+			}, function (error) {
+				switch (error.code) {
+				case 1:
+					$("#errormsg").html("User denied the request for Geolocation.");
+					break;
+				case 2:
+					$("#errormsg").html("Location information is unavailable.");
+					break;
+				case 3:
+					$("#errormsg").html("The request to get user location timed out.");
+					break;
+				case 0:
+					$("#errormsg").html("An unknown error occurred.");
+					break;
+				}
+			});
+		} else {
+			alert("Geolocation is not supported by this browser.");
+		}
+	}
+
+	window.friends_callback = function(results) {
+		for (var i = 0; i < results.features.length; i++) {
+			var coords = results.features[i].geometry.coordinates;
+			var latLng = new google.maps.LatLng(coords[0],coords[1]);
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map
+			});
+		}
+	}
+
+	$( window ).load(function() {
+		myMap();
+	});
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSeNBXeFjA0l3gQCnYU6vbnjmhRseufwQ&callback=myMap"></script>
+
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Mans0k30To1GtjB2-T8DWhd3bmD-nes&callback=myMap">
+  </script>
 
 	<button id="myBtn" style="display: none">Open Modal</button>
 	<div id="myModal" class="modal">
