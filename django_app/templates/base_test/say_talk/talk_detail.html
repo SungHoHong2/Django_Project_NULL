@@ -57,7 +57,7 @@
 
 				if(item.talk_img){
 					$(item.talk_img.split(',')).each(function(index_sub, item_sub){
-							$('#img_'+item.id).append($('<img/>').width('200px').attr('src',{{ img_url }}+ item_sub.replace(' ','')));
+							$('#img_'+item.id).append($('<img/>').width('200px').attr('src', '{{ img_url }}'+ item_sub.replace(' ','')));
 					});
 				}
 
