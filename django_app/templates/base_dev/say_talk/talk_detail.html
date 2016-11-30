@@ -1,0 +1,161 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+<style>
+.login_content{ margin-top : 10px; }
+
+.custom_form_group{
+    width: 100%;
+    margin-top: 16px;
+}
+
+.custom_row{
+    margin-bottom: 18px;
+}
+
+.image_dir{
+	width: 100px;
+    height: 100px;
+}
+.img_class_dev{
+    display: block;
+    float: left;
+    margin-right: 15px;
+    background : grey;
+}
+.img_block_dev{
+    height: 113px;
+}
+
+</style>
+
+<script>
+	$(document).ready(function(){
+			console.log({{ talk_detail|safe }})
+       		 $("#saytalk_detail_templ").tmpl({{ talk_detail|safe }}).appendTo( "#post_detail_div" );
+
+	});
+</script>
+
+<script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
+            <div class="img_block_dev">
+            	<span class="img_class_dev member_detail_btn">
+            	 <img class="image_dir" src="${user_img}" alt=""></span>
+                <span>
+                	<strong class="member_detail_btn">${title}</strong>
+                </span>
+                <p>${content}</p>
+  				<p><img src="${post_img}" alt=""></span></p>
+            </div>
+</script>
+
+
+<style>
+.login_content{ margin-top : 10px; }
+</style>
+<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>Talk Detail</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+
+	 <div class="container mtb login_content">
+	 	<div class="row">
+
+			<div class="col-lg-4">
+
+
+		 		<h4>Menu</h4>
+		 		<div class="hline"></div>
+		 			<p>
+		 				<input type="text" class="form-control" placeholder="Search something">
+		 			</p>
+				    <p>	<button class="btn btn-warning"> 글작성 </button></p>
+
+		 		<div class="spacing"></div>
+
+		 		<h4>Recent Posts</h4>
+		 		<div class="hline"></div>
+					<ul class="popular-posts">
+		                <li>
+		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
+		                    <em>Posted on 02/21/14</em>
+		                </li>
+		                <li>
+		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
+		                    <em>Posted on 03/01/14</em>
+		                </li><li>
+		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
+		                    <em>Posted on 05/16/14</em>
+		                </li>
+		                <li>
+		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
+		                    <em>Posted on 05/16/14</em>
+		                </li>
+		            </ul>
+
+		 		<div class="spacing"></div>
+
+		 		<h4>Popular Tags</h4>
+		 		<div class="hline"></div>
+		 			<p>
+		            	<a class="btn btn-theme" href="#" role="button">Design</a>
+		            	<a class="btn btn-theme" href="#" role="button">Wordpress</a>
+		            	<a class="btn btn-theme" href="#" role="button">Flat</a>
+		            	<a class="btn btn-theme" href="#" role="button">Modern</a>
+		            	<a class="btn btn-theme" href="#" role="button">Wallpaper</a>
+		            	<a class="btn btn-theme" href="#" role="button">HTML5</a>
+		            	<a class="btn btn-theme" href="#" role="button">Pre-processor</a>
+		            	<a class="btn btn-theme" href="#" role="button">Developer</a>
+		            	<a class="btn btn-theme" href="#" role="button">Windows</a>
+		            	<a class="btn btn-theme" href="#" role="button">Phothosop</a>
+		            	<a class="btn btn-theme" href="#" role="button">UX</a>
+		            	<a class="btn btn-theme" href="#" role="button">Interface</a>
+		            	<a class="btn btn-theme" href="#" role="button">UI</a>
+		            	<a class="btn btn-theme" href="#" role="button">Blog</a>
+		 			</p>
+	 		</div>
+	 		<div class="col-lg-8">
+	 			<h4> 게시글 상세 페이지 </h4>
+	 			<div class="hline"></div>
+		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+
+				<div id="post_detail_div"></div>
+
+			</div>
+	 	</div><! --/row -->
+	 </div><! --/container -->
+
+
+<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>API</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 		<div class="col-lg-8">
+		 			<h4>Description</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+{% endblock %}

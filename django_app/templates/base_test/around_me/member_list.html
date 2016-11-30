@@ -40,6 +40,13 @@ var google_data = {};
         console.log(friends_list);
         $("#member_ist_templ").tmpl(friends_list).appendTo( "#friends_list" );
 
+		$(friends_list).each(function(index, item){
+			if(item.tag_names){
+				$(item.tag_names.split(', ')).each(function(index_sub, item_sub){
+						$('#member_tags_'+item.id).append($('<button/>').addClass('btn btn-theme').text(item_sub));
+				});
+			}
+		});
 
 			    google_data = {"type" : "FeatureCollection"
 				                   , "features" : [] };
@@ -68,10 +75,10 @@ var google_data = {};
 
 
 		$('.member_detail_btn').click(function(){
-
+			_followee_id = $(this).attr('id');
 			_tag_list = $(this).attr('tags');
 
-			getAjax('GET', "/member/member_detail/"+$(this).attr('id')
+			getAjax('GET', "/member/member_detail/"+_followee_id
 			, 'application/json', function(response){
 
 				$('#member_detail_photo').empty();
@@ -79,13 +86,21 @@ var google_data = {};
 					$('#member_detail_photo').append($('<img/>').height(200).attr('src',item.img_file))
 				});
 
+				$('#member_like_btn').attr('followee_id', _followee_id);
 				$('#member_detail_hashtag').val('').val(_tag_list);
 				$('#myBtn').trigger('click');
-
-
 			});
-
 		});
+
+
+	 $('#member_like_btn').click(function(){
+		postAjax('POST', {}, '/member/member_detail/'+$(this).attr('followee_id')+'/'
+			, 'application/json', function(response){
+				alert('좋아요 반영되었고요 좋았던 사람 또 좋아요 누를면 지금은 에러나요');
+		});
+	 });
+
+
 
 		openModal();
     });
@@ -100,9 +115,9 @@ var google_data = {};
                 	<strong class="member_detail_btn" id= '${id}' tags= '${ tag_names }'>${username}</strong>
                 </span>
                 <br>
-				<span>
-					${ tag_names }
-				<span>
+				<span id="member_tags_${id}"></span>
+				<br>
+				<button class="btn btn-danger"> 좋아요 횟수 : ${ likes } </button>
             </div>
 </script>
 
@@ -112,7 +127,7 @@ var google_data = {};
 	<div id="blue">
 	    <div class="container">
 			<div class="row">
-				<h3>About Us</h3>
+				<h3>사용자 목록 조회</h3>
 			</div><!-- /row -->
 	    </div> <!-- /container -->
 	</div><!-- /blue -->
@@ -268,33 +283,12 @@ var google_data = {};
 						<input type="text" id="member_detail_hashtag" class="form-control" disabled >
 					</p>
 					<p>
-						<button class="btn btn-warning" id="post_btn"> 좋아해 </button>
-						<button class="btn btn-warning" id="post_btn"> 1:1 채팅 </button>
+						<button class="btn btn-warning" id="member_like_btn"> 좋아해 </button>
+						<button class="btn btn-warning" id="member_chat_btn"> 1:1 채팅 </button>
 					</p>
 		  </div>
 	  </div>
 	</div>
-
-
-<!-- *****************************************************************************************************************
-	 FOOTER
-	 ***************************************************************************************************************** -->
-	 <div id="footerwrap">
-	 	<div class="container">
-		 	<div class="row">
-		 		<div class="col-lg-4">
-		 			<h4>API</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 		<div class="col-lg-8">
-		 			<h4>Description</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 	</div><! --/row -->
-	 	</div><! --/container -->
-	 </div><! --/footerwrap -->
 
 {% endblock %}
 

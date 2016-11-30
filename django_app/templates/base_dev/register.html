@@ -1,0 +1,127 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+<script>
+
+	var temp_file_save_records = [];
+	$(document).ready(function(){
+
+		var hash_tag_list = {{ hash_tags|safe }};
+		$(hash_tag_list).each(function(index, item){
+			$('#hash_tag_div').append($('<button/>').addClass('btn btn-theme').text(item.tag_name).attr('id', item.id)
+			.click(function(){
+				$(this).remove();
+				var text = $('#hash_tag_ids').val();
+				if(text.length>0){
+					text+=','
+				}
+
+				text+= item.id;
+				$('#hash_tag_ids').val(text);
+				$('#register_form').append($('<button/>').addClass('btn btn-theme').text(item.tag_name).attr('id', item.id));
+
+			})
+
+			);
+
+		});
+
+		$('#file_temp_submit').click(function(){
+
+				var form_data = new FormData();
+				form_data.append("img_file",$('input[name=img_file]')[0].files[0])
+				formAjax('POST', form_data, "{% url 'collection:temp_image' %}"
+						, 'application/json'
+						, function(response){
+								console.log(response);
+								var text = $('#image_file_ids').val()
+
+								if(text.length>0){
+									text+=','
+								}
+
+								text+=response.id
+								$('#image_file_ids').val(text)
+								$('#register_form').append($('<img/>').width(100).height(100).attr('src',response.img_file))
+				})
+
+		});
+
+
+	});
+</script>
+
+
+<main>
+	<div class="container">
+		<div class="content col-6">
+			<h3>Come to Join Us!</h3>
+ 			<form id="register_form" role="form" class="form-group" method="POST" action="{% url 'member:register' %}">
+				<!-- {{ register_form.as_p }} -->
+				<fieldset>
+					<legend class="hidden">회원가입 폼</legend>
+					<div class="nickname-form col-5">
+						<label for="join-name" class="form-label">Nickname</label>
+						<input type="text" id="join-name" class="form-input" required placeholder="닉네임을 입력해주세요">
+						<button class="join-cf-btn">중복확인</button>
+					</div>
+					<div class="password-join-form col-5">
+						<label for="join-ps" class="form-label">Password</label>
+						<input type="text" id="join-ps" class="form-input" required placeholder="비밀번호를 입력해주세요">
+					</div>
+					<div class="email-join-form col-5">
+						<label for="join-email" class="form-label">Email</label>
+						<input type="email" id="join-email" class="form-input" required placeholder="user@email.com">
+					</div>
+					<div class="pn-form col-5">
+						<label for="join-fn" class="form-label">Phone_number</label>
+						<input type="number" id="join-fn" class="form-input" required placeholder="핸드폰 번호를 입력해주세요">
+					</div>
+
+					<div class="confirmation col-5">
+						<p>* 추가 인증이 필요합니다 *</p>
+						<button>이메일로 인증</button>
+						<button>핸드폰으로 인증</button>
+						<label for="cf-number">인증번호 입력</label>
+						<input type="number" id="cf-number" required placeholder="인증번호">
+						<button class="cf-submit">확인</button>
+					</div>
+
+				<p><input type="hidden" id= "image_file_ids" name="image_file_ids" class="form-control"></p>
+				<p><input type="hidden" id= "hash_tag_ids" name="hash_tag_ids" class="form-control"></p>
+
+				</fieldset>
+			</form>
+
+		  <div role="form-inline" class="form-inline col-3" method="POST"  enctype="multipart/form-data" action="">
+			  <div class="form-group img-submit">
+			  <!-- {{ register_image_form }} -->
+					<tr><td><input class="form-control" id="id_img_file" name="img_file" type="file" required /></td></tr>
+			  	<a href="#"><span id="file_temp_submit" class="img-submit-btn">사진 추가</span></a>
+			  </div>
+		  </div>
+
+			<button type="submit" class="join-btn">회원가입</button>
+		  <div id="hash_tag_div">
+		  </div>
+		</div>
+	</div>
+</main>
+
+
+
+	<footer>
+		<div class="footer col-6">
+			<div class="copyright">
+				Copyright © 2016 - All Rights Reserved
+			</div>
+			<div class="end-row">
+				<a href="#">Privacy &amp; Cookies</a>
+				<a href="#">Terms &amp; Conditions</a>
+				<a href="#">Accessibility</a>
+				<a href="#">FAQ</a>
+			</div>
+		</div>
+	 </footer>
+
+{% endblock %}

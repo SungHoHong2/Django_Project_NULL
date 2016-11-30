@@ -1,0 +1,76 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+
+<script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
+<script>
+	$(document).ready(function(){
+		            var socket = io.connect('https://52.78.246.112:8081',{secure: true});
+	});
+</script>
+
+<style>
+.login_content{ margin-top : 10px; }
+</style>
+<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>Profile</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+
+	 <div class="container mtb login_content">
+	 	<div class="row">
+			<div class="col-lg-4">
+		 		<h4>회원 정보 메뉴</h4>
+		 		<div class="hline"></div>
+			 		<p><a href="#"><i class="fa fa-angle-right"></i> 개인정보 수정</a></p>
+			 		<p><a href="#"><i class="fa fa-angle-right"></i> 내가쓴글 관리</a> <span class="badge badge-theme pull-right">3</span></p>
+			 		<p><a href="#"><i class="fa fa-angle-right"></i> 내가 초대받은 채팅</a> <span class="badge badge-theme pull-right">11</span></p>
+			 		<p><a href="#"><i class="fa fa-angle-right"></i> 나를 좋아하는 사람</a> <span class="badge badge-theme pull-right">5</span></p>
+			 		<p><a href="#"><i class="fa fa-angle-right"></i> 설정</a> <span class="badge badge-theme pull-right">7</span></p>
+		 		<div class="spacing"></div>
+	 		</div>
+
+	 		<div class="col-lg-8">
+	 			<h4> 개인정보 수정 공간입니다. </h4>
+	 			<div class="hline"></div>
+		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+
+
+			</div>
+	 	</div><! --/row -->
+	 </div><! --/container -->
+
+
+<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>API</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 		<div class="col-lg-8">
+		 			<h4>Description</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+{% endblock %}

@@ -21,9 +21,6 @@ class MyUser(AbstractUser):
                                         , related_name='follower_set_users'
                                         , through='Like_Relationship')
 
-    # image - connected with the collecion.image class
-    # hashtag - connected with the collection.hash_tag class
-
 
     def save(self, *args, **kwargs):
         if not self.id:

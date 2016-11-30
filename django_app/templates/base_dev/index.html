@@ -1,0 +1,57 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+<script>
+	$(document).ready(function(){
+
+	});
+</script>
+
+
+<main>
+  <div class="container col-8">
+		<div class="content col-4">
+			<h3>Log in Here!</h3>
+			<div class="row">
+	 			<div class="form-row">
+			 		<form role="form" class="form-group" method="POST" action="{% url 'member:login' %}">
+					<!-- {{  login_form.as_p }} -->
+						<fieldset>
+							<legend class="hidden">로그인 폼</legend>
+							<div class="email-form">
+								<label for="user-email" class="form-label">Email</label>
+								<input type="email" id="user-email" class="form-input" required placeholder="User@email.com">
+							</div>
+							<div class="password-form">
+								<label for="password" class="form-label">Password</label>
+								<input type="text" id="password" class="form-input" required placeholder="Password">
+							</div>
+						</fieldset>
+					</form>
+					<button type="submit" class="login-btn">Login</button>
+				</div>
+				<div class="not-member">
+					<p class="go-to-join-btn">아직 회원이 아니신가요?</p>
+					<a href="/register">회원가입</a>
+					<a href="#">소셜 계정으로 로그인</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+<footer>
+  <div class="footer col-6">
+ 		<div class="copyright">
+ 			Copyright © 2016 - All Rights Reserved
+ 		</div>
+ 		<div class="end-row">
+      <a href="#">Privacy &amp; Cookies</a>
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
+		</div>
+	</div>
+ </footer>
+
+{% endblock %}
