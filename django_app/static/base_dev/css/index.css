@@ -1,0 +1,131 @@
+
+.container{
+  min-height: 500px;
+  margin-top: 100px;
+  margin-bottom: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  min-height: 40vh;
+}
+
+.content h3{
+  font-size: 3.5rem;
+  color: #384452;
+}
+
+.row{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.form-row, .not-member{
+  width: 50%;
+  text-align: center;
+}
+
+fieldset{
+  border: none;
+  text-align: center;
+}
+
+.form-row .email-form, .form-row .password-form{
+  text-align: left;
+  width: 80%;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-label{
+  color: #384452;
+  font-size: 2rem;
+}
+
+.form-row .form-input{
+  width: 100%;
+}
+
+.form-input{
+  height: 30px;
+  border-radius: 15px;
+  font-size: 1.2rem;
+  font-style: italic;
+  padding-left: 10px;
+  box-shadow: 1px 1px 1px #8DAFD7;
+  background-color: rgba(120,120,120,0.3);
+}
+
+.login-btn{
+  font-family: "Ubuntu-L";
+  border: none;
+  padding: 5px 10px 5px 10px;
+  background: #FF3644;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #787878;
+  margin: 8px 0 18px 0;
+}
+
+.not-member{
+  color: #384452;
+  padding-top: 8%;
+}
+
+.go-to-join-btn{
+  font-size: 1.4rem;
+  margin-bottom: 5px;
+}
+
+.not-member a{
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 1.6rem;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #FF3644;
+}
+
+
+/* footer */
+
+footer{
+  height: 100px;
+  background-color: #8DAFD7;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+}
+
+.footer{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.copyright{
+  font-style: italic;
+  font-family: "Ubuntu-L";
+}
+
+.end-row{
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+}

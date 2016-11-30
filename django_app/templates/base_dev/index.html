@@ -1,9 +1,27 @@
-{% extends 'base_test/base.html' %}
+{% extends 'base_dev/base.html' %}
 {% block content %}
 
 <script>
 	$(document).ready(function(){
+			$('.login-btn').click(function(){
 
+				var form_data = $("#login_form").serialize();
+				$.ajax( {
+					  type: "POST",
+					  url:  "{% url 'member:login' %}",
+					  data: form_data,
+					  success: function( response ) {
+						location.reload();
+					  },
+					  error : function(response){
+					  	alert('error baby');
+					  }
+				});
+
+
+
+
+			});
 	});
 </script>
 
@@ -14,17 +32,17 @@
 			<h3>Log in Here!</h3>
 			<div class="row">
 	 			<div class="form-row">
-			 		<form role="form" class="form-group" method="POST" action="{% url 'member:login' %}">
+			 		<form role="form" id='login_form' class="form-group" method="POST" action="{% url 'member:login' %}">
 					<!-- {{  login_form.as_p }} -->
 						<fieldset>
 							<legend class="hidden">로그인 폼</legend>
 							<div class="email-form">
-								<label for="user-email" class="form-label">Email</label>
-								<input type="email" id="user-email" class="form-input" required placeholder="User@email.com">
+								<label for="user-email" class="form-label">Nickname</label>
+								<input type="text" id="user-email" name="username" class="form-input" required placeholder="Nickname">
 							</div>
 							<div class="password-form">
 								<label for="password" class="form-label">Password</label>
-								<input type="text" id="password" class="form-input" required placeholder="Password">
+								<input type="password" id="password" name="password" class="form-input" required placeholder="Password">
 							</div>
 						</fieldset>
 					</form>

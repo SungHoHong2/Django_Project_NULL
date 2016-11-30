@@ -1,0 +1,94 @@
+
+.content{
+  color: #384452;
+}
+
+.form-group{
+  width: 100%;
+}
+
+#register_form{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.nickname-form, .password-join-form, .email-join-form, .pn-form{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.nickname-form label,
+.password-join-form label,
+.email-join-form label,
+.pn-form label{
+  width: 30%;
+  text-align: right;
+}
+
+.nickname-form input,
+.password-join-form input,
+.email-join-form input,
+.pn-form input{
+  width: 50%;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.join-cf-btn, .img-submit-btn{
+  color: #FF3644;
+  font-size: 1.4rem;
+  text-decoration: underline;
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+.confirmation{
+  font-size: 1.4rem;
+  margin: 40px auto 20px auto;
+}
+
+.confirmation p{
+  font-weight: bold;
+}
+
+.confirmation button{
+  background: #8DAFD7;
+  border: none;
+  padding: 5px 10px 5px 10px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.confirmation label{
+  margin-left: 30px;
+  font-size: 1.4rem;
+}
+
+#id_img_file{
+  border: 1px solid #8DAFD7;;
+  padding: 2px 5px 2px 5px;
+}
+
+.img-submit{
+  display: flex;
+  justify-content: space-around;
+}
+
+.join-btn{
+  font-family: "Ubuntu-L";
+  border: none;
+  padding: 5px 10px 5px 10px;
+  background: #FF3644;
+  font-size: 1.6rem;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #787878;
+  margin: 8px 0 18px 0;
+  margin-top: 50px;
+}

@@ -27,9 +27,9 @@ urlpatterns = [
     url(r'^collection/', include('collection.urls', namespace='collection')),
 
     # 초기 화면 페이지 내용
-    url(r'^$', TemplateView.as_view(template_name='base_test/opening.html'), name='opening'),
+    url(r'^$', TemplateView.as_view(template_name='base_dev/opening.html'), name='opening'),
     url(r'^main_login/$', LoginPageView.as_view(),name='main_login'),
-    url(r'^about_us/$', TemplateView.as_view(template_name='base_test/about_us.html'), name='about_us'),
+    url(r'^about_us/$', TemplateView.as_view(template_name='base_dev/about_us.html'), name='about_us'),
     url(r'^register/$', RegisterPageView.as_view(), name='register'),
 
     # 서비스별 사용

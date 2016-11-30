@@ -14,7 +14,7 @@ from collection.serializer import ImageSerializer
 from django.conf import settings
 
 class LoginPageView(TemplateView):
-    template_name = 'base_test/index.html'
+    template_name = 'base_dev/index.html'
 
     def get_context_data(self, **kwargs):
         context = super(LoginPageView, self).get_context_data(**kwargs)
@@ -46,7 +46,7 @@ class LoginActionView(viewsets.ModelViewSet):
 
 
 class RegisterPageView(TemplateView):
-    template_name = 'base_test/register.html'
+    template_name = 'base_dev/register.html'
 
     def get_context_data(self, **kwargs):
         context = super(RegisterPageView, self).get_context_data(**kwargs)

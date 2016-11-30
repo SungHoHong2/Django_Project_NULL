@@ -1,4 +1,4 @@
-{% extends 'base_test/base.html' %}
+{% extends 'base_dev/base.html' %}
 {% block content %}
 
 <script>
@@ -26,6 +26,7 @@
 
 		});
 
+
 		$('#file_temp_submit').click(function(){
 
 				var form_data = new FormData();
@@ -47,6 +48,20 @@
 
 		});
 
+		$('.join-btn').click(function(){
+				var form_data = $("#register_form").serialize();
+				$.ajax( {
+					  type: "POST",
+					  url:  "{% url 'member:register' %}",
+					  data: form_data,
+					  success: function( response ) {
+						location.href= "{% url 'member:around_me' %}";
+					  },
+					  error : function(response){
+					  	alert('error baby');
+					  }
+				});
+		});
 
 	});
 </script>
@@ -62,12 +77,12 @@
 					<legend class="hidden">회원가입 폼</legend>
 					<div class="nickname-form col-5">
 						<label for="join-name" class="form-label">Nickname</label>
-						<input type="text" id="join-name" class="form-input" required placeholder="닉네임을 입력해주세요">
+						<input type="text" id="join-name" name="username" class="form-input" required placeholder="닉네임을 입력해주세요">
 						<button class="join-cf-btn">중복확인</button>
 					</div>
 					<div class="password-join-form col-5">
 						<label for="join-ps" class="form-label">Password</label>
-						<input type="text" id="join-ps" class="form-input" required placeholder="비밀번호를 입력해주세요">
+						<input type="password" id="join-ps" name="password" class="form-input" required placeholder="비밀번호를 입력해주세요">
 					</div>
 					<div class="email-join-form col-5">
 						<label for="join-email" class="form-label">Email</label>
