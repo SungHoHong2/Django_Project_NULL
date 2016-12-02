@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from member.views.web import LoginPageView, RegisterPageView
+from member.views.register import LoginPageView, RegisterPageView
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.views.static import  serve
@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^register/$', RegisterPageView.as_view(), name='register'),
 
     # 서비스별 사용
-    url(r'^member/', include('member.urls',namespace='member')),
+    url(r'^member/', include('member.urls.web',namespace='member')),
     url(r'^saytalk/', include('saytalk.urls', namespace='saytalk')),
 
 ]

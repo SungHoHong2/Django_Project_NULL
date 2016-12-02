@@ -92,3 +92,31 @@
   margin: 8px 0 18px 0;
   margin-top: 50px;
 }
+
+.img-btn{
+  font-family: "Ubuntu-L";
+  border: none;
+  padding: 5px 10px 5px 10px;
+  background: #FF3644;
+  font-size: 1.6rem;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #787878;
+}
+
+
+.gridly { position: relative; }
+
+.brick.small { width: 140px; height: 140px;
+	  background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.brick.brick_hash_tag {text-align: center; background: black; color: white; background: #635F5F; padding-top: 4px; padding-bottom: 4px; padding-left: 10px;
+padding-right: 10px; background : grey;
+}
+
+.delete{ color: white; display: block; font-size: 24px; background: black; padding-left: 9px; width: 32px; }
+
+.n-tag{ font-size: 17px;}

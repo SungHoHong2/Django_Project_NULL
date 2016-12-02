@@ -11,13 +11,13 @@
 			$('#hash_tag_div').append($('<button/>').addClass('btn btn-theme').text(item.tag_name).attr('id', item.id)
 			.click(function(){
 				$(this).remove();
-				var text = $('#hash_tag_ids').val();
+				var text = $('#hash_tag_names').val();
 				if(text.length>0){
 					text+=','
 				}
 
 				text+= item.id;
-				$('#hash_tag_ids').val(text);
+				$('#hash_tag_names').val(text);
 				$('#register_form').append($('<button/>').addClass('btn btn-theme').text(item.tag_name).attr('id', item.id));
 
 			})
@@ -79,7 +79,7 @@
 		 			<form id="register_form" role="form" class="form-group" method="POST" action="{% url 'member:register' %}">
 						{{ register_form.as_p }}
 						<p><input type="hidden" id= "image_file_ids" name="image_file_ids" class="form-control"></p>
-						<p><input type="hidden" id= "hash_tag_ids" name="hash_tag_ids" class="form-control"></p>
+						<p><input type="hidden" id= "hash_tag_names" name="hash_tag_names" class="form-control"></p>
 					    <button type="submit" class="btn btn-warning">회원가입</button>
 					</form>
 

@@ -1,30 +1,8 @@
 {% extends 'base_dev/base.html' %}
 {% block content %}
+{% load staticfiles %}
 
-<script>
-	$(document).ready(function(){
-			$('.login-btn').click(function(){
-
-				var form_data = $("#login_form").serialize();
-				$.ajax( {
-					  type: "POST",
-					  url:  "{% url 'member:login' %}",
-					  data: form_data,
-					  success: function( response ) {
-						location.reload();
-					  },
-					  error : function(response){
-					  	alert('error baby');
-					  }
-				});
-
-
-
-
-			});
-	});
-</script>
-
+<script src="{% static 'base_dev/js/opening/login.js' %}"></script>
 
 <main>
   <div class="container col-8">
