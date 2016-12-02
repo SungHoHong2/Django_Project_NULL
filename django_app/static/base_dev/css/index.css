@@ -1,131 +1,151 @@
 
 .container{
-  min-height: 500px;
-  margin-top: 100px;
-  margin-bottom: 160px;
+  height: 100vh;
+}
+
+.container .visual,
+.container .content-box{
+  float: left;
+  height: 100%;
+}
+
+
+/* 우측 비주얼 */
+
+.container .visual{
+  background-image: url("../images/bg-login.png");
+  background-size: cover;
+}
+
+
+/* 좌측 텍스트 */
+
+.container .content-box{
+  background-image: url("../images/bg-box-b.png");
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.content{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-direction: column;
-  min-height: 40vh;
-}
-
-.content h3{
-  font-size: 3.5rem;
-  color: #384452;
-}
-
-.row{
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-}
-
-.form-row, .not-member{
-  width: 50%;
-  text-align: center;
-}
-
-fieldset{
-  border: none;
-  text-align: center;
-}
-
-.form-row .email-form, .form-row .password-form{
-  text-align: left;
-  width: 80%;
-  margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.form-label{
-  color: #384452;
-  font-size: 2rem;
-}
-
-.form-row .form-input{
-  width: 100%;
-}
-
-.form-input{
-  height: 30px;
-  border-radius: 15px;
-  font-size: 1.2rem;
-  font-style: italic;
-  padding-left: 10px;
-  box-shadow: 1px 1px 1px #8DAFD7;
-  background-color: rgba(120,120,120,0.3);
-}
-
-.login-btn{
-  font-family: "Ubuntu-L";
-  border: none;
-  padding: 5px 10px 5px 10px;
-  background: #FF3644;
-  font-size: 1.8rem;
+  background-color: rgba(52,52,52,0.2);
+  box-shadow: 5px 5px 10px #fff;
   color: #fff;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #787878;
-  margin: 8px 0 18px 0;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
 }
 
-.not-member{
-  color: #384452;
-  padding-top: 8%;
+.content-box h2{
+  font-size: 4.6rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  margin-top: -50px;
 }
 
-.go-to-join-btn{
-  font-size: 1.4rem;
-  margin-bottom: 5px;
-}
-
-.not-member a{
-  text-decoration: underline;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin-left: 10px;
-  margin-right: 10px;
-  color: #FF3644;
-}
-
-
-/* footer */
-
-footer{
-  height: 100px;
-  background-color: #8DAFD7;
-  display: flex;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
+#login_form{
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
   width: 100%;
-  position: fixed;
 }
+
+#login_form fieldset{
+  border: none;
+}
+
+#login_form .n-form,
+#login_form .pw-form{
+  width: 50%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: auto;
+  position: relative;
+}
+
+#login_form .form-label{
+  color: #fff;
+  font-size: 1.4rem;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 300;
+  width: 30%;
+  text-align: left;
+}
+
+#login_form .form-input{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #fff;
+  width: 70%;
+  background: none;
+  color: #fff;
+}
+
+#login_form button{
+  background: none;
+  font-size: 2rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  color: #fff;
+  border: 1.4px solid #fff;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 30px;
+  width: 50%;
+}
+
+.content-box .not-member{
+  margin-top: 10%;
+  width: 50%;
+}
+
+.not-member p{
+  text-align: center;
+}
+
+.not-member div{
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.not-member div a{
+  border: 1.4px solid #fff;
+  padding: 5px 10px 5px 10px;
+}
+
+
+/* 하단 footer 바 */
 
 .footer{
-  width: 80%;
+  height: 90px;
+  position: absolute;
+  top: 100%;
+  color: #343434;
+  background-color: #fff;
   display: flex;
-  justify-content: space-between;
-  margin: auto;
-  color: #fff;
-  font-size: 1.2rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.footer-row{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
 }
 
 .copyright{
-  font-style: italic;
-  font-family: "Ubuntu-L";
-}
-
-.end-row{
-  width: 50%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2rem;
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 300;
 }

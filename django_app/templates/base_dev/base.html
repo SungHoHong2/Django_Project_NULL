@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="{% static 'base_dev/css/register.css' %}">
     <link rel="stylesheet" href="{% static 'base_dev/css/reset-sy.css' %}">
     <link rel="stylesheet" href="{% static 'base_dev/css/grid.css' %}">
-
     <script src="{% static 'base_test/js/jquery_latest.js' %}"></script>
     <script src="{% static 'base_test/js/ajax_custom.js' %}"></script>
     <script src="{% static 'base_test/js/jquery_template.js' %}"></script>
@@ -27,31 +26,28 @@
 
   <body>
 
-    <!-- Fixed navbar -->
-    <header class="col-8">
-      <div class="head-container col-6">
+  <!-- 상단 nav 바 -->
+    <header>
+      <div class="header col-6">
         <a class="brand-logo" href="">NULL PROJECT</a>
-        <div class="navigation col-4">
+        <div class="navigation col-3">
           <ul>
-
             {% if user.is_authenticated %}
-            <li class="active"><a href="{% url 'member:around_me' %}">Around Me</a></li>
-            <li><a href="{% url 'saytalk:talk_list' %}">Say Talk</a></li>
-            <li><a href="{% url 'member:profile' %}">My Page</a></li>
-            <li><a href="{% url 'member:login' %}">Log Out</a></li>
+            <li class="active"><a href="{% url 'member:around_me' %}">AROUND ME</a></li>
+            <li><a href="{% url 'saytalk:talk_list' %}">SAY TALK</a></li>
+            <li><a href="{% url 'member:profile' %}">MY PAGE</a></li>
+            <li><a href="{% url 'member:login' %}">LOG OUT</a></li>
             {% else %}
-            <li class="active"><a href="/main_login">Login</a></li>
-            <li><a href="/about_us">About Us</a></li>
-            <li><a href="/register">Join Us</a></li>
+            <li class="active"><a href="/main_login">LOGIN</a></li>
+            <li><a href="/register">REGISTER</a></li>
+            <li><a href="/about_us">ABOUT US</a></li>
             {% endif %}
-
           </ul>
         </div>
       </div>
     </header>
 
 	{% block content %}
-
 	{% endblock %}
 
 

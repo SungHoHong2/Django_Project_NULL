@@ -5,9 +5,9 @@
 <script src="{% static 'base_dev/js/opening/jquery.gridly.js' %}"></script>
 <script src="{% static 'base_dev/js/opening/materialize-tags.js' %}"></script>
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/register.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/materialize-tags.css' %}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
 <script>
 	$(document).ready(function(){
 
@@ -17,27 +17,28 @@
 		 * 닉네임 중복여부 확인
 		 */
 
-		$('#check_duplicate_btn').click(function(){
-		    $('#nickname_div').empty();
-			if(String($('#join-name').val()).length==0){
-				$("#alert_related_text").tmpl({'text':'이름을 입력하십시오'}).appendTo( "#nickname_div" );
-				return false;
-			}
-
-			postAjax('POST', {'nickname' : $('#join-name').val()}, "{% url 'member:nickname_duplicate' %}"
-				, 'application/x-www-form-urlencoded', function(response){
-					  if(!response.response){
-						$('.password-join-form').show();
-					  }else{
-						$("#alert_related_text").tmpl({'text':'중복된 사용자 이름입니다.'}).appendTo( "#nickname_div" );
-					  }
-			});
-		});
-
-		$('#join-name').keyup(function(){
+		$('#join-name').keyup(function(e){
 				$('.hidden_class').hide();
 				$('input[name=password_1]').val('');
 				$('input[name=password_2]').val('');
+
+				if (e.keyCode == 13 || e.keyCode == 9){
+					$('#nickname_div').empty();
+				  if(String($('#join-name').val()).length==0){
+					   $("#alert_related_text").tmpl({'text':'이름을 입력하십시오'}).appendTo( "#nickname_div" );
+					   return false;
+				   }
+
+					postAjax('POST', {'nickname' : $('#join-name').val()}, "{% url 'member:nickname_duplicate' %}"
+						, 'application/x-www-form-urlencoded', function(response){
+								if(!response.response){
+								$('.password-join-form').show();
+								}else{
+								$("#alert_related_text").tmpl({'text':'중복된 사용자 이름입니다.'}).appendTo( "#nickname_div" );
+								}
+					});
+				};
+
 		});
 
 		/*
@@ -123,7 +124,7 @@
 
 		$('.gridly').gridly({
 				base: 60,
-				gutter: 20,
+				gutter: 10,
 				columns: 12
 		});
 
@@ -198,6 +199,10 @@
 					, function(response){
 							if(response.response){
 									location.href="{% url 'member:around_me' %}";
+							}else{
+
+									alert('error baby');
+
 							}
 
 			});
@@ -215,88 +220,168 @@
 </script>
 
 
+
+
 <main>
 	<div class="container">
-		<div class="content col-6">
-			<h3>Come to Join Us!</h3>
- 			<form id="register_form" role="form" class="form-group" method="POST" action="{% url 'member:register' %}">
+		<div class="visual2 col-4"></div>
+		<div class="content-box col-4">
+
+			<h2>Join Us!</h2>
+
+	 		<div id="register_form" role="form" class="form-group" method="POST" action="{% url 'member:register' %}">
 				<!-- {{ register_form.as_p }} -->
+			  <form action="" autocomplete="off">
 				<fieldset>
 					<legend class="hidden">회원가입 폼</legend>
-					<div class="nickname-form col-5">
-						<label for="join-name" class="form-label">Nickname</label>
+					<div class="n-form ">
+						<label for="join-name" class="form-label">Name</label>
 						<input type="text" id="join-name" name="username" class="form-input" required placeholder="닉네임을 입력해주세요">
-						<button class="join-cf-btn" id="check_duplicate_btn">중복확인</button>
 					</div>
 					<div id="nickname_div"></div>
-
-
-					<div class="password-join-form col-5 hidden_class">
+					<div class="pw-form hidden_class password-join-form">
 						<label for="join-ps" class="form-label">Password</label>
-						<input type="password" name="password_1" class="form-input" required placeholder="비밀번호를 입력해주세요">
+						<input type="password" id="join-ps" name="password_1" class="form-input" required placeholder="비밀번호를 입력해주세요">
 					</div>
-
-					<div class="password-join-form col-5 hidden_class">
-						<label for="join-ps" class="form-label"></label>
-						<input type="password" name="password_2" class="form-input" required placeholder="비밀번호 일치여부를 확인해주세요">
+					<div class="ps-cf-form hidden_class password-join-form">
+						<label for="join-ps-cf" class="form-label">Password 확인</label>
+						<input type="password" id="join-ps-cf" name="password_2" class="form-input" required placeholder="비밀번호를 재입력해주세요">
 					</div>
 					<div id="password_div"></div>
 
-
-					<div class="email-join-form col-5 hidden_class">
-						<label for="join-email" class="form-label">Email</label>
-						<input type="email" id="join-email" class="form-input" required placeholder="user@email.com">
-					</div>
-					<div class="pn-form col-5 hidden_class">
-						<label for="join-fn" class="form-label">Phone_number</label>
-						<input type="number" id="join-fn" class="form-input" required placeholder="핸드폰 번호를 입력해주세요">
+					<div id="img_upload_div" class="col-5 gridly img_hash_join_class hidden_class"></div>
+					<div id="img_upload_form" class="img_hash_join_class hidden_class" method="POST">
+							<a class="img-btn"><span> 이미지 첨부 </span></a>
+							<div class="form-group img-submit hidden_class">
+								 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
+							</div>
 					</div>
 
-					<div class="confirmation col-5 hidden_class">
-						<p>* 추가 인증이 필요합니다 *</p>
-						<button>이메일로 인증</button>
-						<button>핸드폰으로 인증</button>
-						<label for="cf-number">인증번호 입력</label>
-						<input type="number" id="cf-number" required placeholder="인증번호">
-						<button class="cf-submit">확인</button>
+					<div class="img_hash_join_class hidden_class" id="hash_tag_forms" style="margin-top: 10px;" >
+						<input id="hash_tag_inputs" type="text" required placeholder="해시태그 추가" data-role="materialtags">
+						<div id="hash_tag_div" class="gridly_hashTag"></div>
 					</div>
-
-					<p><input type="hidden" id= "image_file_ids" name="image_file_ids" class="form-control"></p>
-					<p><input type="hidden" id= "hash_tag_names" name="hash_tag_names" class="form-control"></p>
-
 				</fieldset>
-			</form>
-
-		    <div id="img_upload_div" class="col-5 gridly hidden_class img_hash_join_class"></div>
-		    <div id="img_upload_form" class="hidden_class img_hash_join_class" method="POST">
-			  <button class="img-btn"> 이미지 첨부 </button>
-		    <div class="form-group img-submit hidden_class">
-					 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
+				</form>
+				<p><input type="hidden" id= "image_file_ids" name="image_file_ids" class="form-control"></p>
+				<p><input type="hidden" id= "hash_tag_names" name="hash_tag_names" class="form-control"></p>
+			  <div role="form-inline" class="form-inline hidden_class" method="POST"  enctype="multipart/form-data" action="">
+				  <div class="form-group img-submit">
+				  <!-- {{ register_image_form }} -->
+						<tr><td><input class="form-control" id="id_img_file" name="img_file" type="file" required /></td></tr>
+				  	<a href="#"><span id="file_temp_submit" class="img-submit-btn">사진 추가</span></a>
+				  </div>
 			  </div>
-		  </div>
-			<div class="col-5 hidden_class img_hash_join_class" id="hash_tag_forms" style="margin-top: 10px;" >
-				<input id="hash_tag_inputs" type="text" required placeholder="해시태그 추가" data-role="materialtags">
-				<div id="hash_tag_div" class="gridly_hashTag"></div>
+
+				<div class="register-btn hidden_class img_hash_join_class">
+					<button type="submit" class="join-btn">회원가입</button>
+				</div>
 			</div>
-			<button type="submit" class="join-btn hidden_class img_hash_join_class">회원가입</button>
 		</div>
 	</div>
 </main>
-
-
-
-	<footer>
-		<div class="footer col-6">
-			<div class="copyright">
-				Copyright © 2016 - All Rights Reserved
-			</div>
-			<div class="end-row">
-				<a href="#">Privacy &amp; Cookies</a>
-				<a href="#">Terms &amp; Conditions</a>
-				<a href="#">Accessibility</a>
-				<a href="#">FAQ</a>
-			</div>
+<footer>
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
 		</div>
-	 </footer>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
+	</div>
+</footer>
+
+
+
+<!--<main>-->
+	<!--<div class="container">-->
+		<!--<div class="content col-6">-->
+			<!--<h3>Come to Join Us!</h3>-->
+ 			<!--<form id="register_form" role="form" class="form-group" method="POST" action="{% url 'member:register' %}">-->
+				<!--&lt;!&ndash; {{ register_form.as_p }} &ndash;&gt;-->
+				<!--<fieldset>-->
+					<!--<legend class="hidden">회원가입 폼</legend>-->
+					<!--<div class="nickname-form col-5">-->
+						<!--<label for="join-name" class="form-label">Nickname</label>-->
+						<!--<input type="text" id="join-name" name="username" class="form-input" required placeholder="닉네임을 입력해주세요">-->
+						<!--<button class="join-cf-btn" id="check_duplicate_btn">중복확인</button>-->
+					<!--</div>-->
+					<!--<div id="nickname_div"></div>-->
+
+
+					<!--<div class="password-join-form col-5 hidden_class">-->
+						<!--<label for="join-ps" class="form-label">Password</label>-->
+						<!--<input type="password" name="password_1" class="form-input" required placeholder="비밀번호를 입력해주세요">-->
+					<!--</div>-->
+
+					<!--<div class="password-join-form col-5 hidden_class">-->
+						<!--<label for="join-ps" class="form-label"></label>-->
+						<!--<input type="password" name="password_2" class="form-input" required placeholder="비밀번호 일치여부를 확인해주세요">-->
+					<!--</div>-->
+					<!--<div id="password_div"></div>-->
+
+
+					<!--<div class="email-join-form col-5 hidden_class">-->
+						<!--<label for="join-email" class="form-label">Email</label>-->
+						<!--<input type="email" id="join-email" class="form-input" required placeholder="user@email.com">-->
+					<!--</div>-->
+					<!--<div class="pn-form col-5 hidden_class">-->
+						<!--<label for="join-fn" class="form-label">Phone_number</label>-->
+						<!--<input type="number" id="join-fn" class="form-input" required placeholder="핸드폰 번호를 입력해주세요">-->
+					<!--</div>-->
+
+					<!--<div class="confirmation col-5 hidden_class">-->
+						<!--<p>* 추가 인증이 필요합니다 *</p>-->
+						<!--<button>이메일로 인증</button>-->
+						<!--<button>핸드폰으로 인증</button>-->
+						<!--<label for="cf-number">인증번호 입력</label>-->
+						<!--<input type="number" id="cf-number" required placeholder="인증번호">-->
+						<!--<button class="cf-submit">확인</button>-->
+					<!--</div>-->
+
+					<!--<p><input type="hidden" id= "image_file_ids" name="image_file_ids" class="form-control"></p>-->
+					<!--<p><input type="hidden" id= "hash_tag_names" name="hash_tag_names" class="form-control"></p>-->
+
+				<!--</fieldset>-->
+			<!--</form>-->
+
+		    <!--<div id="img_upload_div" class="col-5 gridly hidden_class img_hash_join_class"></div>-->
+		    <!--<div id="img_upload_form" class="hidden_class img_hash_join_class" method="POST">-->
+			  <!--<button class="img-btn"> 이미지 첨부 </button>-->
+		    <!--<div class="form-group img-submit hidden_class">-->
+					 <!--<input class="form-control" id="id_img_file" name="img_file" type="file" required />-->
+			  <!--</div>-->
+		  <!--</div>-->
+			<!--<div class="col-5 hidden_class img_hash_join_class" id="hash_tag_forms" style="margin-top: 10px;" >-->
+				<!--<input id="hash_tag_inputs" type="text" required placeholder="해시태그 추가" data-role="materialtags">-->
+				<!--<div id="hash_tag_div" class="gridly_hashTag"></div>-->
+			<!--</div>-->
+			<!--<button type="submit" class="join-btn hidden_class img_hash_join_class">회원가입</button>-->
+		<!--</div>-->
+	<!--</div>-->
+<!--</main>-->
+
+
+
+	<!--<footer>-->
+		<!--<div class="footer col-6">-->
+			<!--<div class="copyright">-->
+				<!--Copyright © 2016 - All Rights Reserved-->
+			<!--</div>-->
+			<!--<div class="end-row">-->
+				<!--<a href="#">Privacy &amp; Cookies</a>-->
+				<!--<a href="#">Terms &amp; Conditions</a>-->
+				<!--<a href="#">Accessibility</a>-->
+				<!--<a href="#">FAQ</a>-->
+			<!--</div>-->
+		<!--</div>-->
+	 <!--</footer>-->
 
 {% endblock %}

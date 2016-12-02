@@ -1,0 +1,17 @@
+.gridly { position: relative; }
+
+.brick.small { width: 110px; height: 110px;
+	  background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.brick.brick_hash_tag {text-align: center; background: black; color: white; background: #635F5F; padding-top: 4px; padding-bottom: 4px; padding-left: 10px;
+padding-right: 10px; background : grey;
+}
+
+.delete{ color: white; display: block; font-size: 24px; background: black; width: 32px; }
+
+.n-tag{ font-size: 17px; color: white;}
+
+#img_upload_div{ margin-top: 50px; margin-left: 31px; }

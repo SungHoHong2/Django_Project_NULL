@@ -1,122 +1,94 @@
 
-.content{
-  color: #384452;
+.container .visual2{
+  background-image: url("../images/bg-register.png");
+  background-size: cover;
 }
 
-.form-group{
-  width: 100%;
+.container .visual2,
+.container .content-box{
+  float: left;
+  height: 100%;
 }
 
 #register_form{
-  margin-top: 20px;
-  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
-.nickname-form, .password-join-form, .email-join-form, .pn-form{
+#register_form fieldset{
+  border: none;
+}
+
+#register_form .n-form,
+#register_form .pw-form,
+#register_form .ps-cf-form{
+  width: 60%;
+  height: 30px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin: auto;
+  position: relative;
+}
+
+/*#register_form .n-form button{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}*/
+
+#register_form .form-label{
+  color: #fff;
+  font-size: 1.4rem;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 300;
+  width: 30%;
+  text-align: left;
+}
+
+#register_form .form-input{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #fff;
+  width: 70%;
+  background: none;
+  color: #fff;
+}
+
+#register_form button{
+  background: none;
+  font-size: 1.4rem;
+  color: #fff;
+  border: 1.4px solid #fff;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+}
+
+#register_form .join-btn{
+  margin-top: 30px;
+}
+
+#register_form .confirmation{
+  margin-top: 50px;
+  margin-bottom: 50px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.nickname-form label,
-.password-join-form label,
-.email-join-form label,
-.pn-form label{
-  width: 30%;
-  text-align: right;
+#register_form .cf-button-group{
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-.nickname-form input,
-.password-join-form input,
-.email-join-form input,
-.pn-form input{
-  width: 50%;
-  margin-left: 15px;
-  margin-right: 15px;
+.form-inline {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.join-cf-btn, .img-submit-btn{
-  color: #FF3644;
-  font-size: 1.4rem;
-  text-decoration: underline;
-  background: none;
-  cursor: pointer;
-  border: none;
+.content-box .register-btn{
+  margin-top: 80px;
 }
-
-.confirmation{
-  font-size: 1.4rem;
-  margin: 40px auto 20px auto;
-}
-
-.confirmation p{
-  font-weight: bold;
-}
-
-.confirmation button{
-  background: #8DAFD7;
-  border: none;
-  padding: 5px 10px 5px 10px;
-  margin-top: 20px;
-  cursor: pointer;
-}
-
-.confirmation label{
-  margin-left: 30px;
-  font-size: 1.4rem;
-}
-
-#id_img_file{
-  border: 1px solid #8DAFD7;;
-  padding: 2px 5px 2px 5px;
-}
-
-.img-submit{
-  display: flex;
-  justify-content: space-around;
-}
-
-.join-btn{
-  font-family: "Ubuntu-L";
-  border: none;
-  padding: 5px 10px 5px 10px;
-  background: #FF3644;
-  font-size: 1.6rem;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #787878;
-  margin: 8px 0 18px 0;
-  margin-top: 50px;
-}
-
-.img-btn{
-  font-family: "Ubuntu-L";
-  border: none;
-  padding: 5px 10px 5px 10px;
-  background: #FF3644;
-  font-size: 1.6rem;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #787878;
-}
-
-
-.gridly { position: relative; }
-
-.brick.small { width: 140px; height: 140px;
-	  background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.brick.brick_hash_tag {text-align: center; background: black; color: white; background: #635F5F; padding-top: 4px; padding-bottom: 4px; padding-left: 10px;
-padding-right: 10px; background : grey;
-}
-
-.delete{ color: white; display: block; font-size: 24px; background: black; padding-left: 9px; width: 32px; }
-
-.n-tag{ font-size: 17px;}

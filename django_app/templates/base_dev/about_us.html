@@ -1,4 +1,3 @@
-
 {% extends 'base_dev/base.html' %}
 {% block content %}
 
@@ -12,30 +11,42 @@
 
 <style>
 
-.container{
-	flex-direction: column;
+.visual3{
+	background-image: url("{% static 'base_dev/images/bg-whatsnull.png' %}");
+	background-size: cover;
+	height: 100vh;
 }
 
-.content{
+.aboutus{
+	background-color: rgba(255,255,255,0.8);
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 2px 0 2px #fff, -2px 0 2px #fff;
+}
+
+.null-info{
 	text-align: center;
+	height: 180px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	flex-direction: column;
+	margin-bottom: 50px;
 }
 
-.member-info{
+.team-member-info{
 	display: flex;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
 	flex-direction: column;
-	margin-top: 50px;
+	height: 400px;
 }
 
-.content h4, .member-info h4{
-	font-size: 2rem;
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-
-.content img{
-	margin-bottom: 30px;
+.null-info h4, .team-member-info h4{
+	font-size: 1.8rem;
+	font-family: "Lato-Regular";
+	font-weight: bold;
 }
 
 .team-member img{
@@ -48,65 +59,71 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	margin-top: 10px;
 }
 
 .team-member strong{
 	font-size: 1.6rem;
 	margin-left: 20px;
 	margin-right: 20px;
+	color: #2c2f68;
 }
-
 
 </style>
 
 <main>
-	<div class="container">
-		<div class="content col-4">
- 			<h4>NULL 프로젝트란?</h4>
-      <img width="70%" src ="{% static 'base_dev/img/ProjectManage.jpg' %}">
-			<p>FAST CAMPUS의 웹 프로그래밍 스쿨, 프론트엔드 개발 스쿨 수강생들이 함께 만든 익명 SNS 서비스입니다.<br>
-			다양한 해시태그로 나와 맞는 사람들을 찾아보세요.<br> 취미생활부터 최신 트렌드까지, 즐거운 이야기들이 당신을 기다립니다! </p>
-		</div>
-		<div class="member-info col-4">
-			<h4>서비스를 만든 사람들</h4>
-			<div class="our-members">
-				<div class="team-member">
-					<img src="{% static 'base_dev/img/sjPark.jpg' %}" alt="박상준">
-					<strong>Sangjun Park</strong>
-					<p>저는 박상준 입니다.</p>
-				</div>
-				<div class="team-member">
-					<img src="{% static 'base_dev/img/shHong.png' %}" alt="홍성호">
-					<strong>Sungho Hong</strong>
-					<p>힘들다 힘들다 힘들다...</p>
-				</div>
-				<div class="team-member">
-					<img src="{% static 'base_dev/img/wjCho.png' %}" alt="조원준">
-					<strong>Wanjun Cho</strong>
-					<p>숟가락~!!</p>
-				</div>
-				<div class="team-member">
-					<img src="{% static 'base_dev/img/syYeom.jpg' %}" alt="염서연">
-					<strong>Seoyeon Yeom</strong>
-					<p>화이팅 화이팅</p>
+	<div class="visual3 col-8">
+		<div class="aboutus col-4">
+			<div class="null-info col-8">
+				<h4>What is NULL?</h4>
+				<p>FAST CAMPUS의 웹 프로그래밍 스쿨, 프론트엔드 개발 스쿨 수강생들이 함께 만든 익명 SNS 서비스입니다.<br>
+				다양한 해시태그로 나와 맞는 사람들을 찾아보세요.<br> 취미생활부터 최신 트렌드까지, 즐거운 이야기들이 당신을 기다립니다! </p>
+			</div>
+			<div class="team-member-info col-8">
+				<h4>OUR TEAM</h4>
+				<div class="our-members">
+					<div class="team-member">
+						<img src="{% static 'base_dev/images/sjPark.jpg' %}" alt="박상준">
+						<strong>Sangjun Park</strong>
+						<p>저는 박상준 입니다.</p>
+					</div>
+					<div class="team-member">
+						<img src="{% static 'base_dev/images/shHong.png' %}" alt="홍성호">
+						<strong>Sungho Hong</strong>
+						<p> 디자인을 통해 영감받고 <br> 개발을 통해 구현한다.</p>
+					</div>
+					<div class="team-member">
+						<img src="{% static 'base_dev/images/wjCho.png' %}" alt="조원준">
+						<strong>Wanjun Cho</strong>
+						<p>숟가락~!!</p>
+					</div>
+					<div class="team-member">
+						<img src="{% static 'base_dev/images/syYeom.jpg' %}" alt="염서연">
+						<strong>Seoyeon Yeom</strong>
+						<p>화이팅 화이팅</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </main>
 
-	<footer>
-	  <div class="footer col-6">
-	 		<div class="copyright">
-	 			Copyright © 2016 - All Rights Reserved
-	 		</div>
-	 		<div class="end-row">
-	      <a href="#">Privacy &amp; Cookies</a>
-	      <a href="#">Terms &amp; Conditions</a>
-	      <a href="#">Accessibility</a>
-				<a href="#">FAQ</a>
-			</div>
+<footer>
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
 		</div>
-	 </footer>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
+	</div>
+</footer>
 
 {% endblock %}

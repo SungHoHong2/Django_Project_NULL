@@ -2,52 +2,91 @@
 {% block content %}
 {% load staticfiles %}
 
-<script src="{% static 'base_dev/js/opening/login.js' %}"></script>
+<script>
+	$(document).ready(function(){
+        $('.login-btn').click(function(){
+			_this = $(this);
+			var form_data = new FormData();
+			form_data.append("username",$('input[name=username]').val());
+			form_data.append("password",$('input[name=password]').val());
+
+			formAjax('POST', form_data, "{% url 'member:login' %}"
+					, 'application/json'
+					, function(response){
+							if(response.error){
+									$('.err-modal').text("아이디와 비밀번호를 다시 확인해주세요.")
+												   .css({
+														  'color':'#f33d33',
+														  'margin-top' : '10px',
+														  'font-size' : '14px'
+														});
+							}else{
+									_this.attr('disabled',true);
+									location.href = "{% url 'member:around_me' %}"
+							}
+
+			});
+        });
+	});
+</script>
+
 
 <main>
-  <div class="container col-8">
-		<div class="content col-4">
-			<h3>Log in Here!</h3>
-			<div class="row">
-	 			<div class="form-row">
-			 		<form role="form" id='login_form' class="form-group" method="POST" action="{% url 'member:login' %}">
-					<!-- {{  login_form.as_p }} -->
-						<fieldset>
-							<legend class="hidden">로그인 폼</legend>
-							<div class="email-form">
-								<label for="user-email" class="form-label">Nickname</label>
-								<input type="text" id="user-email" name="username" class="form-input" required placeholder="Nickname">
-							</div>
-							<div class="password-form">
-								<label for="password" class="form-label">Password</label>
-								<input type="password" id="password" name="password" class="form-input" required placeholder="Password">
-							</div>
-						</fieldset>
-					</form>
-					<button type="submit" class="login-btn">Login</button>
-				</div>
+	<div class="container col-8">
+		<div class="content-box col-3">
+
+			<h2>Log in Here!</h2>
+
+	 		<div role="form" id="login_form" class="form-group" method="POST" action="{% url 'member:login' %}">
+			<!-- {{  login_form.as_p }} -->
+				<form autocomplete="off">
+				<fieldset>
+					<legend class="hidden">로그인 폼</legend>
+					<div class="n-form">
+						<label for="user-id" class="form-label">Name</label>
+						<input type="text" id="user-id" name="username" class="form-input" required>
+					</div>
+					<div class="pw-form">
+						<label for="user-pw" class="form-label">Password</label>
+						<input type="password" id="user-pw" name="password" class="form-input" required>
+					</div>
+				</fieldset>
+				</form>
+				<button type="submit" class="login-btn">Login</button>
+				<p class="err-modal"></p>
+
+			</div>
+
 				<div class="not-member">
 					<p class="go-to-join-btn">아직 회원이 아니신가요?</p>
-					<a href="/register">회원가입</a>
-					<a href="#">소셜 계정으로 로그인</a>
+					<div>
+						<a href="/register">회원가입</a>
+						<a href="#" class="sns-login">소셜 계정으로 로그인</a>
+					</div>
 				</div>
+
 			</div>
-		</div>
+
+	<div class="visual col-5"></div>
 	</div>
 </main>
 
 <footer>
-  <div class="footer col-6">
- 		<div class="copyright">
- 			Copyright © 2016 - All Rights Reserved
- 		</div>
- 		<div class="end-row">
-      <a href="#">Privacy &amp; Cookies</a>
-      <a href="#">Terms &amp; Conditions</a>
-      <a href="#">Accessibility</a>
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
 			<a href="#">FAQ</a>
 		</div>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
 	</div>
- </footer>
+</footer>
 
 {% endblock %}
