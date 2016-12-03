@@ -14,7 +14,7 @@ from collection.serializer import ImageSerializer
 from django.conf import settings
 
 class AroundMeView(TemplateView):
-    template_name = 'base_test/around_me/member_list.html'
+    template_name = 'base_dev/around_me/member_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(AroundMeView, self).get_context_data(**kwargs)
