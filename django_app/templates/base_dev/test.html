@@ -1,155 +1,154 @@
-<html><head>
-    <meta charset="UTF-8">
-      <title>jQuery Gridly</title>
-      <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-      <link href="stylesheets/jquery.gridly.css" rel="stylesheet" type="text/css">
-      <link href="stylesheets/sample.css" rel="stylesheet" type="text/css">
-      <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script><script src="javascripts/jquery.js" type="text/javascript"></script>
-      <script src="javascripts/jquery.gridly.js" type="text/javascript"></script>
-      <script src="javascripts/sample.js" type="text/javascript"></script>
-      <script src="javascripts/rainbow.js" type="text/javascript"></script>
-      <script>
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-31911059-1']);
-        _gaq.push(['_trackPageview']);
 
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-      </script>
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Location Test with Buttons</title>
+<script src="{% static 'base_dev/js/jquery_latest.js' %}"></script>
 
-  </head>
-  <body>
-    <a href="https://github.com/ksylvest/jquery-gridly">
-      <img alt="Fork" class="fork" src="images/fork.png">
-    </a>
-    <div class="content">
-      <h1>jQuery Gridly</h1>
-      <p>Gridly is a jQuery plugin to enable dragging and dropping as well as resizing on a grids. In the example below try tapping or dragging any of the bricks.</p>
-      <h2>Example</h2>
-      <section class="example">
-        <div class="gridly" style="height: 640px;">
-          <div class="brick small" style="position: absolute; left: 0px; top: 0px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 160px; top: 0px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 320px; top: 0px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 480px; top: 0px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 640px; top: 0px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 800px; top: 0px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 0px; top: 160px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 160px; top: 160px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 320px; top: 160px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 480px; top: 160px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 640px; top: 160px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 800px; top: 160px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 0px; top: 320px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 160px; top: 320px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 320px; top: 320px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 480px; top: 320px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 640px; top: 320px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 800px; top: 320px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 0px; top: 480px;">
-            <a class="delete" href="#">×</a>
-          </div>
-          <div class="brick small" style="position: absolute; left: 160px; top: 480px;">
-            <a class="delete" href="#">×</a>
-          </div>
-        </div>
-        <p class="actions">
-          <a class="add button" href="#">Add</a>
-        </p>
-      </section>
-      <h2>Installation</h2>
-      <p>To install download one of these packages and include the jquery.gridly.js and jquery.gridly.css files in your head with the following:</p>
-      <section class="formats">
-        <div class="format">
-          <a class="zip" href="packages/jquery.gridly.zip"></a>
-        </div>
-        <div class="format">
-          <a class="tar" href="packages/jquery.gridly.tar"></a>
-        </div>
-      </section>
-      <pre><code data-language="html" class="rainbow"><span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">script</span></span> <span class="support attribute">src</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">https://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js</span><span class="string quote">"</span> <span class="support attribute">type</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">text/javascript</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">script</span></span><span class="support tag close">&gt;</span>
-<span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">script</span></span> <span class="support attribute">src</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">javascript/jquery.gridly.js</span><span class="string quote">"</span> <span class="support attribute">type</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">text/javascript</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">script</span></span><span class="support tag close">&gt;</span>
-<span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">link</span></span> <span class="support attribute">href</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">stylesheets/jquery.gridly.css</span><span class="string quote">"</span> <span class="support attribute">rel</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">stylesheet</span><span class="string quote">"</span> <span class="support attribute">type</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">text/css</span><span class="string quote">"</span> <span class="support tag close">/&gt;</span></code></pre>
-      <h2>Example</h2>
-      <p>Setting up a gridly is easy. The following snippet is a good start:</p>
-      <pre><code data-language="html" class="rainbow"><span class="source css embedded"><span class="support tag style">&lt;</span><span class="entity tag style">style</span> <span class="entity tag style">type</span>=<span class="string">"text/css"</span><span class="support tag style">&gt;</span>
-  <span class="entity name class">.gridly</span> {
-    <span class="support css-property">position</span>: <span class="support css-value">relative</span>;
-    <span class="support css-property">width</span>: <span class="constant numeric">960</span><span class="keyword unit">px</span>;
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Mans0k30To1GtjB2-T8DWhd3bmD-nes&callback=listenForPosition">
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<script type="text/javascript">
+
+var markers = [];
+var map;
+var geocoder;
+
+function setText(val, e) {
+    document.getElementById(e).value = val;
+}
+function insertText(val, e) {
+    document.getElementById(e).value += val;
+}
+var nav = null;
+var watchID;
+function listenForPosition() {
+  geocoder = new google.maps.Geocoder();
+
+  if (nav == null) {
+      nav = window.navigator;
   }
-  <span class="entity name class">.brick</span><span class="entity name class">.small</span> {
-    <span class="support css-property">width</span>: <span class="constant numeric">140</span><span class="keyword unit">px</span>;
-    <span class="support css-property">height</span>: <span class="constant numeric">140</span><span class="keyword unit">px</span>;
+  if (nav != null) {
+      var geoloc = nav.geolocation;
+      if (geoloc != null) {
+          watchID = geoloc.watchPosition(successCallback, errorCallback)
+
+          geoloc.watchPosition(function (pos) {
+
+      			// 현재 위경도 값(GPS) 변수에 넣기.
+      			var latitude = pos.coords.latitude;
+      			var longitude = pos.coords.longitude;
+
+      			var mapOptions = {
+      				zoom: 16,
+      				mapTypeId: google.maps.MapTypeId.ROADMAP,
+      				center: new google.maps.LatLng(latitude,longitude)
+      			};
+
+      			map = new google.maps.Map(document.getElementById('map'),mapOptions);
+
+      			// 현재 위치 마커 생성
+      			var marker = new google.maps.Marker({
+      				position: new google.maps.LatLng(latitude,longitude),
+      				map: map,
+      				draggable: false,
+      				icon: "http://maps.google.com/mapfiles/ms/micons/man.png"
+      			});
+
+      			markers.push(marker);
+
+      			// 현재 위치 기준 원 그리기
+      			var populationOptions = {
+      				strokeColor: '#000000',
+      				strokeOpacity: 0.8,
+      				strokeWeight: 2,
+      				fillColor: '#808080',
+      				fillOpacity: 0.5,
+      				map: map,
+      				center: new google.maps.LatLng(latitude,longitude) ,
+      				radius: 1000
+      			};
+
+      			cityCircle = new google.maps.Circle(populationOptions);
+
+      			var script = document.createElement('script');
+      			// This example uses a local copy of the GeoJSON stored at
+      			// http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+      			document.getElementsByTagName('head')[0].appendChild(script);
+        });
+      }
+      else {
+          console.log("Geolocation not supported");
+      }
   }
-  <span class="entity name class">.brick</span><span class="entity name class">.large</span> {
-    <span class="support css-property">width</span>: <span class="constant numeric">300</span><span class="keyword unit">px</span>;
-    <span class="support css-property">height</span>: <span class="constant numeric">300</span><span class="keyword unit">px</span>;
+  else {
+      console.log("Navigator not found");
   }
-<span class="support tag style">&lt;/</span><span class="entity tag style">style</span><span class="support tag style">&gt;</span></span>
-<span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">gridly</span><span class="string quote">"</span><span class="support tag close">&gt;</span>
-  <span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">brick small</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-  <span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">brick small</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-  <span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">brick large</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-  <span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">brick small</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-  <span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">brick small</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-  <span class="support tag"><span class="support tag">&lt;</span><span class="support tag-name">div</span></span> <span class="support attribute">class</span><span class="support operator">=</span><span class="string quote">"</span><span class="string value">brick large</span><span class="string quote">"</span><span class="support tag close">&gt;</span><span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-<span class="support tag"><span class="support tag">&lt;</span><span class="support tag special">/</span><span class="support tag-name">div</span></span><span class="support tag close">&gt;</span>
-<span class="source js embedded"><span class="support tag script">&lt;</span><span class="entity tag script">script</span><span class="support tag script">&gt;</span>
- <span class="selector"> $</span>(<span class="string">'.gridly'</span>).<span class="function call">gridly</span>({
-    base: <span class="constant numeric">60</span>, <span class="comment">// px </span>
-    gutter: <span class="constant numeric">20</span>, <span class="comment">// px</span>
-    columns: <span class="constant numeric">12</span>
-  });
-<span class="support tag script">&lt;/</span><span class="entity tag script">script</span><span class="support tag script">&gt;</span></span></code></pre>
-      <p class="copy">
-        Copyright (c) 2013 - 2015
-        <a href="http://ksylvest.com/">Kevin Sylvestre</a>
-      </p>
-      <p class="links">
-        <a href="https://github.com/ksylvest">GitHub</a>
-        <a href="https://plus.google.com/+KevinSylvestre?rel=author">Google</a>
-        <a href="https://twitter.com/ksylvest">Twitter</a>
-      </p>
-    </div>
+}
+function clearWatch(watchID) {
+    window.navigator.geolocation.clearWatch(watchID);
+}
+function successCallback(position)
+{
+   setText(position.coords.latitude, "latitude");
+   setText(position.coords.longitude, "longitude");
+}
 
 
-</body></html>
+function errorCallback(error) {
+    var message = "";
+    // Check for known errors
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            message = "This website does not have permission to use " +
+                      "the Geolocation API";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = "The current position could not be determined.";
+            break;
+        case error.PERMISSION_DENIED_TIMEOUT:
+            message = "The current position could not be determined " +
+                      "within the specified timeout period.";
+            break;
+    }
+    // If it's an unknown error, build a message that includes
+    // information that helps identify the situation so that
+    // the error handler can be updated.
+    if (message == "")
+    {
+        var strErrorCode = error.code.toString();
+        message = "The position could not be determined due to " +
+                  "an unknown error (Code: " + strErrorCode + ").";
+    }
+    console.log(message);
+}
+
+window.friends_callback = function(results) {
+	for (var i = 0; i < results.features.length; i++) {
+		var coords = results.features[i].geometry.coordinates;
+		var latLng = new google.maps.LatLng(coords[0],coords[1]);
+		var marker = new google.maps.Marker({
+			position: latLng,
+			map: map
+		});
+	}
+}
+
+$( window ).load(function() {
+	listenForPosition();
+});
+
+</script>
+</head>
+<body>
+<label for="latitude">Latitude: </label><input id="latitude" /> <br />
+<label for="longitude">Longitude: </label><input id="longitude" /> <br />
+<input type="button" onclick="listenForPosition ()" value="Watch Latitude and Longitude"  />
+<input type="button" value="Clear watch" onclick="clearWatch()" />
+
+<div id="map" style="width:760px;height:400px;margin-top:20px;"></div>
+
+</body>
+</html>

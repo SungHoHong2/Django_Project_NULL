@@ -36,6 +36,8 @@ urlpatterns = [
     url(r'^member/', include('member.urls.web',namespace='member')),
     url(r'^saytalk/', include('saytalk.urls', namespace='saytalk')),
 
+    url(r'^test/$', TemplateView.as_view(template_name='base_dev/test.html'), name='test'),
+
 ]
 
 if settings.REAL_SERVER_RUNNING:

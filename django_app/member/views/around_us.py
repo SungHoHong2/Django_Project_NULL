@@ -18,6 +18,11 @@ class AroundMeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AroundMeView, self).get_context_data(**kwargs)
+
+        _total = len(MyUser.objects.all())
+        _pagination = int(_total/6)
+
+
         _query = (
             "select "
                 "mm.id as id "
@@ -42,8 +47,9 @@ class AroundMeView(TemplateView):
                       "group by mlr.followee_id "
                      ") mlr on mlr.followee_id = mm.id "
             "order by mm.created_date "
-            "DESC LIMIT 10 "
+            "DESC LIMIT 6 "
         )
+
 
         with connection.cursor() as cursor:
             cursor.execute(_query, [])
@@ -56,12 +62,71 @@ class AroundMeView(TemplateView):
                       , 'likes' : row[5] }  for row in _list
                       ]
             context['member_list'] = json.dumps(_list)
+        context['pagination'] = _pagination
         return context
+
+
+
 
 def xstr(s):
     if s is None:
         return ''
     return str(s)
+
+
+class AroundMePaging(viewsets.ModelViewSet):
+    def create(self, request, *args, **kwargs):
+
+        _query = (
+            "select "
+              "count(mm.id) OVER() as totalcount "
+              ", mm.id as id "
+              ", mm.username as username "
+              ", ci.img_file as img_file "
+              ", cch.tag_names as tag_names "
+              ", mm.google_location as google_location "
+              ", mlr.likes as likes "
+            "from member_myuser mm "
+            "left join (select "
+                       "member_id, img_file "
+                       "from collection_image where "
+                       "img_order = 1 ) ci on ci.member_id = mm.id "
+            "left join (select "
+                      "chr.member_id, string_agg(cht.tag_name, ', ') as tag_names "
+                      "from collection_hash_relationship chr "
+                      "join collection_hash_tag cht on cht.id = chr.hash_tag_id "
+                      "group by chr.member_id ) cch on cch.member_id = mm.id "
+            "left join( select "
+                      "mlr.followee_id, count(id) as likes "
+                      "from member_like_relationship mlr "
+                      "group by mlr.followee_id "
+                     ") mlr on mlr.followee_id = mm.id "
+        )
+
+        print(self.request.data.get('paging'))
+        _paging = int(self.request.data.get('paging')) * 6
+        if request.data.get('search_like') is not None:
+            _query += "where cch.tag_names like %s order by mm.created_date DESC OFFSET %s LIMIT 6"
+            param_list = ['%'+str(request.data.get('search_like'))+'%', _paging ]
+        else:
+            _query += "order by mm.created_date DESC OFFSET %s LIMIT 6"
+            param_list = [_paging ]
+
+
+        with connection.cursor() as cursor:
+            cursor.execute(_query, param_list)
+            _list = cursor.fetchall()
+            _list = [ { 'total_count':row[0]
+                      , 'id' : row[1]
+                      , 'username' : row[2]
+                      , 'img_file' : settings.MEDIA_URL+xstr(row[3])
+                      , 'tag_names' : row[4]
+                      , 'google_location' : row[5]
+                      , 'likes' : row[6] }  for row in _list
+                      ]
+            _member_list = json.dumps(_list)
+        return Response(_member_list)
+
 
 
 class MemberDetailAction(viewsets.ModelViewSet):
