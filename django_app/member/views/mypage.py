@@ -27,14 +27,12 @@ class MyPageProfileView(TemplateView):
         context = super(MyPageProfileView, self).get_context_data(**kwargs)
         context['image'] =  json.dumps([{'id' : image.id, 'url': settings.MEDIA_URL+xstr(image.img_file)} for image in Image.objects.filter(member_id=self.request.user.id)])
         _query = (
-            "select cht.id as id, cht.tag_name as tag_name from collection_hash_relationship chr "
+            "select string_agg(cht.tag_name, ',') as tag_name from collection_hash_relationship chr "
             "join collection_hash_tag cht on cht.id = chr.hash_tag_id and chr.member_id = %s "
         )
 
         with connection.cursor() as cursor:
             cursor.execute(_query, [self.request.user.id])
-            _list = cursor.fetchall()
-            _list = [ { 'id':row[0]
-                      , 'tag_name' : row[1] }  for row in _list ]
-            context['hash_tags'] = json.dumps(_list)
+            _object = cursor.fetchone()
+            context['hash_tags'] = _object[0]
         return context

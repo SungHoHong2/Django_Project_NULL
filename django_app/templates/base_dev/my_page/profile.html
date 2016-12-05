@@ -5,14 +5,38 @@
 
 <script src="{% static 'base_dev/js/opening/jquery.gridly.js' %}"></script>
 <script src="{% static 'base_dev/js/opening/materialize-tags.js' %}"></script>
+<script src="{% static 'base_dev/js/profile/profile.js' %}"></script>
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/materialize-tags.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/profile/profile.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/register.css' %}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <style>
-.gridly_custom{ margin-left: 307px; }
+#img_upload_div{ margin-left: 307px; }
+.hidden_class{display : none; }
+.materialize-tags{display:  block; color: black;}
+.n-tag{ color: black;}
 </style>
 
 <script>
+	function pageEnable(str){
+	$('.page_classes').hide();
+		switch(str){
+			case 'profile' :
+					$('#profile_page').show();
+			break;
+		  case 'mypost' :
+					$('#mypost_page').show();
+		  break;
+
+
+		}
+
+
+	}
+
+
 		$(document).ready(function(){
 
 			/*
@@ -42,16 +66,77 @@
 			});
 
 
-			//var img_div = document.querySelectorAll('.brick')[];
-			//img_div.style['background-image'] = 'url('+response.img_file+')';
-			//img_div.style['left'] = 160 * img_length;
-			//img_length++;
+			/*
+			 * 이미지 삭제
+			 */
 
-			//event.preventDefault();
-			//event.stopPropagation();
+			 $(document).on("click", ".gridly .delete", function(event) {
+	       		var $this;
+	       		event.preventDefault();
+	       		event.stopPropagation();
+	       		$this = $(this);
+	       		$this.closest('.brick').remove();
+	       		return $('.gridly').gridly('layout');
+	   	});
 
-			//$('.gridly').append(img_div);
-			//return $('.gridly').gridly();
+			/*
+			 * 이미지 추가
+		   */
+
+			$('.img-btn').click(function(){
+	 			$('#id_img_file').trigger('click');
+	 		});
+
+			 $("#id_img_file").change(function(){
+	 			var _this = $(this);
+	 			_this.attr('disabled',true);
+	 			var img_length = $('#img_upload_div').find('div').length;
+	 			if(img_length==5){
+	 				alert('이미지는 5개까지 입력 가능합니다.');
+	 				return false;
+	 			}
+
+	 			var form_data = new FormData();
+	 					form_data.append("img_file",$('input[name=img_file]')[0].files[0])
+	 					formAjax('POST', form_data, "{% url 'collection:temp_image' %}"
+	 							, 'application/json'
+	 							, function(response){
+	 								_this.removeAttr('disabled');
+
+	 									var img_div = $('#img_upload_div').append(
+	 									     $('<div/>').addClass('brick small').attr('id',response.id)
+	 									      	        .append($('<a/>').addClass('delete').text('x'))
+	 									   	 );
+	 									$('#id_img_file').val('');
+
+
+	 									var img_div = document.querySelectorAll('.brick')[img_length];
+	 									img_div.style['background-image'] = 'url('+response.img_file+')';
+	 									img_div.style['left'] = 160 * img_length;
+
+	 									event.preventDefault();
+	   								event.stopPropagation();
+	   								$('.gridly').append(img_div);
+	   								return $('.gridly').gridly();
+	 					});
+	 		});
+
+	    /*
+			 * hash tag 입력
+			 */
+		 		$('.n-tag').keyup(function(e) {
+		 		    if (e.keyCode == 13 || e.keyCode == 9){
+		 						$(this).val('');
+		 				};
+		 		});
+
+
+			/*
+			 * hash_tag 목록
+			 */
+
+
+
 		});
 
 </script>
@@ -80,8 +165,8 @@
         <h2>회원정보 메뉴</h2>
       </div>
       <ul class="list-view">
-				<li>개인정보 수정</li>
-				<li>내가쓴글 관리</li>
+				<li onclick="pageEnable('profile')">개인정보 수정</li>
+				<li onclick="pageEnable('mypost')">내가쓴글 관리</li>
 				<li>내가 초대받은 채팅</li>
 				<li>나를 좋아하는 사람</li>
 				<li>설정</li>
@@ -90,6 +175,7 @@
 
 
     <!-- 우측 search 바 & 맵 뷰-->
+		<div id="profile_page" class="page_classes">
     <section class="col-6 profile_body">
       <div class="col-8">
         <div>
@@ -101,21 +187,26 @@
 					<input type="text" name='username' value="{{ request.user.username }}" disabled=true>
 					</div>
 
-					<div class="">
+					<div class="gridly_custom">
 					<label for=""> 사진 수정 </label>
 					</div>
-					<div id="img_upload_div" class='gridly gridly_custom'></div>
-
-					<div class="">
-					<label for=""> 해시 태그 변경 </label>
-					{{ hash_tags }}
+					<div id="img_upload_div" class='gridly'></div>
+					 <button class="img-btn">사진 입력</button>
+					 <input id="hash_tag_inputs" type="text" placeholder="해시태그 추가" data-role="materialtags" value="{{ hash_tags }}">
 					</div>
 			</div>
     </section>
 
-
-
-
+		<div id="img_upload_form" class="img_hash_join_class hidden_class" method="POST">
+				<a class="img-btn"><span> 이미지 첨부 </span></a>
+				<div class="form-group img-submit hidden_class">
+					 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
+				</div>
+		</div>
+		</div>
+		<div id="mypost_page" class="page_classes">
+			this is my post
+		</div>
 
   </div>
 </main>
