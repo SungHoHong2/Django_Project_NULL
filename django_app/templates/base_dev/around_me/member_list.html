@@ -12,9 +12,9 @@
 <script src="{% static 'base_dev/js/opening/google_map.js' %}"></script>
 <script>
 var first_page = 1;
-var last_page = 0;
 var total_page = 0;
 var search_like= '';
+
 function get_member_list(response){
   $('#friends_list').empty();
   $("#member_list_templ").tmpl(response).appendTo( "#friends_list" );
@@ -92,10 +92,12 @@ function paging_system(first_page, last_page){
         var pagination = {{ pagination|safe }} + 1;
 
         console.log(friends_list);
-        console.log(pagination);
+        friends_list[0]
+        if(friends_list){
+           total_page = friends_list[0].total_count / 6;
+        }
+
         first_page= 1;
-        last_page= pagination;
-        total_page = last_page;
 
         /*
          * Pagination

@@ -13,9 +13,28 @@ from rest_framework.response import Response
 from collection.serializer import ImageSerializer
 from django.conf import settings
 
+
+def xstr(s):
+    if s is None:
+        return ''
+    return str(s)
+
+
 class MyPageProfileView(TemplateView):
-    template_name = 'base_test/my_page/profile.html'
+    template_name = 'base_dev/my_page/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super(MyPageProfileView, self).get_context_data(**kwargs)
+        context['image'] =  json.dumps([{'id' : image.id, 'url': settings.MEDIA_URL+xstr(image.img_file)} for image in Image.objects.filter(member_id=self.request.user.id)])
+        _query = (
+            "select cht.id as id, cht.tag_name as tag_name from collection_hash_relationship chr "
+            "join collection_hash_tag cht on cht.id = chr.hash_tag_id and chr.member_id = %s "
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute(_query, [self.request.user.id])
+            _list = cursor.fetchall()
+            _list = [ { 'id':row[0]
+                      , 'tag_name' : row[1] }  for row in _list ]
+            context['hash_tags'] = json.dumps(_list)
         return context

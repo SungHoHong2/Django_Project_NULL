@@ -19,13 +19,10 @@ class AroundMeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AroundMeView, self).get_context_data(**kwargs)
 
-        _total = len(MyUser.objects.all())
-        _pagination = int(_total/6)
-
-
         _query = (
             "select "
-                "mm.id as id "
+              "count(mm.id) OVER() as totalcount "
+              ", mm.id as id "
               ", mm.username as username "
               ", ci.img_file as img_file "
               ", cch.tag_names as tag_names "
@@ -54,17 +51,16 @@ class AroundMeView(TemplateView):
         with connection.cursor() as cursor:
             cursor.execute(_query, [])
             _list = cursor.fetchall()
-            _list = [ {'id' : row[0]
-                      , 'username' : row[1]
-                      , 'img_file' : settings.MEDIA_URL+xstr(row[2])
-                      , 'tag_names' : row[3]
-                      , 'google_location' : row[4]
-                      , 'likes' : row[5] }  for row in _list
+            _list = [ { 'total_count':row[0]
+                      , 'id' : row[1]
+                      , 'username' : row[2]
+                      , 'img_file' : settings.MEDIA_URL+xstr(row[3])
+                      , 'tag_names' : row[4]
+                      , 'google_location' : row[5]
+                      , 'likes' : row[6] }  for row in _list
                       ]
             context['member_list'] = json.dumps(_list)
-        context['pagination'] = _pagination
         return context
-
 
 
 
@@ -146,6 +142,3 @@ class MemberDetailAction(viewsets.ModelViewSet):
         follower_user = request.user
         lr = Like_Relationship.objects.create(followee= followee_user, follower=follower_user)
         return Response({ 'pk' : lr.pk})
-
-
-
