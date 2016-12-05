@@ -71,6 +71,7 @@ var google_data = {};
 
 				google_data['features'] = _features;
 
+
 		//{"type":"Feature","geometry":{"type":"Point","coordinates":[37.517932,127.021830]},"id":"ak10559055"},
 
 
@@ -99,6 +100,7 @@ var google_data = {};
 				alert('좋아요 반영되었고요 좋았던 사람 또 좋아요 누를면 지금은 에러나요');
 		});
 	 });
+
 
 
 
@@ -181,11 +183,12 @@ var google_data = {};
 				var latitude = pos.coords.latitude;
 				var longitude = pos.coords.longitude;
 
+				var location = join(,)
 
-				/*  AJAX 통신을 사용해서 저장 */
-				console.log(latitude);
-				console.log(longitude);
-
+				postAjax('POST', {'location': location}, '/member/member_position/'
+					, 'application/json', function(response){
+						alert('좋아요 반영되었고요 좋았던 사람 또 좋아요 누를면 지금은 에러나요');
+				});
 
 				var mapOptions = {
 					zoom: 14,

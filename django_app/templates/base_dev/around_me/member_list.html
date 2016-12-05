@@ -226,25 +226,21 @@ function paging_system(first_page, last_page){
       <div class="search-view col-8">
         <div>
           <h2>Search #HashTags</h2>
-          <div class="form-group" action="">
+          <form class="form-group" action="">
             <fieldset>
               <legend class="hidden">해시태그 검색하기 폼</legend>
               <input type="search" name="search" class="search-bar">
             </fieldset>
             <button id="search_btn">Search</button>
+            <input class="tracking" type="button" onclick="listenForPosition ()" value="Tracking ON"  />
+            <input class="tracking" type="button" value="Tracking OFF" onclick="clearWatch()" />
           </form>
         </div>
       </div>
-      <div class="map-view col-8">
-        <label for="latitude">Latitude: </label><input id="latitude" /> <br />
-        <label for="longitude">Longitude: </label><input id="longitude" /> <br />
-        <input type="button" onclick="listenForPosition ()" value="Watch Latitude and Longitude"  />
-        <input type="button" value="Clear watch" onclick="clearWatch()" />
-        <br>
-        <div id="map"></div>
-      </div>
 
+    <div id="map"></div>
     </section>
+
 
 
   </div>
