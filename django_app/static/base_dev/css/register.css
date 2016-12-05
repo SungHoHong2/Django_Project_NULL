@@ -1,0 +1,94 @@
+
+.container .visual2{
+  background-image: url("../images/bg-register.png");
+  background-size: cover;
+}
+
+.container .visual2,
+.container .content-box{
+  float: left;
+  height: 100%;
+}
+
+#register_form{
+  text-align: center;
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+#register_form fieldset{
+  border: none;
+}
+
+#register_form .n-form,
+#register_form .pw-form,
+#register_form .ps-cf-form{
+  width: 60%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: auto;
+  position: relative;
+}
+
+/*#register_form .n-form button{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}*/
+
+#register_form .form-label{
+  color: #fff;
+  font-size: 1.4rem;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 300;
+  width: 30%;
+  text-align: left;
+}
+
+#register_form .form-input{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #fff;
+  width: 70%;
+  background: none;
+  color: #fff;
+}
+
+#register_form button{
+  background: none;
+  font-size: 1.4rem;
+  color: #fff;
+  border: 1.4px solid #fff;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+}
+
+#register_form .join-btn{
+  margin-top: 30px;
+}
+
+#register_form .confirmation{
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#register_form .cf-button-group{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form-inline {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.content-box .register-btn{
+  margin-top: 80px;
+}

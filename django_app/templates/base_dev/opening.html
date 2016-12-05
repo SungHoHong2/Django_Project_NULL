@@ -1,0 +1,62 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{% static 'base_dev/css/open.css' %}">
+  <link rel="stylesheet" href="{% static 'base_dev/css/opening/custom.css'%}">
+  <script src='{% static "base_dev/js/jquery_latest.js" %}'></script>
+  <script src='{% static "base_dev/js/opening/custom.js" %}'></script>
+  <title>NULL project</title>
+</head>
+<body>
+  <div class="wrapper col-8">
+
+  <header>
+    <div class="head-wrap col-6">
+      <a class="brand-logo" href="">NULL PROJECT</a>
+      <nav class="navigation col-3">
+        <ul>
+          {% if user.is_authenticated %}
+          <li class="active"><a href="{% url 'member:around_me' %}">AROUND ME</a></li>
+          <li><a href="{% url 'saytalk:talk_list' %}">SAY TALK</a></li>
+          <li><a href="{% url 'member:profile' %}">MY PAGE</a></li>
+          <li><a href="{% url 'member:login' %}">LOG OUT</a></li>
+          {% else %}
+          <li class="active"><a href="/main_login">LOGIN</a></li>
+          <li><a href="/register">REGISTER</a></li>
+          <li><a href="/about_us">ABOUT US</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="text-box">
+
+      <h1>
+        <b>사용자</b>
+        <span data-words="Seoyeon.Yeom|Sangjun.Park|Sungho.Hong|Wanjun.Cho"></span> 가 <br>
+        <b>HashTag</b>
+        <span data-words="salad|macs|chips"></span>
+        를 등록했습니다.
+      </h1>
+
+      <!--<h1>ALL HASHTAGS AROUND ME</h1>-->
+      <a href="/main_login">Start NOW</a>
+    </div>
+  </main>
+  <footer>
+    <div class="footer col-8">
+   		<div class="footer-row col-3">
+        <a href="#">Privacy &amp; Cookies</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Accessibility</a>
+  			<a href="#">FAQ</a>
+  		</div>
+  </footer>
+</div>
+
+</body>
+</html>

@@ -5,5 +5,5 @@ class SayTalkPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SayTalk
-        fields = ('id', 'title', 'content', 'created_by')
+        fields = ('id', 'title', 'content', 'created_by', 'is_parent')
 

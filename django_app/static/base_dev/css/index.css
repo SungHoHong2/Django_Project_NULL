@@ -1,0 +1,151 @@
+
+.container{
+  height: 100vh;
+}
+
+.container .visual,
+.container .content-box{
+  float: left;
+  height: 100%;
+}
+
+
+/* 우측 비주얼 */
+
+.container .visual{
+  background-image: url("../images/bg-login.png");
+  background-size: cover;
+}
+
+
+/* 좌측 텍스트 */
+
+.container .content-box{
+  background-image: url("../images/bg-box-b.png");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(52,52,52,0.2);
+  box-shadow: 5px 5px 10px #fff;
+  color: #fff;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+}
+
+.content-box h2{
+  font-size: 4.6rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  margin-top: -50px;
+}
+
+#login_form{
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+#login_form fieldset{
+  border: none;
+}
+
+#login_form .n-form,
+#login_form .pw-form{
+  width: 50%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: auto;
+  position: relative;
+}
+
+#login_form .form-label{
+  color: #fff;
+  font-size: 1.4rem;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 300;
+  width: 30%;
+  text-align: left;
+}
+
+#login_form .form-input{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #fff;
+  width: 70%;
+  background: none;
+  color: #fff;
+}
+
+#login_form button{
+  background: none;
+  font-size: 2rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  color: #fff;
+  border: 1.4px solid #fff;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 30px;
+  width: 50%;
+}
+
+.content-box .not-member{
+  margin-top: 10%;
+  width: 50%;
+}
+
+.not-member p{
+  text-align: center;
+}
+
+.not-member div{
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.not-member div a{
+  border: 1.4px solid #fff;
+  padding: 5px 10px 5px 10px;
+}
+
+
+/* 하단 footer 바 */
+
+.footer{
+  height: 90px;
+  position: absolute;
+  top: 100%;
+  color: #343434;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.footer-row{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+}
+
+.copyright{
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2rem;
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 300;
+}

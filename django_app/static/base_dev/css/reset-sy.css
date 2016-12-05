@@ -1,0 +1,38 @@
+
+
+body, header, main, footer, section, article, aside,
+h1, h2, h3, h4, h5, h6, 
+abbr, cite, address, figure, dl, dt, dd, button,
+div, a, p, q, span, strong, embed, img, video, audio, canvas,
+form, fieldset, label, legend, input,
+table, caption, th, td, tr, nav, ul, ol, li{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+}
+
+img{
+	vertical-align: top;
+}
+
+ul, ol{
+	list-style-type: none;
+}
+
+html{
+	font-size: 62.5%;
+}
+
+body{
+	font-size: 1.4rem;
+	line-height: 1.5;
+}
+
+h1{
+	font-size: 2.4rem;
+}

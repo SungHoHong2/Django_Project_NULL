@@ -1,0 +1,242 @@
+{% extends 'base_test/base.html' %}
+{% block content %}
+
+{% load staticfiles %}
+<style>
+.login_content{ margin-top : 10px; }
+    audio,
+    video {
+        -moz-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        vertical-align: top;
+    }
+
+    .setup {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        font-size: 102%;
+        height: 47px;
+        margin-left: -9px;
+        margin-top: 8px;
+        position: absolute;
+    }
+
+
+</style>
+
+
+<script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
+<script>
+	$(document).ready(function(){
+            var socket = io.connect('https://52.78.246.112:8081',{secure: true});
+            var $messageForm = $('#send-message');
+            var $messageBox = $('#message');
+            var $chat = $('#chat');
+
+            $messageForm.submit(function(e){
+                e.preventDefault();
+                socket.emit('send message', $messageBox.val());
+                $messageBox.val('');
+            });
+
+            socket.on('new message', function(data){
+                $chat.append(data+"<br/>");
+            });
+
+
+	});
+</script>
+
+<script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
+            <div class="img_block_dev">
+            	<span class="img_class_dev member_detail_btn">
+            	 <img class="image_dir" src="${user_img}" alt=""></span>
+                <span>
+                	<strong class="member_detail_btn">${title}</strong>
+                </span>
+                <p>${content}</p>
+  				<p><img src="${post_img}" alt=""></span></p>
+            </div>
+</script>
+
+
+
+
+
+<style>
+.login_content{ margin-top : 10px; }
+</style>
+<!-- *****************************************************************************************************************
+	 BLUE WRAP
+	 ***************************************************************************************************************** -->
+	<div id="blue">
+	    <div class="container">
+			<div class="row">
+				<h3>Chat detail</h3>
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /blue -->
+
+
+	<!-- *****************************************************************************************************************
+	 CONTACT FORMS
+	 ***************************************************************************************************************** -->
+		<script src="https://cdn.webrtc-experiment.com/firebase.js"></script>
+		<script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+	 <div class="container mtb login_content">
+	 	<div class="row">
+
+			<div class="col-lg-4">
+
+
+		 		<h4>WebRTC 사용자 표시</h4>
+		 		<div class="hline"></div>
+
+				<div style="text-align:center;">
+                <div class="videos-container">
+                    <video id="peer2-to-peer1" width="360px" autoplay controls></video>
+                     <h4>정보 제공 </h4>
+
+                </div>
+                <div class="videos-container">
+                    <video id="peer1-to-peer2" width="360px" autoplay controls></video>
+                     <h4>정보 수신</h4>
+                </div>
+                </div>
+			<script>
+				 var mediaConstraints = {
+					optional: [],
+					mandatory: {
+						OfferToReceiveAudio: true,
+						OfferToReceiveVideo: true
+					}
+				};
+			</script>
+            <script>
+                var offerer, answerer;
+                var offererToAnswerer = document.getElementById('peer1-to-peer2');
+                var answererToOfferer = document.getElementById('peer2-to-peer1');
+                window.RTCPeerConnection = window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+                window.RTCSessionDescription = window.mozRTCSessionDescription || window.RTCSessionDescription;
+                window.RTCIceCandidate = window.mozRTCIceCandidate || window.RTCIceCandidate;
+                navigator.getUserMedia = navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+                window.URL = window.webkitURL || window.URL;
+                window.iceServers = {
+                    iceServers: [{
+                            url: 'stun:23.21.150.121'
+                        }
+                    ]
+                };
+            </script>
+            <script>
+                /* offerer */
+                function offererPeer(video_stream) {
+                    offerer = new RTCPeerConnection(window.iceServers);
+                    offerer.addStream(video_stream);
+                    offerer.onaddstream = function (event) {
+                        offererToAnswerer.src = URL.createObjectURL(event.stream);
+                        offererToAnswerer.play();
+                    };
+                    offerer.onicecandidate = function (event) {
+                        if (!event || !event.candidate) return;
+                        answerer.addIceCandidate(event.candidate);
+                    };
+                    offerer.createOffer(function (offer) {
+                        offerer.setLocalDescription(offer);
+                        answererPeer(offer, video_stream);
+                    }, function() {}, mediaConstraints);
+                }
+            </script>
+            <script>
+                /* answerer */
+                function answererPeer(offer, video_stream) {
+                    answerer = new RTCPeerConnection(window.iceServers);
+                    answerer.addStream(video_stream);
+                    answerer.onaddstream = function (event) {
+                        answererToOfferer.src = URL.createObjectURL(event.stream);
+                        answererToOfferer.play();
+                    };
+                    answerer.onicecandidate = function (event) {
+                        if (!event || !event.candidate) return;
+                        offerer.addIceCandidate(event.candidate);
+                    };
+                    answerer.setRemoteDescription(offer);
+                    answerer.createAnswer(function (answer) {
+                        answerer.setLocalDescription(answer);
+                        offerer.setRemoteDescription(answer);
+                    }, function() {}, mediaConstraints);
+                }
+            </script>
+            <script>
+                var video_constraints = {
+                    mandatory: {},
+                    optional: []
+                };
+                function getUserMedia(callback) {
+                    var n = navigator;
+                    n.getMedia = n.webkitGetUserMedia || n.mozGetUserMedia;
+                    n.getMedia({
+                        audio: true,
+                        video: video_constraints
+                    }, callback, onerror);
+                    function onerror(e) {
+						alert(JSON.stringify(e, null, '\t'));
+                    }
+                }
+            </script>
+            <script>
+                getUserMedia(function (video_stream) {
+                    offererPeer(video_stream);
+                });
+            </script>
+
+
+	 		</div>
+	 		<div class="col-lg-8">
+	 			<h4> Chatting 정보 </h4>
+	 			<div class="hline"></div>
+		 			 chatting information
+				<div id="post_detail_div">
+					<div id='chat'></div>
+					<form id="send-message" class="form-inline" style="display: block; float: left;">
+						<input type="text" id="message" class="form-control">
+						<input type="submit" value="enter" class="btn btn-warning">
+					</form>
+					<button class="btn btn-danger" style="float: left;"> change into webrtc </button>
+				</div>
+
+
+
+
+
+
+
+			</div>
+	 	</div><! --/row -->
+	 </div><! --/container -->
+
+
+<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>API</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 		<div class="col-lg-8">
+		 			<h4>Description</h4>
+		 			<div class="hline-w"></div>
+		 		</div>
+
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+{% endblock %}

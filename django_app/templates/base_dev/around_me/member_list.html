@@ -1,0 +1,251 @@
+{% extends 'base_dev/base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'base_dev/css/member_list.css' %}">
+<style> .member-info{ padding-top: 15px; }
+.member-info .hash-tag { margin-left:10px; display: block; float: left;
+}
+#map{ width: 100%; height: 100%; }
+</style>
+<script src="{% static 'base_dev/js/opening/google_map.js' %}"></script>
+<script>
+var first_page = 1;
+var last_page = 0;
+var total_page = 0;
+var search_like= '';
+function get_member_list(response){
+  $('#friends_list').empty();
+  $("#member_list_templ").tmpl(response).appendTo( "#friends_list" );
+  $(response).each(function(index, item){
+    if(item.tag_names){
+      $(item.tag_names.split(', ')).each(function(index_sub, item_sub){
+          $('#member_tags_'+item.id).append($('<span/>').addClass('hash-tag').text('#'+item_sub));
+      });
+    }
+  });
+}
+
+
+function paging_system(first_page, last_page){
+   $('.page-btn').empty();
+      //$('.page-btn').append($('<a/>').append($('<img/>').attr('src','{% static "base_dev/images/arrow-rec-left.png" %}')));
+
+      if(first_page != 1 ){
+        $('.page-btn').attr('first_page', first_page).append($('<a/>').append($('<img/>').attr('src','{% static "base_dev/images/arrow-rec-left.png" %}'))
+                      .click(function(){
+                              first_page -=3;
+                              last_page -=4;
+                              paging_system(first_page, last_page);
+                      })
+                  );
+      }
+      if(last_page>=3){
+          last_page = last_page + 1 ;
+      }
+
+      for(i=first_page; i<last_page; i++){
+
+        if(i-2 == parseInt(total_page)){
+            return false;
+        }
+
+        $('.page-btn').append($('<a/>').attr('href','#').text(i)
+                      .click(function(){
+                            console.log(total_page);
+                            console.log(parseInt($(this).text())-1);
+                            _request_data = {};
+                            _request_data['paging'] = (parseInt($(this).text())-1);
+                            if(search_like.length>0){
+                              _request_data['search_like'] = search_like;
+                            }
+                            postAjax('POST', _request_data,
+                                           '{% url "member:around_me_paging" %}',
+                                           'application/x-www-form-urlencoded',
+                                            function(response){
+                                                  get_member_list($.parseJSON(response));
+                                            })
+                      }));
+
+      }
+
+      if(total_page>3){
+        $('.page-btn').attr('last_page',last_page).append(
+          $('<a/>').append($('<img/>').attr('src','{% static "base_dev/images/arrow-rec-right.png" %}'))
+          .click(function(){
+                first_page = last_page;
+                if(total_page>=last_page){
+                  last_page +=2;
+                }else{
+                  last_page = total_page;
+                }
+                paging_system(first_page, last_page);
+          })
+        );
+      }
+
+}
+
+    $(document).ready(function(){
+        var friends_list = {{ member_list|safe }};
+        var pagination = {{ pagination|safe }} + 1;
+
+        console.log(friends_list);
+        console.log(pagination);
+        first_page= 1;
+        last_page= pagination;
+        total_page = last_page;
+
+        /*
+         * Pagination
+         */
+        paging_system(first_page, 3);
+        get_member_list(friends_list);
+
+
+        /*
+         * GoogleMap
+         */
+        // var map_div = document.querySelectorAll('#map')[0];
+        // map_div.style['width'] = $('.map-view').width()+ 'px';
+        // map_div.style['height'] = parseInt($('.map-view').height()+$('.page-btn').height())+'px';
+
+
+
+       /*
+        * Searchbar
+        */
+       $('#search_btn').click(function(){
+            console.log($('input[name="search"]').val());
+
+            postAjax('POST', { paging : 0
+                             , search_like: $('input[name=search]').val() },
+                           '{% url "member:around_me_paging" %}',
+                           'application/x-www-form-urlencoded',
+                            function(response){
+                                    var member_list = $.parseJSON(response);
+                                    console.log(member_list);
+                                    if(member_list.length>=1){
+                                      total_page = parseInt(member_list[0].total_count)/6
+
+                                      if(total_page < 3 ){
+                                        last_page = total_page;
+                                      }else{
+                                        last_page = 3;
+                                      }
+                                      search_like = $('input[name="search"]').val();
+                                      paging_system(first_page, last_page);
+                                      get_member_list(member_list);
+                                    }else{
+                                      total_page = 0;
+                                      paging_system(0, 0);
+                                      get_member_list([]);
+                                    }
+                            })
+
+       });
+
+
+
+
+		//{"type":"Feature","geometry":{"type":"Point","coordinates":[37.517932,127.021830]},"id":"ak10559055"},
+
+
+		// $('.member_detail_btn').click(function(){
+		// 	_followee_id = $(this).attr('id');
+		// 	_tag_list = $(this).attr('tags');
+    //
+		// 	getAjax('GET', "/member/member_detail/"+_followee_id
+		// 	, 'application/json', function(response){
+    //
+		// 		$('#member_detail_photo').empty();
+		// 		$(response).each(function(index, item){
+		// 			$('#member_detail_photo').append($('<img/>').height(200).attr('src',item.img_file))
+		// 		});
+    //
+		// 		$('#member_like_btn').attr('followee_id', _followee_id);
+		// 		$('#member_detail_hashtag').val('').val(_tag_list);
+		// 		$('#myBtn').trigger('click');
+		// 	});
+		// });
+
+
+     /*
+	 $('#member_like_btn').click(function(){
+		postAjax('POST', {}, '/member/member_detail/'+$(this).attr('followee_id')+'/'
+			, 'application/json', function(response){
+				alert('좋아요 반영되었고요 좋았던 사람 또 좋아요 누를면 지금은 에러나요');
+		});
+	 });
+	 */
+
+
+    });
+
+
+
+</script>
+
+
+<!-- member 리스트 불러오기 -->
+<script id="member_list_templ" type="text/x-jquery-tmpl">
+  <li class="member-info">
+    <a class="member_detail_btn" href="#" data-tags ='${tag_names}' id= '${id}'>
+    	<span class="member-img" id= '${id}' data-tags ='${tag_names}'> <img class="image_dir" src="${img_file}" style="width:45px; height:45px;" alt=""> </span>
+      <div id="member_tags_${id}">
+        <span class="member-name"><strong id= '${id}' data-tags = '${ tag_names }'> ${username} </strong></span>
+        <!--<span class="hash-tag" id= 'member_tags_${id}'> ${ tag_names } <span>-->
+      </div>
+    </a>
+  </li>
+</script>
+
+
+
+
+
+<main>
+  <div class="wrapper">
+
+    <!-- 좌측 친구 리스트 뷰 -->
+    <section class="list-section col-2">
+      <div class="list-headline">
+        <h2>All friends around me</h2>
+      </div>
+      <ul class="list-view" id="friends_list"></ul>
+      <!-- 친구 리스트가 6개 이상일 때 뜨는 다음 페이지  -->
+      <div class="page-btn"></div>
+    </section>
+
+
+    <!-- 우측 search 바 & 맵 뷰-->
+    <section class="map-section col-6">
+      <div class="search-view col-8">
+        <div>
+          <h2>Search #HashTags</h2>
+          <div class="form-group" action="">
+            <fieldset>
+              <legend class="hidden">해시태그 검색하기 폼</legend>
+              <input type="search" name="search" class="search-bar">
+            </fieldset>
+            <button id="search_btn">Search</button>
+          </form>
+        </div>
+      </div>
+      <div class="map-view col-8">
+        <label for="latitude">Latitude: </label><input id="latitude" /> <br />
+        <label for="longitude">Longitude: </label><input id="longitude" /> <br />
+        <input type="button" onclick="listenForPosition ()" value="Watch Latitude and Longitude"  />
+        <input type="button" value="Clear watch" onclick="clearWatch()" />
+        <br>
+        <div id="map"></div>
+      </div>
+
+    </section>
+
+
+  </div>
+</main>
+
+{% endblock %}

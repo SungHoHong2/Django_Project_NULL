@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>NULL project</title>
+
+    <link rel="shortcut icon" href="{% static 'base_dev/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'base_dev/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'base_dev/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'base_dev/css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'base_dev/css/reset-sy.css' %}">
+    <link rel="stylesheet" href="{% static 'base_dev/css/grid.css' %}">
+    <script src="{% static 'base_dev/js/jquery_latest.js' %}"></script>
+    <script src="{% static 'base_dev/js/ajax_custom.js' %}"></script>
+    <script src="{% static 'base_dev/js/jquery_template.js' %}"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Mans0k30To1GtjB2-T8DWhd3bmD-nes&callback=listenForPosition"></script>
+
+
+    <!--[if lt IE 9]>
+    <script src="{% static 'base_dev/js/ie8-responsive-file-warning.js' %}"></script><![endif]-->
+
+  </head>
+
+  <body>
+
+  <!-- 상단 nav 바 -->
+    <header>
+      <div class="header col-6">
+        <a class="brand-logo" href="">NULL PROJECT</a>
+        <div class="navigation col-3">
+          <ul>
+            {% if user.is_authenticated %}
+            <li class="active"><a href="{% url 'member:around_me' %}">AROUND ME</a></li>
+            <li><a href="{% url 'saytalk:talk_list' %}">SAY TALK</a></li>
+            <li><a href="{% url 'member:profile' %}">MY PAGE</a></li>
+            <li><a href="{% url 'member:login' %}">LOG OUT</a></li>
+            {% else %}
+            <li class="active"><a href="/main_login">LOGIN</a></li>
+            <li><a href="/register">REGISTER</a></li>
+            <li><a href="/about_us">ABOUT US</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </header>
+
+	{% block content %}
+	{% endblock %}
+
+
+  </body>
+</html>

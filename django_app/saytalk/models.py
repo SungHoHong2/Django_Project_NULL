@@ -13,11 +13,26 @@ class SayTalk(models.Model):
     is_chat = models.BooleanField(default=False)
     flag = models.BooleanField(default=True)
 
+    # like relation
+    talk_relation = models.ManyToManyField('self', symmetrical=False
+                                        , related_name='talk_set_relationship'
+                                        , through='Talk_Relationship')
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_date = timezone.now()
         self.modified_date = timezone.now()
         return super(SayTalk, self).save(*args, **kwargs)
+
+
+
+class Talk_Relationship(models.Model):
+    follower = models.ForeignKey(SayTalk, related_name='talk_follower')
+    followee = models.ForeignKey(SayTalk, related_name='talk_followee')
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('follower','followee')
 
 
 

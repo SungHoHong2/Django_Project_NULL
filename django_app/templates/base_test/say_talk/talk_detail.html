@@ -25,15 +25,82 @@
     background : grey;
 }
 .img_block_dev{
-    height: 113px;
+	display: block;
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid black;
+    margin-bottom: 21px;
 }
 
+.post_detial_div{ display: block; float: left; width: 100%;}
 </style>
 
 <script>
 	$(document).ready(function(){
-			console.log({{ talk_detail|safe }})
-       		 $("#saytalk_detail_templ").tmpl({{ talk_detail|safe }}).appendTo( "#post_detail_div" );
+
+			 var _post_array = {{ talk_detail|safe }}.concat({{ talk_sub_detail|safe }});
+			 console.log(_post_array);
+
+       		 $("#saytalk_detail_templ").tmpl(_post_array).appendTo( "#post_detail_div" );
+
+       		 $(_post_array).each(function(index, item){
+
+				if(index==0){
+					$('#is_parent').val(item.id);
+				}
+
+				if(item.tags_names){
+					$(item.tag_names.split(',')).each(function(index_sub, item_sub){
+							$('#tag_'+item.id).append($('<button/>').addClass('btn btn-theme').text(item_sub));
+					});
+				}
+
+				if(item.talk_img){
+					$(item.talk_img.split(',')).each(function(index_sub, item_sub){
+							$('#img_'+item.id).append($('<img/>').width('200px').attr('src', '{{ img_url }}'+ item_sub.replace(' ','')));
+					});
+				}
+
+			 });
+
+
+
+		$('#file_temp_submit').click(function(){
+				var form_data = new FormData();
+				form_data.append("img_file",$('input[name=img_file]')[0].files[0])
+				formAjax('POST', form_data, "{% url 'collection:temp_image' %}"
+						, 'application/json'
+						, function(response){
+								console.log(response);
+								var text = $('#image_file_ids').val();
+
+								if(text.length>0){
+									text+=','
+								}
+
+								text+=response.id;
+								$('#image_file_ids').val(text);
+								$('#post_comment_form').append($('<img/>').width(100).height(100).attr('src',response.img_file));
+				})
+
+		});
+
+
+		$('#post_comment_input').click(function(){
+
+				var form_data = $("#post_comment_form").serialize();
+
+				$.ajax( {
+					  type: "POST",
+					  url:  "{% url 'saytalk:posting' %}",
+					  data: form_data,
+					  success: function( response ) {
+						location.reload();
+					  }
+					} );
+
+		});
+
 
 	});
 </script>
@@ -41,12 +108,13 @@
 <script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
             <div class="img_block_dev">
             	<span class="img_class_dev member_detail_btn">
-            	 <img class="image_dir" src="${user_img}" alt=""></span>
+            	 <img class="image_dir" src="${profile_img}" alt=""></span>
                 <span>
                 	<strong class="member_detail_btn">${title}</strong>
                 </span>
                 <p>${content}</p>
-  				<p><img src="${post_img}" alt=""></span></p>
+				<p id="tag_${id}" class="post_detial_div"></p>
+  				<p id="img_${id}" class="post_detial_div"></p>
             </div>
 </script>
 
@@ -73,89 +141,33 @@
 	 <div class="container mtb login_content">
 	 	<div class="row">
 
-			<div class="col-lg-4">
-
-
-		 		<h4>Menu</h4>
-		 		<div class="hline"></div>
-		 			<p>
-		 				<input type="text" class="form-control" placeholder="Search something">
-		 			</p>
-				    <p>	<button class="btn btn-warning"> 글작성 </button></p>
-
-		 		<div class="spacing"></div>
-
-		 		<h4>Recent Posts</h4>
-		 		<div class="hline"></div>
-					<ul class="popular-posts">
-		                <li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 02/21/14</em>
-		                </li>
-		                <li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 03/01/14</em>
-		                </li><li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 05/16/14</em>
-		                </li>
-		                <li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 05/16/14</em>
-		                </li>
-		            </ul>
-
-		 		<div class="spacing"></div>
-
-		 		<h4>Popular Tags</h4>
-		 		<div class="hline"></div>
-		 			<p>
-		            	<a class="btn btn-theme" href="#" role="button">Design</a>
-		            	<a class="btn btn-theme" href="#" role="button">Wordpress</a>
-		            	<a class="btn btn-theme" href="#" role="button">Flat</a>
-		            	<a class="btn btn-theme" href="#" role="button">Modern</a>
-		            	<a class="btn btn-theme" href="#" role="button">Wallpaper</a>
-		            	<a class="btn btn-theme" href="#" role="button">HTML5</a>
-		            	<a class="btn btn-theme" href="#" role="button">Pre-processor</a>
-		            	<a class="btn btn-theme" href="#" role="button">Developer</a>
-		            	<a class="btn btn-theme" href="#" role="button">Windows</a>
-		            	<a class="btn btn-theme" href="#" role="button">Phothosop</a>
-		            	<a class="btn btn-theme" href="#" role="button">UX</a>
-		            	<a class="btn btn-theme" href="#" role="button">Interface</a>
-		            	<a class="btn btn-theme" href="#" role="button">UI</a>
-		            	<a class="btn btn-theme" href="#" role="button">Blog</a>
-		 			</p>
-	 		</div>
-	 		<div class="col-lg-8">
+	 		<div class="col-lg-12">
 	 			<h4> 게시글 상세 페이지 </h4>
 	 			<div class="hline"></div>
 		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+					<p id="post_detail_div" class="post_detial_div"></p>
+					<p id="post_comment_div" class="post_detial_div">
 
-				<div id="post_detail_div"></div>
+					<hr>
+
+					<form class="form-class" id="post_comment_form">
+						{{ comment_post.as_p }}
+						<input type="hidden" name="is_parent" id="is_parent" value="true">
+						<input type="hidden" name="image_file_ids" id="image_file_ids">
+					</form>
+
+					<div class="form-inline">
+						{{ comment_img_post }}
+						<button class="btn btn-danger" id="file_temp_submit"> 이미지 첨부 </button>
+					</div>
+					<br>
+					<button class="btn btn-warning" id="post_comment_input"> 글작성 </button>
+				</p>
 
 			</div>
 	 	</div><! --/row -->
 	 </div><! --/container -->
 
 
-<!-- *****************************************************************************************************************
-	 FOOTER
-	 ***************************************************************************************************************** -->
-	 <div id="footerwrap">
-	 	<div class="container">
-		 	<div class="row">
-		 		<div class="col-lg-4">
-		 			<h4>API</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 		<div class="col-lg-8">
-		 			<h4>Description</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 	</div><! --/row -->
-	 	</div><! --/container -->
-	 </div><! --/footerwrap -->
 
 {% endblock %}
