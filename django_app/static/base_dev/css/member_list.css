@@ -164,7 +164,7 @@
 .search-view .search-bar{
   height: 30px;
   font-size: 1.6rem;
-  width: 100%;
+  width: 120px;
   border: 1px solid #e0e4e6;
   border-radius: 3px;
 }
