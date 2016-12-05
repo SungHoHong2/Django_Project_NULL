@@ -1,76 +1,123 @@
-{% extends 'base_test/base.html' %}
-{% block content %}
+{% extends 'base_dev/base.html' %}
 
+{% block content %}
 {% load staticfiles %}
 
-<script src="https://node.shh.coffee/socket.io/socket.io.js"></script>
+<script src="{% static 'base_dev/js/opening/jquery.gridly.js' %}"></script>
+<script src="{% static 'base_dev/js/opening/materialize-tags.js' %}"></script>
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
+<link rel="stylesheet" href="{% static 'base_dev/css/profile/profile.css' %}">
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/register.css' %}">
+<style>
+.gridly_custom{ margin-left: 307px; }
+</style>
+
 <script>
-	$(document).ready(function(){
-		            var socket = io.connect('https://52.78.246.112:8081',{secure: true});
-	});
+		$(document).ready(function(){
+
+			/*
+			 * 회원정보 이미지
+			 */
+			$('.gridly').gridly({
+					base: 60,
+					gutter: 10,
+					columns: 12
+			});
+
+		  /*
+			 * 이미지 목록 조회
+			 */
+		  $({{ image|safe }}).each(function(index, item){
+				var img_div = $('#img_upload_div').append(
+						 $('<div/>').addClass('brick small').attr('id',item.id)
+												.append($('<a/>').addClass('delete').text('x'))
+						 );
+
+ 			 			$('.gridly').append(img_div);
+ 			 			$('.gridly').gridly();
+
+						var img_div = document.querySelectorAll('.brick')[index];
+			 			img_div.style['background-image'] = 'url('+item.url+')';
+			 			img_div.style['left'] = 160 * index;
+			});
+
+
+			//var img_div = document.querySelectorAll('.brick')[];
+			//img_div.style['background-image'] = 'url('+response.img_file+')';
+			//img_div.style['left'] = 160 * img_length;
+			//img_length++;
+
+			//event.preventDefault();
+			//event.stopPropagation();
+
+			//$('.gridly').append(img_div);
+			//return $('.gridly').gridly();
+		});
+
 </script>
 
-<style>
-.login_content{ margin-top : 10px; }
-</style>
-<!-- *****************************************************************************************************************
-	 BLUE WRAP
-	 ***************************************************************************************************************** -->
-	<div id="blue">
-	    <div class="container">
-			<div class="row">
-				<h3>Profile</h3>
-			</div><!-- /row -->
-	    </div> <!-- /container -->
-	</div><!-- /blue -->
+
+<!-- member 리스트 불러오기 -->
+<script id="member_list_templ" type="text/x-jquery-tmpl">
+  <li class="member-info">
+    <a class="member_detail_btn" href="#" data-tags ='${tag_names}' id= '${id}'>
+    	<span class="member-img" id= '${id}' data-tags ='${tag_names}'> <img class="image_dir" src="${img_file}" style="width:45px; height:45px;" alt=""> </span>
+      <div id="member_tags_${id}">
+        <span class="member-name"><strong id= '${id}' data-tags = '${ tag_names }'> ${username} </strong></span>
+        <!--<span class="hash-tag" id= 'member_tags_${id}'> ${ tag_names } <span>-->
+      </div>
+    </a>
+  </li>
+</script>
 
 
-	<!-- *****************************************************************************************************************
-	 CONTACT FORMS
-	 ***************************************************************************************************************** -->
+<main>
+  <div class="wrapper">
 
-	 <div class="container mtb login_content">
-	 	<div class="row">
-			<div class="col-lg-4">
-		 		<h4>회원 정보 메뉴</h4>
-		 		<div class="hline"></div>
-			 		<p><a href="#"><i class="fa fa-angle-right"></i> 개인정보 수정</a></p>
-			 		<p><a href="#"><i class="fa fa-angle-right"></i> 내가쓴글 관리</a> <span class="badge badge-theme pull-right">3</span></p>
-			 		<p><a href="#"><i class="fa fa-angle-right"></i> 내가 초대받은 채팅</a> <span class="badge badge-theme pull-right">11</span></p>
-			 		<p><a href="#"><i class="fa fa-angle-right"></i> 나를 좋아하는 사람</a> <span class="badge badge-theme pull-right">5</span></p>
-			 		<p><a href="#"><i class="fa fa-angle-right"></i> 설정</a> <span class="badge badge-theme pull-right">7</span></p>
-		 		<div class="spacing"></div>
-	 		</div>
-
-	 		<div class="col-lg-8">
-	 			<h4> 개인정보 수정 공간입니다. </h4>
-	 			<div class="hline"></div>
-		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+    <!-- 좌측 친구 리스트 뷰 -->
+    <section class="list-section col-2">
+      <div class="list-headline">
+        <h2>회원정보 메뉴</h2>
+      </div>
+      <ul class="list-view">
+				<li>개인정보 수정</li>
+				<li>내가쓴글 관리</li>
+				<li>내가 초대받은 채팅</li>
+				<li>나를 좋아하는 사람</li>
+				<li>설정</li>
+      </ul>
+    </section>
 
 
+    <!-- 우측 search 바 & 맵 뷰-->
+    <section class="col-6 profile_body">
+      <div class="col-8">
+        <div>
+          <h2> 개인정보 수정 </h2>
+      </div>
+			<div class="col-8">
+					<div class="">
+ 					<label for=""> 닉네임 변경 </label>
+					<input type="text" name='username' value="{{ request.user.username }}" disabled=true>
+					</div>
+
+					<div class="">
+					<label for=""> 사진 수정 </label>
+					</div>
+					<div id="img_upload_div" class='gridly gridly_custom'></div>
+
+					<div class="">
+					<label for=""> 해시 태그 변경 </label>
+					{{ hash_tags }}
+					</div>
 			</div>
-	 	</div><! --/row -->
-	 </div><! --/container -->
+    </section>
 
 
-<!-- *****************************************************************************************************************
-	 FOOTER
-	 ***************************************************************************************************************** -->
-	 <div id="footerwrap">
-	 	<div class="container">
-		 	<div class="row">
-		 		<div class="col-lg-4">
-		 			<h4>API</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
 
-		 		<div class="col-lg-8">
-		 			<h4>Description</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
 
-		 	</div><! --/row -->
-	 	</div><! --/container -->
-	 </div><! --/footerwrap -->
+
+  </div>
+</main>
 
 {% endblock %}
