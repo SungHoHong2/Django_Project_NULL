@@ -131,6 +131,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 REAL_SERVER_RUNNING = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
+REAL_SERVER_RUNNING = False
+
+
 if not REAL_SERVER_RUNNING:
     AWS_HEADERS = {
         'Expires': 'Thu, 31 Dec 2199 20:00:00 GMT',

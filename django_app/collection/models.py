@@ -1,7 +1,15 @@
+import boto
+from io import BytesIO
+from boto.s3.connection import S3Connection
 from django.db import models
 from member.models import MyUser
 from saytalk.models import SayTalk
 from django.utils import timezone
+from resizeimage import resizeimage
+from urllib.request import urlopen
+from PIL import Image as Image_PIL
+
+from django.conf import settings
 
 # Create your models here.
 
@@ -19,7 +27,30 @@ class Image(models.Model):
         if not self.id:
             self.created_date = timezone.now()
         self.modified_date = timezone.now()
-        return super(Image, self).save(*args, **kwargs)
+
+        rtn = super(Image, self).save(*args, **kwargs)
+        _img_url = self.img_file.url
+
+        _img_url = _img_url[_img_url.index('.com/')+5: len(_img_url)]
+
+        print(self.img_file.url)
+        print(_img_url.replace('/img/','/small/'))
+
+        fp = urlopen(self.img_file.url)
+
+        img = BytesIO(fp.read())
+        im = Image_PIL.open(img)
+        im2 = im.resize((100, 100), Image_PIL.NEAREST)
+        out_im2 = BytesIO()
+        im2.save(out_im2, 'PNG')
+
+        conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
+        b = conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
+
+        k = b.new_key(_img_url.replace('/img/','/small/'))
+        k.set_contents_from_string(out_im2.getvalue())
+
+        return rtn
 
 
 

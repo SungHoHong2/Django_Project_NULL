@@ -55,6 +55,32 @@ function formAjax(_type, _data, _url, _contentType, _success){
 }
 
 
+
+function formAjax_loading(_type, _data, _url, _contentType, _loading, _hide, _success ){
+
+  $.ajax({
+          type: _type
+         , beforeSend: function(xhr, settings) {
+            $(_loading).show();
+            $(_hide).hide();
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+        , url : _url
+        , data : _data
+		, processData: false
+		, contentType: false
+		, error : function(request, status, error) {
+            alert("code : " + request.status + "\r\n장애가 발생하였습니다.");
+        }
+        , success : _success
+        });
+
+}
+
+
+
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
