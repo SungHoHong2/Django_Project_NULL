@@ -5,7 +5,6 @@ from django.db import models
 from member.models import MyUser
 from saytalk.models import SayTalk
 from django.utils import timezone
-from resizeimage import resizeimage
 from urllib.request import urlopen
 from PIL import Image as Image_PIL
 
