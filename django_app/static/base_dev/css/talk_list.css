@@ -1,0 +1,254 @@
+
+.talk-list-wrapper{
+  min-height: 80vh;
+}
+
+.talk-headline{
+  height: 80px;
+  background-color: #66737f;
+  display: flex;
+  align-items: center;
+  padding-left: 200px;
+  position: relative;
+}
+
+.talk-headline h2,
+.talk-headline .talk-btns{
+  color: #fff;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}
+
+.talk-headline h2::after{
+  content: "";
+  background: url("../images/down-arrow.png") 50% 50%;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: 50%;
+  left: 25%;
+  transform: translateY(-50%);
+}
+
+.talk-btns{
+  text-align: center;
+}
+
+.talk-btns button{
+  width: 5vw;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #65d3e3;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.visual-container{
+  padding: 10px 20px 10px 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.visual-container::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.visual-container a{
+  float: left;
+  margin: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.visual-container a img{
+  width: 350px;
+}
+
+.visual-container a img:hover,
+.visual-container a img:focus{
+  opacity: 0.7;
+  transition: all 1.2s ease-out;
+  transform: scale(1.07);
+}
+
+
+.visual-container .hover img{
+  opacity: 0.8;
+}
+
+
+
+/* 이미지 내부 텍스트 디자인 */
+
+.text-in-img{
+  display: none;
+}
+
+.hover .text-in-img{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  background-color: rgba(0,0,0,0.8);
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}
+
+.text-in-img h3{
+  font-size: 1.8rem;
+  margin-bottom: 2%;
+}
+
+.text-in-img .hash-tag-in-img{
+  width: 50%;
+  text-align: center;
+  margin-top: 2%;
+  color: #65d3e3;
+  font-size: 1.4rem;
+}
+
+.btn-in-img{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2%;
+}
+
+.btn-in-img .detail_btn,
+.btn-in-img .remove_btn{
+  border: 1.5px solid #fff;
+  background: transparent;
+  padding: 5px 8px 5px;
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+
+/* 글쓰기 모달 창 디자인 */
+
+#myModal{
+  min-height: 600px;
+  background: url("../images/bg-write.png") 50% 50%, no-repeat;
+  position: absolute;
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  box-shadow:inset 1px 1px 1px #fff, 1px 1px 1px #fff;
+}
+
+.modal-content{
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  text-align: left;
+  padding: 20px 40px 20px;
+}
+
+.modal-content > span{
+  position: absolute;
+  top: 10px;
+  right: -50px;
+  font-size: 4rem;
+  font-weight: 300;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+}
+
+.modal-content h4{
+  font-weight: 300;
+  font-family: 'Lato', sans-serif;
+  font-size: 2.6rem;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.modal-content .form-group{
+  font-size: 1.6rem;
+  font-weight: 300;
+  font-family: 'Lato', sans-serif;
+}
+
+#id_title{
+  height: 30px;
+}
+
+#id_content{
+  height: 200px;
+}
+
+#id_title, #id_content{
+  background-color: #b5b6b6;
+  border: none;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.modal-content .write-btn{
+  width: 5vw;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #65d3e3;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  bottom: -8%;
+  right: 8%;
+}
+
+.form-group.img_upload #id_img_file{
+  background-color: none;
+  width: 75%;
+  border: none;
+}
+
+.img_upload .btn-danger{
+  cursor: pointer;
+}
+
+.img_upload{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.dim{
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(102,115,127,0.7);
+}
+
+
+
+/* footer 포지션 수정 */
+
+.talk-footer .footer{
+  position: static;
+}

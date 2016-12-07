@@ -1,206 +1,158 @@
-{% extends 'base_test/base.html' %}
+{% extends 'base_dev/base.html' %}
 {% block content %}
-
 {% load staticfiles %}
-<style>
-		.photo_content_item { width:  280px; float: left; }
-		.photo_content_image { width: 280px; }
-		.photo_content_back{  height: 345px; overflow-y: hidden; background: #FFF5B9; }
-		.custom_form_inline{ margin-top: 15px; }
-</style>
+<script src="../../../static/base_dev/js/talk_list.js"></script>
 
-<script>
-	$(document).ready(function(){
-
-		// Get the modal
-		var modal = document.getElementById('myModal');
-
-		// Get the button that opens the modal
-		var btn = document.getElementById("myBtn");
-
-		// Get the <span> element that closes the modal
-		var span = document.getElementsByClassName("close")[0];
-
-		// When the user clicks the button, open the modal
-		btn.onclick = function() {
-			modal.style.display = "block";
-		}
-
-		// When the user clicks on <span> (x), close the modal
-		span.onclick = function() {
-			modal.style.display = "none";
-		}
-
-		// When the user clicks anywhere outside of the modal, close it
-		window.onclick = function(event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
-		}
-
-		$("#photo_list_templ").tmpl({{ talk_list|safe }}).appendTo( "#photo_add_content" );
-		$('#post_btn').click(function(){
-
-			$('#id_hash_tags').val('')
-			$({{ hash_tags|safe }}).each(function(index, item){
-
-					var text = $('#hash_tag_ids').val();
-					if(text.length>0){
-						text+=','
-					}
-					text+=item.id;
-					$('#hash_tag_ids').val(text);
-			});
-
-			$('#myBtn').trigger('click');
-
-		});
-
-
-		$('#file_temp_submit').click(function(){
-
-				var form_data = new FormData();
-				form_data.append("img_file",$('input[name=img_file]')[0].files[0])
-				formAjax('POST', form_data, "{% url 'collection:temp_image' %}"
-						, 'application/json'
-						, function(response){
-								console.log(response);
-								var text = $('#image_file_ids').val()
-
-								if(text.length>0){
-									text+=','
-								}
-
-								text+=response.id
-								$('#image_file_ids').val(text)
-								$('#post_image_display').append($('<img/>').width(100).height(100).attr('src',response.img_file))
-				})
-
-		});
+<main>
+  <div class="talk-list-wrapper col-8">
+    <div class="talk-headline col-8">
+      <h2 class="col-4">Currently Posted</h2>
+      <div class="talk-btns col-4">
+        <button id="post_btn">글쓰기</button>
+        <button id="chat_btn">채팅</button>
+      </div>
+    </div>
+    <div class="visual-container" id="photo_add_content">
+      <!-- *********************** 예시로 넣어놓은 내용 2개 ************* --->
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-1.png' %}"  alt="">
+        <div class="text-in-img">
+          <h3>I want to go home.</h3>
+          <p>So tired.</p>
+          <div class="hash-tag-in-img">
+            <span>#javaScript</span><span>#getRest</span>
+          </div>
+          <div class="btn-in-img">
+            <button class="detail_btn">Details</button>
+            <button class="remove_btn">Remove</button> <!-- remove 버튼은 자기가 쓴 글에만 보이게 -->
+          </div>
+        </div>
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-11.pn' %}g " alt="">
+        <div class="text-in-img">
+          <h3>playing guitar?</h3>
+          <p>I love music. Would you like to join us?</p>
+          <div class="hash-tag-in-img">
+            <span>#Music</span><span>#guitar</span>
+          </div>
+          <div class="btn-in-img">
+            <button class="detail_btn">Details</button>
+            <button class="remove_btn">Remove</button> <!-- remove 버튼은 자기가 쓴 글에만 보이게 -->
+          </div>
+        </div>
+      </a>
+      <!-- *************************** 여기까지 ******************** --->
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-6.png' %}"  alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-7.png' %}"  alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-12.pn' %}g " alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-5.png' %}"  alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-3.png' %}"  alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-4.png' %}"  alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-9.png' %}"  alt="">
+      </a>
+      <a href="#">
+        <img src="{% static 'base_dev/images/img-10.pn' %}g " alt="">
+      </a>
+    </div>
+  </div>
+</main>
 
 
-		$('.detail_btn').click(function(){
-				location.href = '/saytalk/talk_detail/'+$(this).attr('id');
-		});
-
-		$('#chat_btn').click(function(){
-			location.href = "/saytalk/chat_detail/1/";
-		});
-
-	});
-</script>
-
+<!-- 이미지 안에 표시될 실제 텍스트 데이터 형식 불러오기 -->
 <script id="photo_list_templ" type="text/x-jquery-tmpl">
-			<div class="portfolio-item graphic-design photo_content_item">
-				<div class="he-wrap tpl6 photo_content_back">
-						<img src="${ img_file }" class='photo_content_image' alt="">
-					<div class="he-view">
-						<div class="bg a0" data-animate="fadeIn">
-							<h3 class="a1" data-animate="fadeInDown"> ${ title } </h3>
-							<p> ${ content } </p>
-							<h4 style=" color: yellow"> ${ tag_names } </h4>
-							<span data-rel="prettyPhoto" id= "${ id }" class="dmbutton a2 detail_btn" data-animate="fadeInUp"> Detail </span>
-							<span data-rel="prettyPhoto" id= "${ id }" class="dmbutton a2 remove_btn" data-animate="fadeInUp"> Remove </span>
-						</div><!-- he bg -->
-					</div><!-- he view -->
-				</div><!-- he wrap -->
-			</div><!-- end col-12 -->
+  //------------------------------------이 아래 내용이 들어감 //
+  <a href="#">
+    <img src="${ img_file }" class='photo_content_image' alt="">
+    <div class="text-in-img">
+      <h3>${ title }</h3>
+      <p>${ content } </p>
+      <div class="hash-tag-in-img">
+        <span>#${ tag_names }</span>
+        <span>#${ tag_names }</span>
+      </div>
+      <div class="btn-in-img">
+        <button id= "${ id }" class="detail_btn">Details</button>
+        <button id= "${ id }" class="remove_btn">Remove</button>
+      </div>
+    </div>
+  </a>
+  //-------------------------------------------여기까지 //
 </script>
 
 
-<style>
-.login_content{ margin-top : 10px; }
-</style>
-<!-- *****************************************************************************************************************
-	 BLUE WRAP
-	 ***************************************************************************************************************** -->
-	<div id="blue">
-	    <div class="container">
-			<div class="row">
-				<h3>Say Talk</h3>
-			</div><!-- /row -->
-	    </div> <!-- /container -->
-	</div><!-- /blue -->
+
+<!-- 모달 창 설정 -->
+
+<button id="myBtn" style="display: none">Open Modal</button>
+<div class="dim" style="display:none"></div>
+
+<div id="myModal" class="modal col-4" style="display: none">
+  <div class="modal-content col-6">
+    <span class="modal-close">×</span>
+    <h4> POST 작성 </h4>
+    <form class ="form-group col-8" action="{% url 'saytalk:posting' %}" method="POST">
+        <!-- {% csrf_token %}
+        {{ post_form.as_p }} -->
+      <fieldset>
+        <legend class="hidden">post 작성하기 폼</legend>
+        <label for="id_title">Title</label>
+        <input type="text" id="id_title">
+        <label for="id_content">Content</label>
+        <textarea type="text" class="col-8" id="id_content" name="content"></textarea>
+
+        <p id="post_image_display"></p>
+        <label for="hash_tag_ids" style="display: none">등록된 해시태그</label>
+        <input type="hidden" id="hash_tag_ids" name="hash_tag_ids">
+        <label for="image_file_ids" style="display: none">등록된 이미지</label>
+        <input type="hidden" id="image_file_ids" name="image_file_ids">
+
+        <button type="submit" class="write-btn">글쓰기</button>
+      </fieldset>
+    </form>
+
+    <div role="form-inline" class="form-inline" method="POST"  enctype="multipart/form-data" action="">
+      <form class="form-group img_upload">
+      <!-- {{ image_form }} -->
+      <label for="id_img_file"></label>
+      <input class="form-control" id="id_img_file" name="img_file" type="file">
+      <span id="file_temp_submit" class="btn btn-danger">첨부파일 추가</span>
+      </form>
+    </div>
+
+  </div>
+</div>
 
 
-	<!-- *****************************************************************************************************************
-	 CONTACT FORMS
-	 ***************************************************************************************************************** -->
-
-	 <div class="container mtb login_content">
-	 	<div class="row">
-	 		<div class="col-lg-12">
-
-				<h4> 게시글과 채팅방입니다. </h4>
-
-	 			<div class="hline"></div>
-
-				<div class="form-inline custom_form_inline">
-				<button class="btn btn-danger" id="post_btn"> 글쓰기 </button>
-				<button class="btn btn-warning" id="chat_btn"> 채팅 </button>
-				<input type="text" class="form-control">
-				</div>
-
-				 <div id="portfoliowrap">
-				 <div class="portfolio-centered">
-				 <div class="recentitems portfolio" id="photo_add_content">
-
-
-				 </div>
-				 </div>
-		 	 	 </div>
-			</div>
-	 	</div><! --/row -->
-	 </div><! --/container -->
-
-	<button id="myBtn" style="display: none">Open Modal</button>
-	<div id="myModal" class="modal">
-
-
-	  <!-- Modal content -->
-	  <div class="modal-content">
-		  <span class="close">×</span>
-		  <h4> Post 글쓰기 </h4>
-		  <form class ="form-group" action="{% url 'saytalk:posting' %}" method="POST">
-					{% csrf_token %}
-					{{ post_form.as_p }}
-
-			 		<p id="post_image_display"></p>
-
-			  		<input type="hidden" id="hash_tag_ids", name="hash_tag_ids">
-			  		<input type="hidden" id="image_file_ids", name="image_file_ids">
-			  		<input type="submit" value="글쓰기" class="btn btn-warning">
-		  </form>
-
-		  <div role="form-inline" class="form-inline" method="POST"  enctype="multipart/form-data" action="">
-			  <div class="form-group">
-			 	{{ image_form }}
-			  <span id="file_temp_submit" class="btn btn-danger">첨부파일 추가</span>
-			  </div>
-		  </div>
-
-	  </div>
+<footer class="talk-footer">
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
+		</div>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
 	</div>
+</footer>
 
-
-<!-- *****************************************************************************************************************
-	 FOOTER
-	 ***************************************************************************************************************** -->
-	 <div id="footerwrap">
-	 	<div class="container">
-		 	<div class="row">
-		 		<div class="col-lg-4">
-		 			<h4>API</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 		<div class="col-lg-8">
-		 			<h4>Description</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 	</div><! --/row -->
-	 	</div><! --/container -->
-	 </div><! --/footerwrap -->
-
-{% endblock %}
+{% endblock content %}

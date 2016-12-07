@@ -1,7 +1,9 @@
 {% extends 'base_test/base.html' %}
 {% block content %}
-
 {% load staticfiles %}
+
+<script src="{% static 'base_test/js/webrtc/RTCMultiConnection.min.js' %}"></script>
+
 <style>
 		.photo_content_item { width:  280px; float: left; }
 		.photo_content_image { width: 280px; }
@@ -79,12 +81,67 @@
 		});
 
 
+		$('#post_upload_btn').click(function(){
+
+			var form_data = $("#posting_form").serialize();
+
+			$.ajax( {
+				  type: "POST",
+				  url:  "{% url 'saytalk:posting' %}",
+				  data: form_data,
+				  success: function( response ) {
+				        console.log(response);
+                  		socket.emit('request new post', response );
+				  }
+				} );
+		});
+
+
+            //post alert
+			var socket = io.connect('http://localhost:9001');
+		    socket.on('new post', function(data){
+                  console.log(data)
+            });
+
+            $('#request_btn').click(function(){
+                  socket.emit('request new post', 'howdy');
+            });
+
+
+			//chat room alert
+	        var connection = new RTCMultiConnection();
+            connection.socketURL = 'https://mysterious-wave-22797.herokuapp.com:443/';
+
+    		var publicRoomsDiv = $('#public-rooms');
+    		var room_list = {};
+            (function looper() {
+                // connection.getPublicModerators(startsWith, callback)
+                connection.getPublicModerators(function(array) {
+                    publicRoomsDiv.empty();
+                    array.forEach(function(moderator) {
+                        // moderator.userid
+                        // moderator.extra
+
+                        if(moderator.userid == connection.userid) return; // if owner himself
+
+						//if(room_list[moderator.userid]) return;
+
+						//console.log(room_list[moderator.userid]);
+
+						room_list[moderator.userid] = true;
+						publicRoomsDiv.append($('<a/>').attr('href', '/saytalk/chat_detail/#'+moderator.userid).text('room_'+moderator.userid)).append($('<br/>'));
+                    });
+                    setTimeout(looper, 3000);
+                });
+            })();
+
+
 		$('.detail_btn').click(function(){
 				location.href = '/saytalk/talk_detail/'+$(this).attr('id');
 		});
 
 		$('#chat_btn').click(function(){
-			location.href = "/saytalk/chat_detail/1/";
+			location.href = "/saytalk/chat_detail/";
 		});
 
 	});
@@ -134,13 +191,16 @@
 				<h4> 게시글과 채팅방입니다. </h4>
 
 	 			<div class="hline"></div>
-
 				<div class="form-inline custom_form_inline">
 				<button class="btn btn-danger" id="post_btn"> 글쓰기 </button>
-				<button class="btn btn-warning" id="chat_btn"> 채팅 </button>
+				<button class="btn btn-warning" id="video_btn"> 영상 채팅 </button>
+				<button class="btn btn-warning" id="chat_btn"> 일반 채팅 </button>
+
+				<button class="btn btn-primary" id="request_btn">테스트용</button>
 				<input type="text" class="form-control">
 				</div>
 
+				<div id="public-rooms"></div>
 				 <div id="portfoliowrap">
 				 <div class="portfolio-centered">
 				 <div class="recentitems portfolio" id="photo_add_content">
@@ -161,15 +221,12 @@
 	  <div class="modal-content">
 		  <span class="close">×</span>
 		  <h4> Post 글쓰기 </h4>
-		  <form class ="form-group" action="{% url 'saytalk:posting' %}" method="POST">
+		  <form id='posting_form' class ="form-group" action="{% url 'saytalk:posting' %}" method="POST">
 					{% csrf_token %}
 					{{ post_form.as_p }}
-
 			 		<p id="post_image_display"></p>
-
 			  		<input type="hidden" id="hash_tag_ids", name="hash_tag_ids">
 			  		<input type="hidden" id="image_file_ids", name="image_file_ids">
-			  		<input type="submit" value="글쓰기" class="btn btn-warning">
 		  </form>
 
 		  <div role="form-inline" class="form-inline" method="POST"  enctype="multipart/form-data" action="">
@@ -178,7 +235,8 @@
 			  <span id="file_temp_submit" class="btn btn-danger">첨부파일 추가</span>
 			  </div>
 		  </div>
-
+		  <br>
+		  <input id='post_upload_btn' type="submit" value="글쓰기" class="btn btn-warning">
 	  </div>
 	</div>
 

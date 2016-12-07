@@ -54,7 +54,7 @@ class AroundMeView(TemplateView):
             _list = [ { 'total_count':row[0]
                       , 'id' : row[1]
                       , 'username' : row[2]
-                      , 'img_file' : settings.MEDIA_URL+xstr(row[3])
+                      , 'img_file' : (settings.MEDIA_URL+xstr(row[3])).replace('/img/','/small/')
                       , 'tag_names' : row[4]
                       , 'google_location' : row[5]
                       , 'likes' : row[6] }  for row in _list

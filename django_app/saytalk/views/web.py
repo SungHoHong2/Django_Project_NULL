@@ -3,7 +3,6 @@ import json
 from django.conf import settings
 from django.db import connection
 from django.http import QueryDict
-from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication
@@ -14,10 +13,10 @@ from project_null.custom_authentication import CsrfExemptSessionAuthentication
 from saytalk.dto.forms import PostInsertForm, PostImageForm
 from saytalk.dto.serializer import SayTalkPostSerializer
 from saytalk.models import Talk_Relationship, SayTalk
-
+from rest_framework.response import Response
 
 class TalkListPageView(TemplateView):
-    template_name = 'base_test/say_talk/talk_list.html'
+    template_name = 'base_dev/say_talk/talk_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(TalkListPageView, self).get_context_data(**kwargs)
@@ -56,7 +55,9 @@ class TalkListPageView(TemplateView):
 
             cursor.execute(_query_talk,[])
             _list = cursor.fetchall()
-            _list = [ {'id': row[0], 'title': row[1], 'content':row[2], 'img_file':settings.MEDIA_URL+xstr(row[3]), 'tag_names': row[4]}  for row in _list]
+            _list = [ {'id': row[0], 'title': row[1], 'content':row[2]
+                     , 'img_file': (settings.MEDIA_URL+xstr(row[3])).replace('/img/','/small/')
+                     , 'tag_names': row[4]}  for row in _list]
             context['talk_list'] = json.dumps(_list)
 
         return context
@@ -94,6 +95,7 @@ class PostViewSet(viewsets.ModelViewSet):
         qdict = QueryDict('', mutable=True)
         qdict.update(myDict)
 
+        # 공통 게시판 생성
         serializer = self.get_serializer(data=qdict)
         serializer.is_valid(raise_exception=True)
         _say_talk = serializer.save()
@@ -104,10 +106,15 @@ class PostViewSet(viewsets.ModelViewSet):
             Talk_Relationship.objects.create(follower= _say_talk, followee= par_say_talk)
 
 
+        prompto_image = ''
         if request.data.get('image_file_ids') is not None:
             _index = 1
             for image_id in [x.strip() for x in request.data['image_file_ids'].split(',')]:
                 img_obj = Image.objects.get(pk=image_id)
+
+                if _index == 1:
+                    prompto_image = img_obj.img_file.url
+
                 img_obj.say_talk = _say_talk
                 img_obj.img_order = _index
                 _index += 1
@@ -118,8 +125,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 hash_tag = Hash_Tag.objects.get(id=hash_tag_id)
                 Hash_Relationship.objects.create(say_talk= _say_talk, hash_tag=hash_tag)
 
-
-        return redirect('saytalk:talk_list')
+        return Response({ 'post_id' : _say_talk.id, 'title' : _say_talk.title, 'content' : _say_talk.content, 'image_url' : prompto_image })
 
 
 

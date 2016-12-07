@@ -1,161 +1,150 @@
-{% extends 'base_test/base.html' %}
+{% extends 'base_dev/base.html' %}
 {% block content %}
-
 {% load staticfiles %}
-<style>
-.login_content{ margin-top : 10px; }
+<script src="{% static 'base_dev/js/talk_detail.js' %}"></script>
 
-.custom_form_group{
-    width: 100%;
-    margin-top: 16px;
-}
 
-.custom_row{
-    margin-bottom: 18px;
-}
+<main>
+  <div class="talk-list-wrapper">
+    <div class="talk-headline col-8">
+      <h2 class="col-4">Details</h2>
+      <div class="talk-btns col-4">
+        <button id="comment_btn">댓글달기</button>
+      </div>
+    </div>
 
-.image_dir{
-	width: 100px;
-    height: 100px;
-}
-.img_class_dev{
-    display: block;
-    float: left;
-    margin-right: 15px;
-    background : grey;
-}
-.img_block_dev{
-    height: 113px;
-}
+    <section class="talk-detail-container" id="post_detail_div">
 
-</style>
+      <!-- 댓글달기 클릭 시 뜨는 모달창 -->
+      <button id="myBtn" style="display: none">Open Modal</button>
 
-<script>
-	$(document).ready(function(){
-			console.log({{ talk_detail|safe }})
-       		 $("#saytalk_detail_templ").tmpl({{ talk_detail|safe }}).appendTo( "#post_detail_div" );
+      <div id="mycomment" class="modal col-4" style="display: none">
+        <div class="modal-content">
+          <span class="modal-close">×</span>
+          <form class ="form-group" action="" method="POST">
+              <!-- {% csrf_token %}
+              {{ post_form.as_p }} -->
+            <fieldset>
+              <legend class="hidden">댓글 작성하기 폼</legend>
+              <label for="comment_text">Content</label>
+              <textarea type="text" class="col-8" id="comment_text" name="content"></textarea>
 
-	});
-</script>
+              <button type="submit" class="write-btn">enter</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
 
-<script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
-            <div class="img_block_dev">
-            	<span class="img_class_dev member_detail_btn">
-            	 <img class="image_dir" src="${user_img}" alt=""></span>
-                <span>
-                	<strong class="member_detail_btn">${title}</strong>
-                </span>
-                <p>${content}</p>
-  				<p><img src="${post_img}" alt=""></span></p>
+
+      <div class="talk-main-content col-6">
+        <div class="talk-paragraph col-5">
+          <h3>Lorem ipsum dolor sit amet, consectetur adipisicin</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing
+          elit, sed do eiusmod tempor
+           incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+           veniam, quis nostrud exercitation ullamco laboris nisi ut
+           aliquip ex ea commodo consequat. Duis aute irure dolor
+           in reprehenderit in voluptate velit esse cillum dolore
+           eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+           a qui officia deserunt mollit anim id est laborum.</p>
+          <div class="edit-footer">
+            <div class="if-my-content"> <!-- 작성자에게만 보이는 아이콘 -->
+              <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+              <img src="{% static 'base_dev/images/delete_item.png' %} " title="삭제" alt="삭제하기">
             </div>
+            <span>ys7049</span>
+          </div>
+        </div>
+        <div class="talk-img col-3">
+          <img src="../../../static/base_dev/images/img-1.png" alt="">
+        </div>
+      </div>
+      <div class="talk-comment col-5">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing
+          elit, sed do eiusmod tempor incididunt ut labore et dolore mag!!</p>
+        <div class="edit-footer">
+          <div class="if-my-content"> <!-- 작성자에게만 보이는 아이콘 -->
+            <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+            <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+          </div>
+          <span>Pretty Girl</span>
+        </div>
+      </div>
+      <div class="talk-comment col-5">
+        <p> quis nostrud exercitation ullamco laboris
+          nisi ut aliquip ex ea commodo consequat. Duis aute
+          irure dolor in reprehenderit in voluptate velit
+          esse cillum dolore eu fugiat nulla pariatur.</p>
+        <div class="edit-footer">
+          <div class="if-my-content"> <!-- 작성자에게만 보이는 아이콘 -->
+            <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+            <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+          </div>
+          <span>sleepy02</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+
+
+<!-- 말풍선 안에 표시될 실제 *** 메인 컨텐츠 *** 데이터 가져오기 -->
+<script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
+  <div class="talk-main-content col-6">
+    <div class="talk-paragraph col-5">
+      <h3>${title}</h3>
+      <p>${content}</p>
+      <div class="edit-footer">
+        <div class="if-my-content"> <!-- 이 디비전은 글 쓴 사람에게만 보이게!! -->
+          <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+          <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+        </div>
+        <span> </span> //여기는 작성자 데이터가 들어가야 함//
+      </div>
+    </div>
+    <div class="talk-img col-3">
+      <img src="${post_img}" alt="">
+    </div>
+  </div>
 </script>
 
 
-<style>
-.login_content{ margin-top : 10px; }
-</style>
-<!-- *****************************************************************************************************************
-	 BLUE WRAP
-	 ***************************************************************************************************************** -->
-	<div id="blue">
-	    <div class="container">
-			<div class="row">
-				<h3>Talk Detail</h3>
-			</div><!-- /row -->
-	    </div> <!-- /container -->
-	</div><!-- /blue -->
+
+<!-- 말풍선 안에 표시될 실제 *** 댓글 컨텐츠 *** 데이터 가져오기 -->
+<script id="saytalk_comment_templ" type="text/x-jquery-tmpl">
+  <div class="talk-comment col-5">
+    <p> </p> //여기는 댓글 데이터가 들어가야 함//
+    <div class="edit-footer">
+      <div class="if-my-content"> <!-- 작성자에게만 보이는 아이콘 -->
+        <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+        <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+      </div>
+      <span> </span> //여기는 작성자 데이터가 들어가야 함//
+    </div>
+  </div>
+</script>
 
 
-	<!-- *****************************************************************************************************************
-	 CONTACT FORMS
-	 ***************************************************************************************************************** -->
-
-	 <div class="container mtb login_content">
-	 	<div class="row">
-
-			<div class="col-lg-4">
 
 
-		 		<h4>Menu</h4>
-		 		<div class="hline"></div>
-		 			<p>
-		 				<input type="text" class="form-control" placeholder="Search something">
-		 			</p>
-				    <p>	<button class="btn btn-warning"> 글작성 </button></p>
+<footer class="talk-footer">
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
+		</div>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
+	</div>
+</footer>
 
-		 		<div class="spacing"></div>
-
-		 		<h4>Recent Posts</h4>
-		 		<div class="hline"></div>
-					<ul class="popular-posts">
-		                <li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 02/21/14</em>
-		                </li>
-		                <li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 03/01/14</em>
-		                </li><li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 05/16/14</em>
-		                </li>
-		                <li>
-		                    <p><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></p>
-		                    <em>Posted on 05/16/14</em>
-		                </li>
-		            </ul>
-
-		 		<div class="spacing"></div>
-
-		 		<h4>Popular Tags</h4>
-		 		<div class="hline"></div>
-		 			<p>
-		            	<a class="btn btn-theme" href="#" role="button">Design</a>
-		            	<a class="btn btn-theme" href="#" role="button">Wordpress</a>
-		            	<a class="btn btn-theme" href="#" role="button">Flat</a>
-		            	<a class="btn btn-theme" href="#" role="button">Modern</a>
-		            	<a class="btn btn-theme" href="#" role="button">Wallpaper</a>
-		            	<a class="btn btn-theme" href="#" role="button">HTML5</a>
-		            	<a class="btn btn-theme" href="#" role="button">Pre-processor</a>
-		            	<a class="btn btn-theme" href="#" role="button">Developer</a>
-		            	<a class="btn btn-theme" href="#" role="button">Windows</a>
-		            	<a class="btn btn-theme" href="#" role="button">Phothosop</a>
-		            	<a class="btn btn-theme" href="#" role="button">UX</a>
-		            	<a class="btn btn-theme" href="#" role="button">Interface</a>
-		            	<a class="btn btn-theme" href="#" role="button">UI</a>
-		            	<a class="btn btn-theme" href="#" role="button">Blog</a>
-		 			</p>
-	 		</div>
-	 		<div class="col-lg-8">
-	 			<h4> 게시글 상세 페이지 </h4>
-	 			<div class="hline"></div>
-		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-
-				<div id="post_detail_div"></div>
-
-			</div>
-	 	</div><! --/row -->
-	 </div><! --/container -->
-
-
-<!-- *****************************************************************************************************************
-	 FOOTER
-	 ***************************************************************************************************************** -->
-	 <div id="footerwrap">
-	 	<div class="container">
-		 	<div class="row">
-		 		<div class="col-lg-4">
-		 			<h4>API</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 		<div class="col-lg-8">
-		 			<h4>Description</h4>
-		 			<div class="hline-w"></div>
-		 		</div>
-
-		 	</div><! --/row -->
-	 	</div><! --/container -->
-	 </div><! --/footerwrap -->
-
-{% endblock %}
+{% endblock content %}

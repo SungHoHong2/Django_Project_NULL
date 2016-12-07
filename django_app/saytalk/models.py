@@ -26,6 +26,7 @@ class SayTalk(models.Model):
 
 
 
+
 class Talk_Relationship(models.Model):
     follower = models.ForeignKey(SayTalk, related_name='talk_follower')
     followee = models.ForeignKey(SayTalk, related_name='talk_followee')

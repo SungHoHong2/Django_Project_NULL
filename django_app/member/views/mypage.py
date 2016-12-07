@@ -21,7 +21,7 @@ def xstr(s):
 
 
 class MyPageProfileView(TemplateView):
-    template_name = 'base_dev/my_page/profile.html'
+    template_name = 'base_test/my_page/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super(MyPageProfileView, self).get_context_data(**kwargs)

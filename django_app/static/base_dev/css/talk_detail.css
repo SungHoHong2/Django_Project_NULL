@@ -1,0 +1,172 @@
+
+/* 말풍선 디자인 레이아웃 */
+
+.talk-detail-container{
+  background: url("../images/bg-talk-detail.png") 50% 50%, no-repeat;
+  min-height: 600px;
+  box-shadow: inset 0px 2px 0px #fff;
+  text-align: center;
+  padding-top: 20px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+}
+
+.talk-main-content, .talk-comment{
+  display: inline-block;
+  position: relative;
+  min-height: 60px;
+  margin: 0 auto 20px;
+  font-size: 1.6rem;
+  padding: 10px 20px 10px;
+  box-shadow: inset 0px 2px 2px #000;
+  border-radius: 10px;
+}
+
+.talk-main-content{
+  background-color: #E96F68;
+}
+
+.talk-comment{
+  background-color: #b5b6b6;
+}
+
+.talk-detail-container .talk-comment:nth-child(2n-1){
+  margin-right: 12%;
+}
+
+.talk-detail-container .talk-comment:nth-child(2n){
+  margin-left: 12%;
+}
+
+.talk-main-content::after, .talk-comment::after{
+  content: "";
+  position: absolute;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  bottom: -9px;
+}
+
+.talk-main-content::after{
+  border-top: 10px solid #E96F68;
+  left: 10px;
+}
+
+.talk-comment:nth-child(2n)::after{
+  border-top: 10px solid #b5b6b6;
+  right: 10px;
+}
+
+.talk-comment:nth-child(2n-1)::after{
+  border-top: 10px solid #b5b6b6;
+  left: 10px;
+}
+
+
+/* talk 컨테이너 내부 디자인 */
+
+.talk-main-content{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.talk-main-content h3{
+  font-size: 2rem;
+}
+
+.talk-main-content h3,
+.talk-main-content p,
+.talk-comment p{
+  border-bottom: 1px solid #343434;
+  text-align: left;
+}
+
+.edit-footer{
+  text-align: right;
+  position: relative;
+  margin-top: 5px;
+}
+
+.if-my-content{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 15px;
+}
+
+.edit-footer img{
+  width: 15px;
+  height: auto;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.edit-footer span{
+  font-size: 1.4rem;
+  margin-left: 85%;
+  font-weight: bold;
+}
+
+.talk-img img{
+  max-width: 90%;
+  height: auto;
+}
+
+
+/* 댓글달기 modal 창 디자인 */
+
+#mycomment{
+  min-height: 150px;
+  background: transparent;
+  position: relative;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: 12%;
+  margin-bottom: 30px;
+}
+
+#mycomment::after{
+  content: "";
+  position: absolute;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  top: -10px;
+  border-bottom: 10px solid #fff;
+  right: 16%;
+}
+
+#mycomment .modal-close{
+  right: 20px;
+  top: 0;
+  font-size: 3.4rem;
+}
+
+#mycomment .modal-content{
+  padding: 20px 20px 20px;
+}
+
+#mycomment .form-group{
+  text-align: left;
+}
+
+#mycomment .form-group textarea{
+  height: 50px;
+  font-size: 1.8rem;
+}
+
+#mycomment .write-btn{
+  width: 5vw;
+  height: 25px;
+  border-radius: 3px;
+  background-color: #65d3e3;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  bottom: -10%;
+}
