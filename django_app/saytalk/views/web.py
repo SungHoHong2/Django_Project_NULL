@@ -130,7 +130,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class TalkDetailPageView(TemplateView):
-    template_name = 'base_test/say_talk/talk_detail.html'
+    template_name = 'base_dev/say_talk/talk_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

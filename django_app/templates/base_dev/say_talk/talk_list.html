@@ -1,7 +1,53 @@
 {% extends 'base_dev/base.html' %}
 {% block content %}
 {% load staticfiles %}
-<script src="../../../static/base_dev/js/talk_list.js"></script>
+<script src="{% static 'base_dev/js/talk_list.js' %}"></script>
+<script src="{% static 'base_test/js/webrtc/RTCMultiConnection.min.js' %}"></script>
+
+<script>
+
+$(document).ready(function(){
+
+    /*
+     * 포스트 리스트 목록 조회
+     */
+
+    $("#photo_list_templ").tmpl({{ talk_list|safe }}).appendTo( "#photo_add_content" );
+
+
+    /*
+     * 포스트 상세내용 표시
+     */
+
+    $('#photo_add_content > a').click(function(){
+
+          if ($(this).hasClass('hover')) {
+              $(this).removeClass('hover');
+          }
+          else {
+            $(this).addClass('hover');
+          }
+    });
+
+    /*
+     * 포스트 상세 페이지 이동
+     */
+
+     $('.detail_btn').click(function(){
+ 				location.href = '/saytalk/talk_detail/'+$(this).attr('id');
+ 		 });
+
+ 		$('#chat_btn').click(function(){
+ 			location.href = "/saytalk/chat_detail/";
+ 		});
+
+
+});
+
+
+
+</script>
+
 
 <main>
   <div class="talk-list-wrapper col-8">
@@ -28,8 +74,9 @@
           </div>
         </div>
       </a>
+
       <a href="#">
-        <img src="{% static 'base_dev/images/img-11.pn' %}g " alt="">
+        <img src="{% static 'base_dev/images/img-11.pn' %} " alt="">
         <div class="text-in-img">
           <h3>playing guitar?</h3>
           <p>I love music. Would you like to join us?</p>
@@ -42,31 +89,6 @@
           </div>
         </div>
       </a>
-      <!-- *************************** 여기까지 ******************** --->
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-6.png' %}"  alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-7.png' %}"  alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-12.pn' %}g " alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-5.png' %}"  alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-3.png' %}"  alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-4.png' %}"  alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-9.png' %}"  alt="">
-      </a>
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-10.pn' %}g " alt="">
-      </a>
     </div>
   </div>
 </main>
@@ -74,7 +96,6 @@
 
 <!-- 이미지 안에 표시될 실제 텍스트 데이터 형식 불러오기 -->
 <script id="photo_list_templ" type="text/x-jquery-tmpl">
-  //------------------------------------이 아래 내용이 들어감 //
   <a href="#">
     <img src="${ img_file }" class='photo_content_image' alt="">
     <div class="text-in-img">
@@ -90,7 +111,6 @@
       </div>
     </div>
   </a>
-  //-------------------------------------------여기까지 //
 </script>
 
 
