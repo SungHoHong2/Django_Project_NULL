@@ -9,32 +9,21 @@
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/materialize-tags.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/profile/profile.css' %}">
+<link rel="stylesheet" href="{% static 'base_dev/css/profile.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/register.css' %}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="{% static 'base_dev/js/profile.js' %}"></script>
 
 <style>
-#img_upload_div{ margin-left: 307px; }
+.img-change{
+    float: left;
+    margin-left: -94px;}
 .hidden_class{display : none; }
 .materialize-tags{display:  block; color: black;}
 .n-tag{ color: black;}
 </style>
 
 <script>
-	function pageEnable(str){
-	$('.page_classes').hide();
-		switch(str){
-			case 'profile' :
-					$('#profile_page').show();
-			break;
-		  case 'mypost' :
-					$('#mypost_page').show();
-		  break;
-
-
-		}
-
-
-	}
 
 
 		$(document).ready(function(){
@@ -43,9 +32,9 @@
 			 * 회원정보 이미지
 			 */
 			$('.gridly').gridly({
-					base: 60,
-					gutter: 10,
-					columns: 12
+					base: 40,
+					gutter: 5,
+					columns: 5
 			});
 
 		  /*
@@ -131,11 +120,6 @@
 		 		});
 
 
-			/*
-			 * hash_tag 목록
-			 */
-
-
 
 		});
 
@@ -156,59 +140,143 @@
 </script>
 
 
+
 <main>
-  <div class="wrapper">
-
-    <!-- 좌측 친구 리스트 뷰 -->
-    <section class="list-section col-2">
-      <div class="list-headline">
-        <h2>회원정보 메뉴</h2>
-      </div>
-      <ul class="list-view">
-				<li onclick="pageEnable('profile')">개인정보 수정</li>
-				<li onclick="pageEnable('mypost')">내가쓴글 관리</li>
-				<li>내가 초대받은 채팅</li>
-				<li>나를 좋아하는 사람</li>
-				<li>설정</li>
+  <div class="mypage-wrapper">
+    <nav class="mypage-navi col-1">
+      <ul>
+        <li><a href="#" class="my-profile">MY PROFILE</a></li>
+        <li><a href="#" class="my-post">EDIT MY POST</a></li>
       </ul>
-    </section>
+    </nav>
 
+    <section class="mypage-view col-7">
 
-    <!-- 우측 search 바 & 맵 뷰-->
-		<div id="profile_page" class="page_classes">
-    <section class="col-6 profile_body">
-      <div class="col-8">
-        <div>
-          <h2> 개인정보 수정 </h2>
-      </div>
-			<div class="col-8">
-					<div class="">
- 					<label for=""> 닉네임 변경 </label>
-					<input type="text" name='username' value="{{ request.user.username }}" disabled=true>
-					</div>
-
-					<div class="gridly_custom">
-					<label for=""> 사진 수정 </label>
-					</div>
+      <!-- 개인정보 수정 페이지 -->
+      <div class="page-div col-8" id="my-profile">
+        <div class="img-change col-4">
 					<div id="img_upload_div" class='gridly'></div>
-					 <button class="img-btn">사진 입력</button>
-					 <input id="hash_tag_inputs" type="text" placeholder="해시태그 추가" data-role="materialtags" value="{{ hash_tags }}">
-					</div>
-			</div>
-    </section>
+          <!-- <img class="col-2" src="../../../static/base_dev/images/syYeom.jpg" alt="내 프로필 이미지"> -->
+          <div class="img-change-btn">
+						<button class="img-btn">사진 입력</button>
+          </div>
+        </div>
+        <div class="profile-change col-4">
+          <h3>개인 정보 수정 페이지입니다.</h3>
+          <form action="" name="profile-form" class="profile-form">
+            <fieldset>
+              <legend class="hidden">개인정보 수정 폼</legend>
+              <label for="mynickname">Nickname</label>
+              <input type="text" id="mynickname" value="{{ request.user.username }}" disabled>
+              <label for="mypassword">Password</label>
+              <input type="password" id="mypassword" value="password">
+							<input id="hash_tag_inputs" type="text" placeholder="해시태그 추가" data-role="materialtags" value="{{ hash_tags }}">
+            </fieldset>
+            <button class="profile-change-btn">Change</button>
+          </form>
+        </div>
 
-		<div id="img_upload_form" class="img_hash_join_class hidden_class" method="POST">
-				<a class="img-btn"><span> 이미지 첨부 </span></a>
-				<div class="form-group img-submit hidden_class">
-					 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
+				<div id="img_upload_form" class="img_hash_join_class hidden_class" method="POST">
+						<a class="img-btn"><span> 이미지 첨부 </span></a>
+						<div class="form-group img-submit hidden_class">
+							 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
+						</div>
 				</div>
-		</div>
-		</div>
-		<div id="mypost_page" class="page_classes">
-			this is my post
-		</div>
 
+				<!-- <section class="col-6 profile_body">
+		      <div class="col-8">
+		        <div>
+		          <h2> 개인정보 수정 </h2>
+		      </div>
+					<div class="col-8">
+							<div class="">
+		 					<label for=""> 닉네임 변경 </label>
+							<input type="text" name='username' value="{{ request.user.username }}" disabled=true>
+							</div>
+
+							<div class="gridly_custom">
+							<label for=""> 사진 수정 </label>
+							</div>
+							<div id="img_upload_div" class='gridly'></div>
+							 <button class="img-btn">사진 입력</button>
+							 <input id="hash_tag_inputs" type="text" placeholder="해시태그 추가" data-role="materialtags" value="{{ hash_tags }}">
+							</div>
+					</div>
+		    </section>
+
+				<div id="img_upload_form" class="img_hash_join_class hidden_class" method="POST">
+						<a class="img-btn"><span> 이미지 첨부 </span></a>
+						<div class="form-group img-submit hidden_class">
+							 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
+						</div>
+				</div> -->
+
+
+      </div>
+
+      <!-- 내가 쓴 글 관리 페이지 -->
+      <div class="page-div col-8" id="my-post" style="display: none">
+        <h3>내가 쓴 글 조회 페이지입니다.</h3>
+        <table class="board col-5">
+          <caption>내가 쓴 글 목록</caption>
+            <thead>
+              <tr>
+                  <th class="col-2" scope="cols">DATE</th>
+                  <th class="col-4" scope="cols">TITLE</th>
+                  <th class="col-2" scope="coles">COMMENT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <th scope="row">2016.12.07</th>
+                  <td><a href="#">I want to go home.</a></td>
+                  <td>6</td>
+              </tr>
+              <tr>
+                  <th scope="row">2016.12.03</th>
+                  <td><a href="#">playing guitar</a></td>
+                  <td>3</td>
+              </tr>
+              <tr>
+                  <th scope="row">2016.11.27</th>
+                  <td><a href="#">FrontEnd design study..</a></td>
+                  <td>4</td>
+              </tr>
+              <tr>
+                  <th scope="row">2016.11.12</th>
+                  <td><a href="#">Nice to meet you!</a></td>
+                  <td>12</td>
+              </tr>
+            </tbody>
+            <summary class="hidden">내가 쓴 글 목록과 각 댓글 수를 최근부터 오래 된 순으로 보여주는 표입니다.</summary>
+          </table>
+          <button class="all-delete">모두 삭제</button>
+      </div>
+
+    </section>
   </div>
 </main>
+
+
+
+<footer>
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
+		</div>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
+	</div>
+</footer>
+
+
 
 {% endblock %}

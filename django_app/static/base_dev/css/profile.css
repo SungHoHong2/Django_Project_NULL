@@ -8,16 +8,21 @@
 }
 
 .mypage-navi ul{
-  height: 300px;
+  height: 160px;
+  width: 120px;
   display: flex;
   justify-content: space-around;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.6rem;
 }
 
 .mypage-navi ul li a:hover,
 .mypage-navi ul li a:focus{
-  color: #000;
+  color: #afe6ee;
 }
 
 .mypage-view{
@@ -32,9 +37,10 @@
 }
 
 
+
 /* 개인정보 수정 페이지 */
 
-.my-profile{
+#my-profile{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,61 +135,73 @@
 
 /* 내가 쓴 글 관리 페이지 */
 
-.my-post-list{
-  list-style-type: none;
-  display: flex;
-  justify-content: flex-start;
-  align-items: baseline;
-  margin-left: auto;
-  margin-right: auto;
+#my-post{
   height: 70vh;
 }
 
-.my-post-list li{
-  width: 12vw;
-  height: 20vh;
-  border: 2px solid #000;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
-.my-post-detail{
-  width: 80%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+.board {
+  border-collapse: collapse;
+  text-align: center;
+  line-height: 1.5;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   margin-left: auto;
   margin-right: auto;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
 }
 
-.my-post-detail > div{
+#my-post h3{
+  font-size: 1.8rem;
+  margin-bottom: 30px;
   text-align: center;
 }
 
-.my-post-detail span{
-  font-size: 1.2rem;
+caption{
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  font-size: 0;
+  line-height:0
 }
 
-.my-post-btn button{
-  background: none;
-  border: 1.3px solid #000;
-  padding: 2px 4px 2px;
+.board thead th {
+  padding: 10px;
+  font-weight: bold;
+  vertical-align: top;
+  color: #fff;
+  background: #65d3e3;
+}
+
+.board tbody th {
+  padding: 10px;
+}
+
+.board td {
+  padding: 10px;
+  vertical-align: top;
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.board tbody tr:nth-of-type(2n) {
+  background: #EBEEF0;
+}
+
+.all-delete{
+  width: 6vw;
+  height: 30px;
+  font-size: 1.6rem;
+  border: none;
+  color: #fff;
+  background-color: #65d3e3;
   cursor: pointer;
+  margin-left: 74%;
+  margin-top: 30px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
