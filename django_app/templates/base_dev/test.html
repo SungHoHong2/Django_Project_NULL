@@ -1,154 +1,80 @@
 
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
-<title>Location Test with Buttons</title>
-<script src="{% static 'base_dev/js/jquery_latest.js' %}"></script>
+//<![CDATA[
+$(function(){
+	var hsort_flg = false;
 
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Mans0k30To1GtjB2-T8DWhd3bmD-nes&callback=listenForPosition">
-</script>
-<meta http-equiv="X-UA-Compatible" content="IE=9" />
-<script type="text/javascript">
+	//setup
+	var vg = $("#grid-content").vgrid({
+		easing: "easeOutQuint",
+		time: 400,
+		delay: 20,
+		fadeIn: {
+			time: 500,
+			delay: 50,
+			wait: 500
+		},
+		onStart: function(){
+			$("#message1")
+				.css("visibility", "visible")
+				.fadeOut("slow",function(){
+					$(this).show().css("visibility", "hidden");
+				});
+		},
+		onFinish: function(){
+			$("#message2")
+				.css("visibility", "visible")
+				.fadeOut("slow",function(){
+					$(this).show().css("visibility", "hidden");
+				});
+		}
+	});
+	$(window).load(function(e){
+		vg.vgrefresh();
+	});
 
-var markers = [];
-var map;
-var geocoder;
-
-function setText(val, e) {
-    document.getElementById(e).value = val;
-}
-function insertText(val, e) {
-    document.getElementById(e).value += val;
-}
-var nav = null;
-var watchID;
-function listenForPosition() {
-  geocoder = new google.maps.Geocoder();
-
-  if (nav == null) {
-      nav = window.navigator;
-  }
-  if (nav != null) {
-      var geoloc = nav.geolocation;
-      if (geoloc != null) {
-          watchID = geoloc.watchPosition(successCallback, errorCallback)
-
-          geoloc.watchPosition(function (pos) {
-
-      			// 현재 위경도 값(GPS) 변수에 넣기.
-      			var latitude = pos.coords.latitude;
-      			var longitude = pos.coords.longitude;
-
-      			var mapOptions = {
-      				zoom: 16,
-      				mapTypeId: google.maps.MapTypeId.ROADMAP,
-      				center: new google.maps.LatLng(latitude,longitude)
-      			};
-
-      			map = new google.maps.Map(document.getElementById('map'),mapOptions);
-
-      			// 현재 위치 마커 생성
-      			var marker = new google.maps.Marker({
-      				position: new google.maps.LatLng(latitude,longitude),
-      				map: map,
-      				draggable: false,
-      				icon: "http://maps.google.com/mapfiles/ms/micons/man.png"
-      			});
-
-      			markers.push(marker);
-
-      			// 현재 위치 기준 원 그리기
-      			var populationOptions = {
-      				strokeColor: '#000000',
-      				strokeOpacity: 0.8,
-      				strokeWeight: 2,
-      				fillColor: '#808080',
-      				fillOpacity: 0.5,
-      				map: map,
-      				center: new google.maps.LatLng(latitude,longitude) ,
-      				radius: 1000
-      			};
-
-      			cityCircle = new google.maps.Circle(populationOptions);
-
-      			var script = document.createElement('script');
-      			// This example uses a local copy of the GeoJSON stored at
-      			// http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-      			document.getElementsByTagName('head')[0].appendChild(script);
-        });
-      }
-      else {
-          console.log("Geolocation not supported");
-      }
-  }
-  else {
-      console.log("Navigator not found");
-  }
-}
-function clearWatch(watchID) {
-    window.navigator.geolocation.clearWatch(watchID);
-}
-function successCallback(position)
-{
-   setText(position.coords.latitude, "latitude");
-   setText(position.coords.longitude, "longitude");
-}
-
-
-function errorCallback(error) {
-    var message = "";
-    // Check for known errors
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            message = "This website does not have permission to use " +
-                      "the Geolocation API";
-            break;
-        case error.POSITION_UNAVAILABLE:
-            message = "The current position could not be determined.";
-            break;
-        case error.PERMISSION_DENIED_TIMEOUT:
-            message = "The current position could not be determined " +
-                      "within the specified timeout period.";
-            break;
-    }
-    // If it's an unknown error, build a message that includes
-    // information that helps identify the situation so that
-    // the error handler can be updated.
-    if (message == "")
-    {
-        var strErrorCode = error.code.toString();
-        message = "The position could not be determined due to " +
-                  "an unknown error (Code: " + strErrorCode + ").";
-    }
-    console.log(message);
-}
-
-window.friends_callback = function(results) {
-	for (var i = 0; i < results.features.length; i++) {
-		var coords = results.features[i].geometry.coordinates;
-		var latLng = new google.maps.LatLng(coords[0],coords[1]);
-		var marker = new google.maps.Marker({
-			position: latLng,
-			map: map
+	//add item
+	$("#additem").click(function(e){
+		var _item = $('<div>\
+				<h3>New Item</h3>\
+				<p>Foo</p>\
+				<p><a href="#">DELETE</a></p>\
+			</div>')
+			.fadeTo(0, 0)
+			.addClass(Math.random() > 0.3 ? 'wn' : 'wl')
+			.addClass(Math.random() > 0.3 ? 'hn' : 'hl');
+		vg.prepend(_item);
+		vg.vgrefresh(null, null, null, function(){
+			_item.fadeTo(300, 1);
 		});
-	}
-}
+		hsort_flg = true;
+	});
 
-$( window ).load(function() {
-	listenForPosition();
+	//delete
+	vg.on('click', 'a', function(e){
+		$(this).parent().parent().fadeOut(200, function(){
+			$(this).remove();
+			vg.vgrefresh();
+		});
+		return false;
+	});
+
+	//sort
+	$("#hsort").click(function(e){
+		hsort_flg = !hsort_flg;
+		$("#grid-content").vgsort(function(a, b){
+			var _a = $(a).find('h3').text();
+			var _b = $(b).find('h3').text();
+			var _c = hsort_flg ? 1 : -1 ;
+			return (_a > _b) ? _c * -1 : _c ;
+		}, "easeInOutExpo", 300, 0);
+		return false;
+	});
+	$("#rsort").click(function(e){
+		$("#grid-content").vgsort(function(a, b){
+			return Math.random() > 0.5 ? 1 : -1 ;
+		}, "easeInOutExpo", 300, 20);
+		hsort_flg = true;
+		return false;
+	});
 });
-
-</script>
-</head>
-<body>
-<label for="latitude">Latitude: </label><input id="latitude" /> <br />
-<label for="longitude">Longitude: </label><input id="longitude" /> <br />
-<input type="button" onclick="listenForPosition ()" value="Watch Latitude and Longitude"  />
-<input type="button" value="Clear watch" onclick="clearWatch()" />
-
-<div id="map" style="width:760px;height:400px;margin-top:20px;"></div>
-
-</body>
-</html>
+//]]>

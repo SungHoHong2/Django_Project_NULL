@@ -73,7 +73,7 @@
         <script src="{% static 'base_test/js/webrtc/RTCMultiConnection.min.js' %}"></script>
         <!-- custom layout for HTML5 audio/video elements -->
         <script src="{% static 'base_test/js/webrtc/getMediaElement.js' %}"></script>
-		<script src="{% static 'base_test/js/webrtc/filebuffer.js' %}"></script>
+		    <script src="{% static 'base_test/js/webrtc/filebuffer.js' %}"></script>
         <script>
 
             document.getElementById('open-room').onclick = function() {
@@ -155,7 +155,7 @@
             var connection = new RTCMultiConnection();
 
             // by default, socket.io server is assumed to be deployed on your own URL
-            connection.socketURL = 'https://mysterious-wave-22797.herokuapp.com:443/';
+						connection.socketURL = 'https://project-null-node.herokuapp.com/';
 
 
             connection.socketMessageEvent = 'audio-video-file-chat-demo';

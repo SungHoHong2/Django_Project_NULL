@@ -28,7 +28,7 @@ class TalkListPageView(TemplateView):
                 "ss.id, ss.title, ss.content, ci.img_file, hht.tag_names "
                 "FROM saytalk_saytalk ss LEFT JOIN collection_image ci ON ci.say_talk_id = ss.id AND ci.img_order = 1 "
                 "LEFT JOIN( "
-                         "select chr.say_talk_id, string_agg(cht.tag_name, ', ') as tag_names "
+                         "select chr.say_talk_id, string_agg(cht.tag_name, ' #') as tag_names "
                          "from collection_hash_tag cht "
                          "join collection_hash_relationship chr on chr.hash_tag_id = cht.id "
                          "group by chr.say_talk_id "
@@ -142,7 +142,7 @@ class TalkDetailPageView(TemplateView):
                     "postimg.talk_images as talk_images, "
                     "ss.content as content, "
                     "ss.title as title, "
-                    "chrs.tag_names as tag_names "
+                    "mm.username as username "
             "from saytalk_saytalk ss "
             "join member_myuser mm on ss.created_by != '' and mm.id = ss.created_by::Integer "
             "join collection_image ci on ci.member_id = mm.id and ci.img_order = 1 "
@@ -154,25 +154,16 @@ class TalkDetailPageView(TemplateView):
             "ci2.say_talk_id = %s "
             "group by ci2.say_talk_id "
         ") postimg on postimg.say_talk_id = ss.id "
-        "join( "
-            "select "
-                "chr.say_talk_id, string_agg(c.tag_name, ', ') as tag_names "
-                "from collection_hash_relationship chr "
-            "join collection_hash_tag c on "
-            "c.id = chr.hash_tag_id "
-            "where chr.say_talk_id = %s "
-            "group by say_talk_id "
-        ") chrs on chrs.say_talk_id = ss.id "
         "where ss.id = %s "
         )
-
 
         _query_sub_detail = (
                  "select ss.id, "
                  "ci.img_file AS profile_img, "
                  "postimg.talk_images AS talk_images, "
                  "ss.content AS content, "
-                 "ss.title AS title "
+                 "ss.title AS title, "
+                 "mm.username AS username "
                  "FROM saytalk_talk_relationship sr "
                  "JOIN saytalk_saytalk ss on sr.followee_id = %s and ss.id = sr.follower_id "
                  "JOIN member_myuser mm ON ss.created_by != '' AND mm.id = ss.created_by::Integer "
@@ -184,14 +175,14 @@ class TalkDetailPageView(TemplateView):
         )
 
         with connection.cursor() as cursor:
-            cursor.execute(_query_detail,[kwargs.get('pk'), kwargs.get('pk'), kwargs.get('pk')])
+            cursor.execute(_query_detail,[kwargs.get('pk'), kwargs.get('pk')])
             _list = cursor.fetchall()
             _list = [ {'id': row[0],
                        'profile_img': settings.MEDIA_URL+xstr(row[1]),
                        'talk_img': row[2],
                        'content': row[3],
                        'title': row[4],
-                       'tag_names': row[5],
+                       'username': row[5],
                        }  for row in _list]
             context['talk_detail'] = json.dumps(_list)
 
@@ -202,20 +193,26 @@ class TalkDetailPageView(TemplateView):
                        'talk_img': row[2],
                        'content': row[3],
                        'title': row[4],
+                       'username': row[5],
                        }  for row in _list]
             context['talk_sub_detail'] = json.dumps(_list)
 
-
         context['img_url'] = settings.MEDIA_URL
-        context['comment_post'] = PostInsertForm()
-        context['comment_img_post'] = PostImageForm()
         return context
 
 
 
+class ChatVideoDetailPageView(TemplateView):
+    template_name = 'base_dev/say_talk/chat_video_stream.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
 
 class ChatDetailPageView(TemplateView):
-    template_name = 'base_test/say_talk/chat_video_stream.html'
+    template_name = 'base_dev/say_talk/chat_stream.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

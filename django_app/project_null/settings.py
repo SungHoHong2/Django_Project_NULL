@@ -131,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 REAL_SERVER_RUNNING = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
-REAL_SERVER_RUNNING = False
+#REAL_SERVER_RUNNING = False
 
 
 if not REAL_SERVER_RUNNING:
@@ -152,7 +152,6 @@ if not REAL_SERVER_RUNNING:
     MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
     DEFAULT_FILE_STORAGE = 'project_null.custom_storages.MediaStorage'
 else:
-    print('this is local!!!!!!!!!')
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'

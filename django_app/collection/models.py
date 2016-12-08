@@ -7,8 +7,9 @@ from saytalk.models import SayTalk
 from django.utils import timezone
 from urllib.request import urlopen
 from PIL import Image as Image_PIL
-
 from django.conf import settings
+from project_null.essential_package import resize_and_crop
+
 
 # Create your models here.
 
@@ -39,7 +40,7 @@ class Image(models.Model):
 
         img = BytesIO(fp.read())
         im = Image_PIL.open(img)
-        im2 = im.resize((100, 100), Image_PIL.NEAREST)
+        im2 = im.resize((300, 300), Image_PIL.NEAREST)
         out_im2 = BytesIO()
         im2.save(out_im2, 'PNG')
 
@@ -48,6 +49,7 @@ class Image(models.Model):
 
         k = b.new_key(_img_url.replace('/img/','/small/'))
         k.set_contents_from_string(out_im2.getvalue())
+
 
         return rtn
 

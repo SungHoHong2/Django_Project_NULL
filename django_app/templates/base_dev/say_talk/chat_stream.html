@@ -1,0 +1,298 @@
+{% extends 'base_dev/base.html' %}
+{% block content %}
+{% load staticfiles %}
+<style> .hidden_class{ display: none; } .experiment{ background : #1F1D1D}
+#post_detail_div{overflow-y: scroll;}
+.class_btn{ width: 8vw; height: 30px; border-radius: 3px; background-color: #65d3e3; border: none; color: #fff; font-size: 1.6rem; margin-left: 20px; cursor: pointer;}
+.class_input{ height: 30px; font-size: 1.6rem; width: 260px; border: 1px solid #e0e4e6; border-radius: 3px; }
+</style>
+
+<main>
+  <div class="talk-list-wrapper">
+    <div class="talk-headline col-8">
+      <h2 class="col-4">Chat Room</h2>
+      <button id="open-room" class="class_btn">채팅방 생성</button>
+
+    </div>
+    <div class='col-3' style='float:left'>
+			<section class="experiment talk-detail-container">
+					<div class="make-center">
+							<input type="text" class="hidden_class" id="room-id" value="abcdef">
+							<button id="join-room" class="hidden_class">Join Room</button>
+						  <button id="open-or-join-room" class="hidden_class">Auto Open Or Join Room</button>
+
+              <input type="text" id="input-text-chat" class="class_input" placeholder="Enter Text Chat" disabled>
+							<button id="share-file" class="class_btn" disabled>Share File</button>
+
+							<div id="room-urls" style="text-align: center;display: none; color: white; margin: 15px -10px; border-left: 0;border-right: 0;"></div>
+					</div>
+
+					<div id="chat-container">
+							<div id="file-container"></div>
+							<div class="chat-output"></div>
+					</div>
+			</section>
+    </div>
+
+    <div class='col-5' style='float:right'>
+    <section class="talk-detail-container" id="post_detail_div">
+
+    </section>
+		</div>
+
+  </div>
+</main>
+
+
+
+<!-- 말풍선 안에 표시될 실제 *** 메인 컨텐츠 *** 데이터 가져오기 -->
+<script id="saytalk_detail_templ" type="text/x-jquery-tmpl">
+  <div class="talk-main-content col-6">
+    <div class="talk-paragraph col-5">
+      <p>${content}</p>
+      <div class="edit-footer">
+        <div class="if-my-content">
+          <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+          <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+        </div>
+        <span>${username}</span>
+      </div>
+    </div>
+  </div>
+</script>
+
+
+
+<!-- 말풍선 안에 표시될 실제 *** 댓글 컨텐츠 *** 데이터 가져오기 -->
+<script id="saytalk_comment_templ" type="text/x-jquery-tmpl">
+  <div class="talk-comment col-5">
+    <p>${content}</p>
+    <div class="edit-footer">
+      <div class="if-my-content">
+        <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+        <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+      </div>
+      <span>${username}</span>
+    </div>
+    <div class="talk-img col-3" id="img_${id}"></div>
+  </div>
+</script>
+
+
+<script src="{% static 'base_test/js/webrtc/RTCMultiConnection.min.js' %}"></script>
+<script src="{% static 'base_test/js/webrtc/filebuffer.js' %}"></script>
+
+<script>
+
+		/*
+		 * 고유 방 아이디 생성
+		 */
+
+		function generateUUID(){
+			var d = new Date().getTime();
+			if(window.performance && typeof window.performance.now === "function"){
+				d += performance.now(); //use high-precision timer if available
+			}
+			var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				var r = (d + Math.random()*16)%16 | 0;
+				d = Math.floor(d/16);
+				return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+			});
+			return uuid;
+		}
+
+
+    /*
+     * 채팅방 생성
+     */
+
+		document.getElementById('open-room').onclick = function() {
+				disableInputButtons();
+				connection.open('chat_'+ generateUUID(), true);
+				showRoomURL('chat_'+ generateUUID());
+		};
+
+
+    /*
+     * 파일공유 - 채팅기능
+     */
+
+		document.getElementById('share-file').onclick = function() {
+				var fileSelector = new FileSelector();
+				fileSelector.selectSingleFile(function(file) {
+						connection.send(file);
+				});
+		};
+
+		document.getElementById('input-text-chat').onkeyup = function(e) {
+				if (e.keyCode != 13) return;
+
+				// removing trailing/leading whitespace
+				this.value = this.value.replace(/^\s+|\s+$/g, '');
+				if (!this.value.length) return;
+
+				var send_data = '{{ request.user.username }}'+'____'+this.value;
+				connection.send(send_data);
+				appendDIV(send_data);
+				this.value = '';
+		};
+
+
+
+    /*
+     * 채팅 정보전송
+     */
+
+		var chatContainer = document.querySelector('#post_detail_div');
+
+		function appendDIV(event) {
+
+        var template_div_id = "#saytalk_detail_templ";
+         if(event.data){
+              event = event.data;
+              template_div_id = '#saytalk_comment_templ';
+         }
+
+				$(template_div_id).tmpl([{
+						username : event.split('____')[0],
+						content : event.split('____')[1]
+				 }]).prependTo( '#post_detail_div' );
+				document.getElementById('input-text-chat').focus();
+		}
+
+
+		// ......................................................
+		// ..................RTCMultiConnection Code.............
+		// ......................................................
+
+		var connection = new RTCMultiConnection();
+
+		// by default, socket.io server is assumed to be deployed on your own URL
+		connection.socketURL = 'https://project-null-node.herokuapp.com/';
+
+		// comment-out below line if you do not have your own socket.io server
+		// connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+
+		connection.socketMessageEvent = 'textchat-plus-fileshare-demo';
+
+		connection.enableFileSharing = true; // by default, it is "false".
+
+		connection.session = {
+				data: true
+		};
+
+		connection.sdpConstraints.mandatory = {
+				OfferToReceiveAudio: false,
+				OfferToReceiveVideo: false
+		};
+
+		connection.onmessage = appendDIV;
+		connection.filesContainer = document.getElementById('post_detail_div');
+
+		connection.onopen = function() {
+				document.getElementById('share-file').disabled = false;
+				document.getElementById('input-text-chat').disabled = false;
+		};
+
+		function disableInputButtons() {
+				document.getElementById('open-or-join-room').disabled = true;
+				document.getElementById('open-room').disabled = true;
+				document.getElementById('join-room').disabled = true;
+				document.getElementById('room-id').disabled = true;
+		}
+
+		// ......................................................
+		// ......................Handling Room-ID................
+		// ......................................................
+
+		function showRoomURL(roomid) {
+				var roomHashURL = '#' + roomid;
+				var roomQueryStringURL = '?roomid=' + roomid;
+
+				var html = '<h2>채팅방에 접속할 수 있는 URL입니다.</h2><br>';
+
+				html += 'Hash URL: <a href="' + roomHashURL + '" target="_blank">' + roomHashURL + '</a>';
+				html += '<br>';
+				html += 'QueryString URL: <a href="' + roomQueryStringURL + '" target="_blank">' + roomQueryStringURL + '</a>';
+
+				var roomURLsDiv = document.getElementById('room-urls');
+				roomURLsDiv.innerHTML = html;
+
+				roomURLsDiv.style.display = 'block';
+		}
+
+		(function() {
+				var params = {},
+						r = /([^&=]+)=?([^&]*)/g;
+
+				function d(s) {
+						return decodeURIComponent(s.replace(/\+/g, ' '));
+				}
+				var match, search = window.location.search;
+				while (match = r.exec(search.substring(1)))
+						params[d(match[1])] = d(match[2]);
+				window.params = params;
+		})();
+
+		var roomid = '';
+		if (localStorage.getItem(connection.socketMessageEvent)) {
+				roomid = localStorage.getItem(connection.socketMessageEvent);
+		} else {
+				roomid = connection.token();
+		}
+		document.getElementById('room-id').value = roomid;
+		document.getElementById('room-id').onkeyup = function() {
+				localStorage.setItem(connection.socketMessageEvent, this.value);
+		};
+
+		var hashString = location.hash.replace('#', '');
+		if(hashString.length && hashString.indexOf('comment-') == 0) {
+			hashString = '';
+		}
+
+		var roomid = params.roomid;
+		if(!roomid && hashString.length) {
+				roomid = hashString;
+		}
+
+		if(roomid && roomid.length) {
+				document.getElementById('room-id').value = roomid;
+				localStorage.setItem(connection.socketMessageEvent, roomid);
+
+				// auto-join-room
+				(function reCheckRoomPresence() {
+						connection.checkPresence(roomid, function(isRoomExists) {
+								if(isRoomExists) {
+                    $('#open-room').hide();
+										connection.join(roomid);
+										return;
+								}
+
+								setTimeout(reCheckRoomPresence, 5000);
+						});
+				})();
+
+				disableInputButtons();
+		}
+</script>
+
+
+<footer class="talk-footer">
+	<div class="footer col-8">
+		<div class="footer-row col-3">
+			<a href="#">Privacy &amp; Cookies</a>
+			<a href="#">Terms &amp; Conditions</a>
+			<a href="#">Accessibility</a>
+			<a href="#">FAQ</a>
+		</div>
+		<div class="copyright col-4">
+			<p>The celebrities named of featured on asos.com have not
+				endorsed recommended or approved the items offered
+				on site.
+			</p>
+			<p>Copyright © 2016 - All Rights Reserved</p>
+		</div>
+	</div>
+</footer>
+
+{% endblock content %}

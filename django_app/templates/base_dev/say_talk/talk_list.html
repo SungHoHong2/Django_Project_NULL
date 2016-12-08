@@ -3,15 +3,26 @@
 {% load staticfiles %}
 <script src="{% static 'base_dev/js/talk_list.js' %}"></script>
 <script src="{% static 'base_test/js/webrtc/RTCMultiConnection.min.js' %}"></script>
+<script src="{% static 'base_dev/js/opening/jquery.gridly.js' %}"></script>
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/register.css' %}">
+
+
+
+
 
 <script>
 
 $(document).ready(function(){
+    $('#loading').hide();
+    $('.hidden_class').hide();
+
+
 
     /*
      * 포스트 리스트 목록 조회
      */
-
+    console.log({{ talk_list|safe }});
     $("#photo_list_templ").tmpl({{ talk_list|safe }}).appendTo( "#photo_add_content" );
 
 
@@ -37,10 +48,191 @@ $(document).ready(function(){
  				location.href = '/saytalk/talk_detail/'+$(this).attr('id');
  		 });
 
- 		$('#chat_btn').click(function(){
- 			location.href = "/saytalk/chat_detail/";
+ 		 $('#chat_btn').click(function(){
+ 			  location.href = "/saytalk/chat_detail/";
+ 		 });
+
+
+    /*
+     * 팝업 숨김 HashTag 입력
+     */
+
+     $({{ hash_tags|safe }}).each(function(index, item){
+         var text = $('#hash_tag_ids').val();
+         if(text.length>0){
+           text+=','
+         }
+         text+=item.id;
+         $('#hash_tag_ids').val(text);
+     });
+
+
+    /*
+     * 팝업 이미지 업로드
+     */
+
+     $('.gridly').gridly({
+ 				base: 60,
+ 				gutter: 10,
+ 				columns: 12
+ 		 });
+
+     $("#id_img_file").change(function(){
+ 			var _this = $(this);
+ 			_this.attr('disabled',true);
+ 			var img_length = $('#img_upload_div').find('div').length;
+ 			if(img_length==5){
+ 				alert('이미지는 5개까지 입력 가능합니다.');
+ 				return false;
+ 			}
+
+ 			var form_data = new FormData();
+ 					form_data.append("img_file",$('input[name=img_file]')[0].files[0])
+ 					formAjax_loading('POST', form_data, "{% url 'collection:temp_image' %}"
+ 							, 'application/json',$('#loading'),$('.img-btn')
+ 							, function(response){
+ 								$('#loading').hide();
+ 								$('.img-btn').show();
+
+ 								_this.removeAttr('disabled');
+
+ 									var img_div = $('#img_upload_div').append(
+ 									     $('<div/>').addClass('brick small').attr('id',response.id)
+ 									      	        .append($('<a/>').addClass('delete').text('x'))
+ 									   	 );
+ 									$('#id_img_file').val('');
+
+
+ 									var img_div = document.querySelectorAll('.brick')[img_length];
+ 									img_div.style['background-image'] = 'url('+response.img_file.replace('/img/','/small/')+')';
+ 									img_div.style['left'] = 160 * img_length;
+ 									img_length++;
+
+ 									event.preventDefault();
+   								event.stopPropagation();
+   								$('.gridly').append(img_div);
+   								return $('.gridly').gridly();
+ 					});
+ 		    });
+
+     		$('.img-btn').click(function(){
+     			$('#id_img_file').trigger('click');
+     		});
+
+     		$(document).on("click", ".gridly .delete", function(event) {
+           		var $this;
+           		event.preventDefault();
+           		event.stopPropagation();
+           		$this = $(this);
+           		$this.closest('.brick').remove();
+           		return $('.gridly').gridly('layout');
+       	});
+
+
+      /*
+       * 포스트 입력
+       */
+
+   		$('.write-btn').click(function(){
+       $('#image_file_ids').val('')
+
+   				$($('#img_upload_div').find('div')).each(function(index, item){
+   						var image_id = $(item).attr('id');
+   						var text = $('#image_file_ids').val();
+   						if(text.length>0){
+   							text+=','
+   						}
+   						text+=image_id;
+   						$('#image_file_ids').val(text);
+   				})
+
+   			var form_data = new FormData();
+   			form_data.append("title",$('input[name=title]').val());
+   			form_data.append("content",$('textarea[name=content]').val());
+
+   			if($('#image_file_ids').val().length != 0){
+   				form_data.append("image_file_ids",$('#image_file_ids').val());
+   		  }
+
+   			if($('#hash_tag_ids').val().length != 0){
+   				form_data.append("hash_tag_ids",$('#hash_tag_ids').val());
+   			}
+
+   			formAjax('POST', form_data, "{% url 'saytalk:posting' %}"
+   					, 'application/json'
+   					, function(response){
+                    //socket.emit('request new post', response );
+   									location.href="{% url 'saytalk:talk_list' %}";
+                    socket.emit('request new post', response );
+
+   			});
+   		});
+
+
+      /*
+       * 채팅방 신호 수신
+       */
+ 	      var connection = new RTCMultiConnection();
+        connection.socketURL = 'https://project-null-node.herokuapp.com/';
+
+             (function looper() {
+                 connection.getPublicModerators(function(array) {
+                     //$('.dynamic_a_tag').remove();
+                     array.forEach(function(moderator) {
+                         if($('a[id='+moderator.userid+']').length!=0) return;
+
+                         if(moderator.userid == connection.userid) return;
+
+                         var room_type = moderator.userid.split('_')[0];
+                         if(room_type=='video'){
+                             $("#chat_list_templ").tmpl([{id : moderator.userid, url: '{% url "saytalk:chat_video_detail" %}#'+moderator.userid } ]).prependTo( "#photo_add_content" );
+                         }else if(room_type=='chat'){
+                             $("#chat_list_templ").tmpl([{id : moderator.userid, url: '{% url "saytalk:chat_detail" %}#'+moderator.userid } ]).prependTo( "#photo_add_content" );
+                         }
+
+                        $('#'+moderator.userid).click(function(){
+                                    if ($(this).hasClass('hover')) {
+                                        $(this).removeClass('hover');
+                                    }
+                                    else {
+                                      $(this).addClass('hover');
+                                    }
+                        });
+
+                        vg.vgrefresh(null, null, null, function(){
+                          $('#'+moderator.userid).fadeTo(300, 1);
+                        });
+
+                     });
+                     setTimeout(looper, 3000);
+                 });
+             })();
+
+      /*
+       * 작업 버튼
+       */
+
+ 		$('.detail_btn').click(function(){
+ 				location.href = '/saytalk/talk_detail/'+$(this).attr('id');
  		});
 
+ 		$('#video_btn').click(function(){
+ 			location.href = "/saytalk/chat_video_detail/";
+ 		});
+
+    var vg = $("#photo_add_content").vgrid({
+      easing: "easeOutQuint",
+      useLoadImageEvent: true,
+      time: 1000,
+      delay: 20,
+      fadeIn: {
+        time: 1000,
+        delay: 100,
+        wait: 1000
+      }
+    });
+
+    vg.vgrefresh();
 
 });
 
@@ -55,41 +247,11 @@ $(document).ready(function(){
       <h2 class="col-4">Currently Posted</h2>
       <div class="talk-btns col-4">
         <button id="post_btn">글쓰기</button>
-        <button id="chat_btn">채팅</button>
+        <button id="video_btn">영상 채팅</button>
+        <button id="chat_btn">일반 채팅</button>
       </div>
     </div>
-    <div class="visual-container" id="photo_add_content">
-      <!-- *********************** 예시로 넣어놓은 내용 2개 ************* --->
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-1.png' %}"  alt="">
-        <div class="text-in-img">
-          <h3>I want to go home.</h3>
-          <p>So tired.</p>
-          <div class="hash-tag-in-img">
-            <span>#javaScript</span><span>#getRest</span>
-          </div>
-          <div class="btn-in-img">
-            <button class="detail_btn">Details</button>
-            <button class="remove_btn">Remove</button> <!-- remove 버튼은 자기가 쓴 글에만 보이게 -->
-          </div>
-        </div>
-      </a>
-
-      <a href="#">
-        <img src="{% static 'base_dev/images/img-11.pn' %} " alt="">
-        <div class="text-in-img">
-          <h3>playing guitar?</h3>
-          <p>I love music. Would you like to join us?</p>
-          <div class="hash-tag-in-img">
-            <span>#Music</span><span>#guitar</span>
-          </div>
-          <div class="btn-in-img">
-            <button class="detail_btn">Details</button>
-            <button class="remove_btn">Remove</button> <!-- remove 버튼은 자기가 쓴 글에만 보이게 -->
-          </div>
-        </div>
-      </a>
-    </div>
+    <div class="visual-container" id="photo_add_content"></div>
   </div>
 </main>
 
@@ -102,8 +264,7 @@ $(document).ready(function(){
       <h3>${ title }</h3>
       <p>${ content } </p>
       <div class="hash-tag-in-img">
-        <span>#${ tag_names }</span>
-        <span>#${ tag_names }</span>
+        <span> #${ tag_names }</span>
       </div>
       <div class="btn-in-img">
         <button id= "${ id }" class="detail_btn">Details</button>
@@ -114,43 +275,57 @@ $(document).ready(function(){
 </script>
 
 
+<script id="chat_list_templ" type="text/x-jquery-tmpl">
+  <a href="${ url }" id="${id}" class="dynamic_a_tag">
+    <img src="{% static 'base_dev/images/say_talk/motion-radio-04.gif' %}" class='photo_content_image' alt="">
+    <div class="text-in-img">
+      <h3>비디오 채팅방이 열렸습니다.</h3>
+      <p> 캠코더가 가능하신 분들은 참석하실 수 있습니다.</p>
+      <div class="btn-in-img">
+        <a href="${ url }" class="detail_btn">비디오방 참여하기</a>
+      </div>
+    </div>
+  </a>
+</script>
+
 
 <!-- 모달 창 설정 -->
 
 <button id="myBtn" style="display: none">Open Modal</button>
 <div class="dim" style="display:none"></div>
+<div id='public-rooms'></div>
 
 <div id="myModal" class="modal col-4" style="display: none">
   <div class="modal-content col-6">
     <span class="modal-close">×</span>
     <h4> POST 작성 </h4>
-    <form class ="form-group col-8" action="{% url 'saytalk:posting' %}" method="POST">
+    <div class ="form-group col-8" action="{% url 'saytalk:posting' %}" method="POST">
         <!-- {% csrf_token %}
         {{ post_form.as_p }} -->
       <fieldset>
         <legend class="hidden">post 작성하기 폼</legend>
         <label for="id_title">Title</label>
-        <input type="text" id="id_title">
+        <input type="text" id="id_title" name="title">
         <label for="id_content">Content</label>
         <textarea type="text" class="col-8" id="id_content" name="content"></textarea>
 
-        <p id="post_image_display"></p>
+        <div id="img_upload_div" class="gridly"></div>
         <label for="hash_tag_ids" style="display: none">등록된 해시태그</label>
         <input type="hidden" id="hash_tag_ids" name="hash_tag_ids">
         <label for="image_file_ids" style="display: none">등록된 이미지</label>
         <input type="hidden" id="image_file_ids" name="image_file_ids">
-
         <button type="submit" class="write-btn">글쓰기</button>
       </fieldset>
-    </form>
+    </div>
 
     <div role="form-inline" class="form-inline" method="POST"  enctype="multipart/form-data" action="">
-      <form class="form-group img_upload">
-      <!-- {{ image_form }} -->
+      <form class="form-group img_upload hidden_class">
       <label for="id_img_file"></label>
       <input class="form-control" id="id_img_file" name="img_file" type="file">
-      <span id="file_temp_submit" class="btn btn-danger">첨부파일 추가</span>
+      <span id="file_temp_submit" class="btn btn-danger"></span>
       </form>
+      <span class="img-btn" class="btn btn-danger">첨부파일 추가</span>
+      <img id="loading" src="{% static 'base_dev/images/register/big-roller2.gif' %}" alt="">
     </div>
 
   </div>
