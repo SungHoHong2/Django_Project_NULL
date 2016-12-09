@@ -1,8 +1,10 @@
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication
 from member.dto.forms import LoginForm, RegisterForm, RegisterImageForm
+from member.dto.serializer import UserSerializer
 from project_null.custom_authentication import CsrfExemptSessionAuthentication
 from member.models import MyUser, Like_Relationship
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
@@ -142,3 +144,15 @@ class MemberDetailAction(viewsets.ModelViewSet):
         follower_user = request.user
         lr = Like_Relationship.objects.create(followee= followee_user, follower=follower_user)
         return Response({ 'pk' : lr.pk})
+
+
+
+class MemberPosition(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    queryset = MyUser.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        position = request.data['location']
+        user = MyUser.objects.filter(id=request.user.id)
+        user.google_location = position
+        return Response({"success": "성공"})

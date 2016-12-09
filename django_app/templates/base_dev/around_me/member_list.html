@@ -1,14 +1,28 @@
+
+
 {% extends 'base_dev/base.html' %}
+
 {% block content %}
 {% load staticfiles %}
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Mans0k30To1GtjB2-T8DWhd3bmD-nes&callback=listenForPosition"></script>
 <link rel="stylesheet" href="{% static 'base_dev/css/member_list.css' %}">
 <style> .member-info{ padding-top: 15px; }
-.member-info .hash-tag { margin-left:10px; display: block; float: left;}
+.member-info .hash-tag { margin-left:10px; display: block; float: left;
+}
 #map{ width: 100%; height: 100%; }
+#alert_location{
+    width: 100%;
+    display: block;
+    float: left;
+    text-align: center;
+    background: #81ffca;
+    font-family: 'Lato', sans-serif;
+    color: #6b5a5a;
+}
+
 </style>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-Mans0k30To1GtjB2-T8DWhd3bmD-nes&callback=listenForPosition"></script>
-<script src="{% static 'base_dev/js/around_me/google_map.js' %}"></script>
+<script src="{% static 'base_dev/js/opening/google_map.js' %}"></script>
 <script>
 var first_page = 1;
 var total_page = 0;
@@ -64,6 +78,32 @@ function paging_system(first_page, last_page){
                                            'application/x-www-form-urlencoded',
                                             function(response){
                                                   get_member_list($.parseJSON(response));
+
+                                           google_data = {"type" : "FeatureCollection"
+                                                             , "features" : [] };
+
+                                          var _features = [];
+
+                                          $($.parseJSON(response)).each(function(index, item){
+                                                  var _feature = {};
+                                                  var _geometry = {};
+                                                  var _temp = [];
+                                                  _temp.push(parseFloat(item.google_location.split(',')[0]));
+                                                  _temp.push(parseFloat(item.google_location.split(',')[1]));
+
+                                                  _geometry['coordinates'] = _temp;
+                                              _geometry['type'] = 'Point';
+                                                  _geometry['id'] = index.id;
+
+                                                  _feature['type'] = "Feature";
+                                                  _feature['geometry'] = _geometry;
+                                                  _feature['member_id'] = item.id;
+                                              _features.push(_feature);
+                                          });
+
+                                          google_data['features'] = _features;
+                                              fnRemoveMarker();
+                                              viewMarker();
                                             })
                       }));
 
@@ -86,9 +126,39 @@ function paging_system(first_page, last_page){
 
 }
 
+var google_data = {};
+
     $(document).ready(function(){
         var friends_list = {{ member_list|safe }};
         var pagination = {{ pagination|safe }} + 1;
+
+            google_data = {"type" : "FeatureCollection"
+ 				                   , "features" : [] };
+
+ 				var _features = [];
+
+ 				$(friends_list).each(function(index, item){
+ 						var _feature = {};
+ 						var _geometry = {};
+ 						var _temp = [];
+						_temp.push(parseFloat(item.google_location.split(',')[0]));
+    					_temp.push(parseFloat(item.google_location.split(',')[1]));
+
+						_geometry['coordinates'] = _temp;
+
+
+
+					_geometry['type'] = 'Point';
+						_geometry['id'] = index.id;
+						_feature['type'] = "Feature";
+						_feature['geometry'] = _geometry;
+					    _feature['member_id'] = item.id;
+
+					_features.push(_feature);
+				});
+
+ 				google_data['features'] = _features;
+
 
         console.log(friends_list);
         friends_list[0]

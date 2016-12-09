@@ -35,4 +35,8 @@ class MyPageProfileView(TemplateView):
             cursor.execute(_query, [self.request.user.id])
             _object = cursor.fetchone()
             context['hash_tags'] = _object[0]
+
+        context['post_list'] = MyUser.objects.filter(id=self.request.user.id).order_by('-created_date')
         return context
+
+

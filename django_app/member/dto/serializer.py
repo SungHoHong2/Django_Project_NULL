@@ -6,3 +6,11 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
         fields = ('username', 'password')
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MyUser
+        fields = '__all__'

@@ -11,8 +11,9 @@ urlpatterns = [
     url(r'^around_me/$', views.AroundMeView.as_view(), name='around_me'),
     url(r'^around_me_paging/$', views.AroundMePaging.as_view({'post':'create'}), name='around_me_paging'),
     url(r'^member_detail/(?P<pk>[0-9]+)/$', views.MemberDetailAction.as_view({'get':'retrieve', 'post':'create'}), name='member_detail'),
+    url(r'^member_position/$', views.MemberPosition.as_view(), name='member_position'),
+
+    # MyPage 기능
     url(r'^profile/$', views.MyPageProfileView.as_view(), name='profile'),
 ]
-
-
 

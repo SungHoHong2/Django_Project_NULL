@@ -183,34 +183,6 @@
 						</div>
 				</div>
 
-				<!-- <section class="col-6 profile_body">
-		      <div class="col-8">
-		        <div>
-		          <h2> 개인정보 수정 </h2>
-		      </div>
-					<div class="col-8">
-							<div class="">
-		 					<label for=""> 닉네임 변경 </label>
-							<input type="text" name='username' value="{{ request.user.username }}" disabled=true>
-							</div>
-
-							<div class="gridly_custom">
-							<label for=""> 사진 수정 </label>
-							</div>
-							<div id="img_upload_div" class='gridly'></div>
-							 <button class="img-btn">사진 입력</button>
-							 <input id="hash_tag_inputs" type="text" placeholder="해시태그 추가" data-role="materialtags" value="{{ hash_tags }}">
-							</div>
-					</div>
-		    </section>
-
-				<div id="img_upload_form" class="img_hash_join_class hidden_class" method="POST">
-						<a class="img-btn"><span> 이미지 첨부 </span></a>
-						<div class="form-group img-submit hidden_class">
-							 <input class="form-control" id="id_img_file" name="img_file" type="file" required />
-						</div>
-				</div> -->
-
 
       </div>
 
@@ -227,26 +199,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+				{% for post in post_list %}
+                <tr>
                   <th scope="row">2016.12.07</th>
                   <td><a href="#">I want to go home.</a></td>
                   <td>6</td>
-              </tr>
-              <tr>
-                  <th scope="row">2016.12.03</th>
-                  <td><a href="#">playing guitar</a></td>
-                  <td>3</td>
-              </tr>
-              <tr>
-                  <th scope="row">2016.11.27</th>
-                  <td><a href="#">FrontEnd design study..</a></td>
-                  <td>4</td>
-              </tr>
-              <tr>
-                  <th scope="row">2016.11.12</th>
-                  <td><a href="#">Nice to meet you!</a></td>
-                  <td>12</td>
-              </tr>
+                </tr>
+                {% endfor %}
             </tbody>
             <summary class="hidden">내가 쓴 글 목록과 각 댓글 수를 최근부터 오래 된 순으로 보여주는 표입니다.</summary>
           </table>

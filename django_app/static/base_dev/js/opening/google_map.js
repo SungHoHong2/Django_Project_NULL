@@ -1,7 +1,12 @@
 
 var markers = [];
+var marker2 =[];
 var map;
 var geocoder;
+var infowindow = null;
+var latitude = 0;
+var longitude = 0;
+
 
 function setText(val, e) {
     document.getElementById(e).value = val;
@@ -28,6 +33,18 @@ function listenForPosition() {
       			// 현재 위경도 값(GPS) 변수에 넣기.
       			var latitude = pos.coords.latitude;
       			var longitude = pos.coords.longitude;
+                var location = latitude.toString() + "," + longitude.toString()
+				postAjax('PUT', {'location': location}, '/member/member_position/'
+					, 'application/x-www-form-urlencoded', function(response){
+					    $('#alert_location').remove();
+                        $('.search-view').append($('<span/>').attr('id','alert_location').text('지역 위치를 저장하고 있습니다.'));
+                        $( "#alert_location" ).animate({ opacity: 0, height: 0}, 3000, function() {
+					                         $(this).hide();
+                         });
+
+
+				});
+
 
       			var mapOptions = {
       				zoom: 16,
@@ -61,11 +78,8 @@ function listenForPosition() {
 
       			cityCircle = new google.maps.Circle(populationOptions);
 
-      			var script = document.createElement('script');
-      			// This example uses a local copy of the GeoJSON stored at
-      			// http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-      			//script.src = './data.js';
-      			document.getElementsByTagName('head')[0].appendChild(script);
+                viewMarker();
+
         });
       }
       else {
@@ -85,6 +99,58 @@ function successCallback(position)
    setText(position.coords.longitude, "longitude");
 }
 
+function viewMarker() {
+        console.log('viewMarker activated');
+        $('.member-info').css({'background': ''});
+
+        var infowindow = new google.maps.InfoWindow();
+        marker2 = [];
+        for (var i = 0; i < google_data.features.length; i++) {
+
+                    var _member_id = google_data.features[i].member_id;
+                    var coords = google_data.features[i].geometry.coordinates;
+                    var latLng = new google.maps.LatLng(coords[0],coords[1]);
+                    var marker = new google.maps.Marker({
+                        member_id : google_data.features[i].member_id,
+                        position: latLng,
+                        map: map,
+                        icon: 'https://null-bucket.s3.amazonaws.com/static/base_dev/images/default_icon.png'
+                    });
+
+                    marker2.push(marker);
+        }
+
+
+        $(marker2).each(function(index, item){
+
+                 item.addListener('click',function() {
+
+
+                       $(marker2).each(function(index_2, item_2){
+                              item_2.setIcon('https://null-bucket.s3.amazonaws.com/static/base_dev/images/default_icon.png');
+                       });
+
+                       $('.member-info').css({'background': ''});
+                       item.setIcon('https://null-bucket.s3.amazonaws.com/static/base_dev/images/clicked_icon.png');
+                       console.log(item.member_id);
+                       $('#'+item.member_id).parent().css({'background': 'green'});
+                 });
+
+        })
+
+
+}
+
+function fnRemoveMarker(){
+     console.log('before delete');
+     console.log(marker2);
+	for (var i = 0; i < google_data.features.length; i++) {
+		marker2[i].setMap(null);
+	}
+     console.log('after delete');
+	 console.log(marker2);
+
+}
 
 function errorCallback(error) {
     var message = "";
@@ -112,17 +178,6 @@ function errorCallback(error) {
                   "an unknown error (Code: " + strErrorCode + ").";
     }
     console.log(message);
-}
-
-window.friends_callback = function(results) {
-	for (var i = 0; i < results.features.length; i++) {
-		var coords = results.features[i].geometry.coordinates;
-		var latLng = new google.maps.LatLng(coords[0],coords[1]);
-		var marker = new google.maps.Marker({
-			position: latLng,
-			map: map
-		});
-	}
 }
 
 $( window ).load(function() {
