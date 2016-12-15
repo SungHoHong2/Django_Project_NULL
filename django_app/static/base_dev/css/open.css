@@ -7,7 +7,7 @@
 /* 전체 이미지 배경 */
 
 .wrapper{
-  background-image: url("../images/bg-opening.png");
+  background-image: url("../images/bg-opening.jpg");
   height: 120vh;
   color: #fff;
   font-family: 'Ubuntu', sans-serif;
@@ -87,6 +87,15 @@ header .brand-logo{
   font-size: 2.5rem;
 }
 
+p{
+  text-align: center;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 1em;
+}
+
+[data-words]{ vertical-align: top; position: static;}
+[data-words] > span{ position: absolute; color: #C1FF37;}
+
 
 /* 하단 footer 바 */
 
@@ -105,13 +114,4 @@ header .brand-logo{
   margin-bottom: 10px;
   font-family: 'Ubuntu', sans-serif;
   font-weight: 400;
-}
-
-.copyright{
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 1.2rem;
-  text-align: center;
-  font-family: 'Ubuntu', sans-serif;
-  font-weight: 300;
 }

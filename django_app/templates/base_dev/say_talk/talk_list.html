@@ -293,7 +293,7 @@ $(document).ready(function(){
 
 <button id="myBtn" style="display: none">Open Modal</button>
 <div class="dim" style="display:none"></div>
-<div id='public-rooms'></div>
+<div id="public-rooms"></div>
 
 <div id="myModal" class="modal col-4" style="display: none">
   <div class="modal-content col-6">
@@ -320,11 +320,11 @@ $(document).ready(function(){
 
     <div role="form-inline" class="form-inline" method="POST"  enctype="multipart/form-data" action="">
       <form class="form-group img_upload hidden_class">
-      <label for="id_img_file"></label>
-      <input class="form-control" id="id_img_file" name="img_file" type="file">
-      <span id="file_temp_submit" class="btn btn-danger"></span>
+        <label for="id_img_file"></label>
+        <input class="form-control" id="id_img_file" name="img_file" type="file">
+        <span id="file_temp_submit" class="btn btn-danger"></span>
       </form>
-      <span class="img-btn" class="btn btn-danger">첨부파일 추가</span>
+      <span class="img-btn btn btn-danger">첨부파일 추가</span>
       <img id="loading" src="{% static 'base_dev/images/register/big-roller2.gif' %}" alt="">
     </div>
 

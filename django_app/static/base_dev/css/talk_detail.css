@@ -2,7 +2,7 @@
 /* 말풍선 디자인 레이아웃 */
 
 .talk-detail-container{
-  background: url("../images/bg-talk-detail.png") 50% 50%, no-repeat;
+  background: url("../images/bg-talk-detail.jpg") 50% 50%, no-repeat;
   min-height: 600px;
   box-shadow: inset 0px 2px 0px #fff;
   text-align: center;
@@ -30,11 +30,11 @@
   background-color: #b5b6b6;
 }
 
-.talk-detail-container .talk-comment:nth-child(2n-1){
+.talk-detail-container .talk-comment:nth-child(2n){
   margin-right: 12%;
 }
 
-.talk-detail-container .talk-comment:nth-child(2n){
+.talk-detail-container .talk-comment:nth-child(2n-1){
   margin-left: 12%;
 }
 
@@ -61,10 +61,34 @@
   left: 10px;
 }
 
+.talk-btns{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.talk-btns button{
+  width: 5vw;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #65d3e3;
+  border: none;
+  color: #fff;
+  font-size: 1.6rem;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
 
 /* talk 컨테이너 내부 디자인 */
 
 .talk-main-content{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.talk-comment{
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -164,9 +188,9 @@
   background-color: #65d3e3;
   border: none;
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   cursor: pointer;
   position: absolute;
   right: 20px;
-  bottom: -10%;
+  bottom: 10%;
 }

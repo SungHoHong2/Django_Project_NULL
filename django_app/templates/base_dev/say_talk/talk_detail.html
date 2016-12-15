@@ -166,10 +166,6 @@ $(document).ready(function(){
               {{ post_form.as_p }} -->
             <fieldset>
               <legend class="hidden">댓글 작성하기 폼</legend>
-
-              <label for="comment_text">Title</label>
-              <input type="text" id="id_title" name="title">
-
               <label for="comment_text">Content</label>
               <textarea type="text" class="col-8" id="comment_text" name="content"></textarea>
               <input type="hidden" id="image_file_ids" name="image_file_ids">
@@ -183,7 +179,7 @@ $(document).ready(function(){
                 <input class="hidden_class" id="id_img_file" name="img_file" type="file">
                 <span id="file_temp_submit" class="btn btn-danger"></span>
                 </form>
-                <span class="img-btn" class="btn btn-danger">첨부파일 추가</span>
+                <span class="img-btn btn btn-danger">첨부파일 추가</span>
                 <img id="loading" src="{% static 'base_dev/images/register/big-roller2.gif' %}" alt="">
               </div>
 
@@ -225,14 +221,15 @@ $(document).ready(function(){
 <!-- 말풍선 안에 표시될 실제 *** 댓글 컨텐츠 *** 데이터 가져오기 -->
 <script id="saytalk_comment_templ" type="text/x-jquery-tmpl">
   <div class="talk-comment col-5">
-    <h3>${title}</h3>
-    <p>${content}</p> 
-    <div class="edit-footer">
-      <div class="if-my-content">
-        <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
-        <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+    <div class="talk-paragraph col-5">
+      <p>${content}</p>
+      <div class="edit-footer">
+        <div class="if-my-content">
+          <img src="{% static 'base_dev/images/edit_item.png' %}" title="수정" alt="수정하기">
+          <img src="{% static 'base_dev/images/delete_item.png' %}" title="삭제" alt="삭제하기">
+        </div>
+        <span>${username}</span>
       </div>
-      <span>${username}</span>
     </div>
     <div class="talk-img col-3" id="img_${id}"></div>
   </div>

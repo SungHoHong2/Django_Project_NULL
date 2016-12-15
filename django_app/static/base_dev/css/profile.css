@@ -42,15 +42,24 @@
 
 #my-profile{
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.img-change, .profile-change{
-  display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
+  height: 70vh;
+}
+
+#my-profile h3{
+  font-size: 1.8rem;
+  margin-bottom: 50px;
+  width: 50%;
+  text-align: center;
+}
+
+.page-div > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 60%;
 }
 
 .img-change img{
@@ -76,14 +85,9 @@
   cursor: pointer;
 }
 
-.profile-change h3{
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-}
-
 .profile-form{
   border: none;
-  width: 60%;
+  width: 100%;
   font-size: 1.8rem;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
@@ -203,11 +207,22 @@ caption{
   margin-top: 30px;
 }
 
+.gridly { position: relative; }
 
+.brick.small { width: 110px; height: 110px;
+	  background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
 
-
-
-
-.footer{
-  position: static;
+.delete{
+  color: white;
+  display: block;
+  font-size: 24px;
+  background: black;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
 }
