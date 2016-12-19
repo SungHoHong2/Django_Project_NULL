@@ -25,7 +25,6 @@ $(document).ready(function(){
     }
 
 
-    // ?????????
     $('#post_btn').click(function(){
 
       // $('#id_hash_tags').val('')
@@ -51,10 +50,10 @@ $(document).ready(function(){
 
 
 // 3. 이미지 데이터를 가져와서 뷰 단에 붙이기
-    // $("#photo_list_templ").tmpl({{ talk_list|safe }}).appendTo( "#photo_add_content" );
+    $("#photo_list_templ").tmpl({{ talk_list|safe }}).appendTo( "#photo_add_content" );
 
 
-// ??????
+// 
     $('#file_temp_submit').click(function(){
 
         var form_data = new FormData();
@@ -105,20 +104,20 @@ function makeHover(){
 });
 
 
-// 이미지 자동 정렬
-// $(function(){
-//   var vg = $("#photo_add_content").vgrid({
-//     easing: "easeOutQuint",
-//     useLoadImageEvent: true,
-//     time: 1000,
-//     delay: 20,
-//     fadeIn: {
-//       time: 1000,
-//       delay: 100,
-//       wait: 1000
-//     }
-//   });
-//   $(window).load(function(e){
-//     vg.vgrefresh();
-//   });
-// });
+이미지 자동 정렬
+$(function(){
+  var vg = $("#photo_add_content").vgrid({
+    easing: "easeOutQuint",
+    useLoadImageEvent: true,
+    time: 1000,
+    delay: 20,
+    fadeIn: {
+      time: 1000,
+      delay: 100,
+      wait: 1000
+    }
+  });
+  $(window).load(function(e){
+    vg.vgrefresh();
+  });
+});

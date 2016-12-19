@@ -3,10 +3,9 @@
 {% load staticfiles %}
 <script src="{% static 'base_dev/js/talk_list.js' %}"></script>
 <script src="{% static 'base_test/js/webrtc/RTCMultiConnection.min.js' %}"></script>
-<script src="{% static 'base_dev/js/opening/jquery.gridly.js' %}"></script>
-<link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/register.css' %}">
-
+<script src="{% static 'base_dev/js/jquery.vgrid.min.js' %}"></script>
+<script src="{% static 'base_dev/js/jquery.easing.min.js' %}"></script>
 
 
 
@@ -16,7 +15,6 @@
 $(document).ready(function(){
     $('#loading').hide();
     $('.hidden_class').hide();
-
 
 
     /*
