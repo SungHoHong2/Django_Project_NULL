@@ -185,7 +185,7 @@
 
 
 			var form_data = new FormData();
-			form_data.append("username",$('input[name=username]').val());
+			form_data.append("username",$('input[name=username_register]').val());
 			form_data.append("password_1",$('input[name=password_1]').val());
 			form_data.append("password_2",$('input[name=password_2]').val());
 
@@ -239,7 +239,7 @@
 					<legend class="hidden">회원가입 폼</legend>
 					<div class="n-form ">
 						<label for="join-name" class="form-label">Name</label>
-						<input type="text" id="join-name" name="username" class="form-input" required placeholder="닉네임을 입력해주세요">
+						<input type="text" id="join-name" name="username_register" class="form-input" required placeholder="닉네임을 입력해주세요">
 					</div>
 					<div id="nickname_div"></div>
 					<div class="pw-form hidden_class password-join-form">
