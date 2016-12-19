@@ -233,32 +233,32 @@ var google_data = {};
 		// {"type":"Feature","geometry":{"type":"Point","coordinates":[37.517932,127.021830]},"id":"ak10559055"},
     //
 
-		$('.member_detail_btn').click(function(){
-			_followee_id = $(this).attr('id');
-			_tag_list = $(this).attr('tags');
-
-			getAjax('GET', "/member/member_detail/"+_followee_id
-			, 'application/json', function(response){
-
-				$('#member_detail_photo').empty();
-				$(response).each(function(index, item){
-					$('#member_detail_photo').append($('<img/>').height(200).attr('src',item.img_file))
-				});
-
-				$('#member_like_btn').attr('followee_id', _followee_id);
-				$('#member_detail_hashtag').val('').val(_tag_list);
-				$('#myBtn').trigger('click');
-			});
-		});
-
-
-
-	 $('#member_like_btn').click(function(){
-		postAjax('POST', {}, '/member/member_detail/'+$(this).attr('followee_id')+'/'
-			, 'application/json', function(response){
-				alert('좋아요 반영되었고요 좋았던 사람 또 좋아요 누를면 지금은 에러나요');
-		});
-	 });
+	// 	$('.member_detail_btn').click(function(){
+	// 		_followee_id = $(this).attr('id');
+	// 		_tag_list = $(this).attr('tags');
+   //
+	// 		getAjax('GET', "/member/member_detail/"+_followee_id
+	// 		, 'application/json', function(response){
+   //
+	// 			$('#member_detail_photo').empty();
+	// 			$(response).each(function(index, item){
+	// 				$('#member_detail_photo').append($('<img/>').height(200).attr('src',item.img_file))
+	// 			});
+   //
+	// 			$('#member_like_btn').attr('followee_id', _followee_id);
+	// 			$('#member_detail_hashtag').val('').val(_tag_list);
+	// 			$('#myBtn').trigger('click');
+	// 		});
+	// 	});
+   //
+   //
+   //
+	//  $('#member_like_btn').click(function(){
+	// 	postAjax('POST', {}, '/member/member_detail/'+$(this).attr('followee_id')+'/'
+	// 		, 'application/json', function(response){
+	// 			alert('좋아요 반영되었고요 좋았던 사람 또 좋아요 누를면 지금은 에러나요');
+	// 	});
+	//  });
 
 
 
