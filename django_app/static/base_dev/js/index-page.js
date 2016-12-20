@@ -1,23 +1,18 @@
-window.onload = function () {
 
-  window.requestAnimFrame = (function(){
-          return  window.requestAnimationFrame   ||
-              window.webkitRequestAnimationFrame ||
-              window.mozRequestAnimationFrame    ||
-              function( callback ){
-                  window.setTimeout(callback, 1000 / 60);
+
+$(document).ready(function(){
+
+
+  var requestAnimFrame = (function(){
+          return function( callback ){
+                  window.setTimeout(callback, 1000/50);
               };
       })();
 
 
-  window.clearAnimation = (function() {
-        return window.cancelRequestAnimationFrame ||
-          window.cancelAnimationFrame ||
-          window.mozCancelRequestAnimationFrame ||
-          window.oCancelRequestAnimationFrame ||
-          window.msCancelRequestAnimationFrame ||
-            function(id){
-                clearTimeout(id)
+  var clearAnimation = (function() {
+        return function(id){
+                window.clearTimeout(id);
             };
     })();
 
@@ -52,16 +47,18 @@ window.onload = function () {
 
   function linkClick(){
     if(offset<linkIndex*slide_width){
-      offset+=64;
+      offset+=slide_width;
       slider.style.left = -offset+"px";
+      slider.style.transition = "left, 1.5s";
       if(offset==linkIndex*slide_width){
           clearAnimation(sliding);
           y=slide_width*linkIndex+slide_width;
         }
     }
     else if(offset>linkIndex*slide_width){
-      offset-=64;
+      offset-=slide_width;
       slider.style.left = -offset+"px";
+      slider.style.transition = "left, 1.5s";
       if(offset==linkIndex*slide_width){
           clearAnimation(sliding);
           y=slide_width*linkIndex+slide_width;
@@ -74,8 +71,9 @@ window.onload = function () {
 }
 
 function btnClick(){
-  offset+=64;
-  slider.style.left = -offset+"px";
+  offset=slide_width;
+  slider.style.left = -slide_width+"px";
+  slider.style.transition = "all, 2s";
   if(offset==1*slide_width){
       clearAnimation(sliding);
     }
@@ -94,6 +92,7 @@ var link_btn = document.querySelector('.link-btn');
         return false;
       };
       link_btn.onclick = function(){
+        linkIndex = index;
         (function animloop(){
           sliding = requestAnimFrame(animloop);
           btnClick();
@@ -104,4 +103,4 @@ var link_btn = document.querySelector('.link-btn');
   }
 
 
-};
+});

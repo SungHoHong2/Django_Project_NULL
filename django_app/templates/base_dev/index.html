@@ -3,7 +3,9 @@
 {% load staticfiles %}
 
 
+<script src="{% static 'base_dev/js/opening/jquery.gridly.js' %}"></script>
 <script src="{% static 'base_dev/js/opening/materialize-tags.js' %}"></script>
+<link rel="stylesheet" href="{% static 'base_dev/css/opening/jquery.gridly.css' %}">
 <link rel="stylesheet" href="{% static 'base_dev/css/opening/materialize-tags.css' %}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -218,7 +220,7 @@
 
 
 			var form_data = new FormData();
-			form_data.append("username",$('input[name=username]').val());
+			form_data.append("username",$('#join-name').val());
 			form_data.append("password_1",$('input[name=password_1]').val());
 			form_data.append("password_2",$('input[name=password_2]').val());
 
@@ -312,16 +314,16 @@
 					<legend class="hidden">회원가입 폼</legend>
 					<div class="n-form ">
 						<label for="join-name" class="form-label">Name</label>
-						<input type="text" id="join-name" name="username" class="form-input" required placeholder="닉네임을 입력해주세요">
+						<input type="text" id="join-name" name="username" class="form-input" required placeholder="닉네임 입력 후 ENTER를 눌러주세요">
 					</div>
 					<div id="nickname_div"></div>
 					<div class="pw-form hidden_class password-join-form">
 						<label for="join-ps" class="form-label">Password</label>
-						<input type="password" id="join-ps" name="password_1" class="form-input" required placeholder="비밀번호를 입력해주세요">
+						<input type="password" id="join-ps" name="password_1" class="form-input" required placeholder="비밀번호 입력 후 ENTER를 눌러주세요">
 					</div>
 					<div class="ps-cf-form hidden_class password-join-form">
 						<label for="join-ps-cf" class="form-label">Password 확인</label>
-						<input type="password" id="join-ps-cf" name="password_2" class="form-input" required placeholder="비밀번호를 재입력해주세요">
+						<input type="password" id="join-ps-cf" name="password_2" class="form-input" required placeholder="비밀번호 재입력 후 ENTER를 눌러주세요">
 					</div>
 					<div id="password_div"></div>
 
